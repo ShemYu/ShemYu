@@ -1,0 +1,8 @@
+name: TripSaaS
+position: Data Scientist
+startDate: "2019-12-01"
+endDate: "2020-11-01"
+summary: Assist in maintaining ETL pipelines and data collection, ensuring stable analytics during dynamic business environments.
+highlights:
+  - Analyze customer order data using statistical modeling (FP-Growth, K-means) to support marketing and segmentation strategies.
+  - Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.

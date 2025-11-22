@@ -1,0 +1,12 @@
+name: Example AI Project
+description: An example project demonstrating the YAML structure.
+url: https://github.com/ShemYu/example-project
+startDate: "2024-01"
+endDate: "2024-03"
+keywords:
+  - Python
+  - LLM
+  - RAG
+highlights:
+  - Built a RAG system using LangChain.
+  - Improved retrieval accuracy by 20%.
