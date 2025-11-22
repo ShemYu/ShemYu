@@ -74,6 +74,9 @@ def update_readme(md_content, readme_path='README.md'):
     print(f"Successfully updated {readme_path}")
 
 import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def generate_ai_highlight(profile):
     api_key = os.environ.get('GEMINI_API_KEY')
@@ -83,7 +86,7 @@ def generate_ai_highlight(profile):
 
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash-lite')
         
         # Construct a prompt from the profile
         basics = profile.get('basics', {})

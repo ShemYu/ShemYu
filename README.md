@@ -19,6 +19,11 @@
 
 
 
+## 🤖 AI Generated Highlight
+**Shem Yu - ML Engineer & Team Lead**
+
+Driving innovation in applied AI, Shem excels at architecting and leading enterprise-scale multi-agent systems. Proven expertise in building adaptive task workflows and LLM-powered automation, including flagship projects like DOGI and GAIA. Adept at deploying complex autonomous reasoning solutions on cloud platforms (AWS/Databricks). Specializing in Generative AI, NLP, and robust cloud infrastructure to deliver cutting-edge AI solutions.
+
 
 ## Skills
 
