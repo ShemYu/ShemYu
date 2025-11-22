@@ -1,57 +1,28 @@
-# Career History Knowledge Base
+## Hi there 👋
 
-This repository serves as a single source of truth for my career history, experiences, and skills. It is structured as a knowledge base that can be used to generate various formats of resumes and profiles.
+<img src="https://profile-counter.glitch.me/ShemYu/count.svg">
 
-## Structure
 
-The data is organized in the `data/` directory:
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Architects+Daughter&color=D79921&size=30&lines=Hey!+It's+Shem!;I'm+a+Machine+Learning+Engineer)](https://git.io/typing-svg)
 
-- `data/basics.yaml`: Personal information and summary.
-- `data/work/`: Work experiences (one YAML file per role).
-- `data/education/`: Education history.
-- `data/certificates/`: Certifications.
-- `data/publications/`: Articles and publications.
-- `data/skills/`: Skill sets by category.
-- `data/projects/`: Significant projects.
+<img src="https://komarev.com/ghpvc/?username=ShemYu&label=Views&color=brightgreen&style=flat-square" alt="views on github" />
 
-## Usage
+<h3> Here's some fun facts about me: </h3>
 
-### Prerequisites
+- 🔭 I’m currently working as ML Engineer.
+- 🔭 I’m Team Lead of ML Engineer.
+- 🔭 I’m have AWS MLS certification.
+- 🌱 I've 6 years of experience focus on AI/ML development, deployment and architecture.
+- 👯 I’m looking to collaborate on Machine Learning Projects
+- 📫 I am also a technical writer at Medium 
+- 📰 Articles: 
+  -	[AI Agent 專案架構最佳實踐](https://medium.com/@shemyu/ai-agent-%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90-8d8613fde368) 
+  -	[容器化技術Podman的初體驗](https://medium.com/@shemyu/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93-podman%E7%9A%84%E5%88%9D%E9%AB%94%E9%A9%97-f85cc07beff6)
 
-- Python 3
-- `pyyaml`
+## Certificate
 
-```bash
-pip install pyyaml
-```
+[AWS Certified Machine Learning - Specialty (MLS)](https://aws.amazon.com/certification/certified-machine-learning-specialty/)
 
-### Generate Resume
+## Resume
 
-To generate the `RESUME.md` file from the knowledge base:
-
-```bash
-python3 generate_resume.py
-```
-
-### Adding New Data
-
-Simply create a new YAML file in the corresponding directory under `data/`. The generator script automatically picks up all YAML files and sorts them by date.
-
-For example, to add a new project, create `data/projects/my_new_project.yaml`:
-
-```yaml
-name: My New Project
-description: Description of the project.
-url: https://...
-startDate: "2024-01"
-endDate: "2024-06"
-keywords:
-  - Python
-  - AI
-highlights:
-  - Achieved X result.
-```
-
-## Generated Resume
-
-See [RESUME.md](./RESUME.md) for the latest generated version.
+[View my full Resume](./RESUME.md)

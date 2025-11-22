@@ -131,9 +131,41 @@ def generate_markdown(profile):
 
     return "\n".join(lines)
 
+
+
+def update_readme(md_content, readme_path='README.md'):
+    if not os.path.exists(readme_path):
+        print(f"Warning: {readme_path} not found. Skipping update.")
+        return
+
+    with open(readme_path, 'r', encoding='utf-8') as f:
+        readme_content = f.read()
+
+    start_marker = "<!-- RESUME_START -->"
+    end_marker = "<!-- RESUME_END -->"
+
+    if start_marker not in readme_content or end_marker not in readme_content:
+        print(f"Warning: Markers {start_marker} and {end_marker} not found in {readme_path}. Skipping update.")
+        return
+
+    start_index = readme_content.find(start_marker) + len(start_marker)
+    end_index = readme_content.find(end_marker)
+
+    new_readme_content = (
+        readme_content[:start_index] +
+        "\n" + md_content + "\n" +
+        readme_content[end_index:]
+    )
+
+    with open(readme_path, 'w', encoding='utf-8') as f:
+        f.write(new_readme_content)
+    
+    print(f"Successfully updated {readme_path}")
+
 def main():
     data_dir = 'data'
     output_path = 'RESUME.md'
+    readme_path = 'README.md'
     
     if not os.path.exists(data_dir):
         print(f"Error: {data_dir} directory not found.")
@@ -147,6 +179,9 @@ def main():
             f.write(md_content)
         
         print(f"Successfully generated {output_path}")
+        
+        # update_readme(md_content, readme_path)
+        
     except ImportError:
         print("Error: PyYAML is not installed. Please run: pip install pyyaml")
     except Exception as e:
