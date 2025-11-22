@@ -31,106 +31,17 @@ def load_profile(data_dir):
             
     return profile
 
-def generate_markdown(profile):
-    basics = profile.get('basics', {})
-    lines = []
+from jinja2 import Environment, FileSystemLoader
 
-    # Header
-    lines.append(f"# {basics.get('name', 'Name')}")
-    lines.append(f"**{basics.get('label', '')}**")
-    lines.append("")
+def generate_resume(profile, template_name, output_path):
+    env = Environment(loader=FileSystemLoader('templates'))
+    template = env.get_template(template_name)
+    output = template.render(**profile)
     
-    # Contact / Links
-    links = []
-    if basics.get('email'): links.append(f"[Email](mailto:{basics['email']})")
-    if basics.get('url'): links.append(f"[Website]({basics['url']})")
-    for p in basics.get('profiles', []):
-        links.append(f"[{p['network']}]({p['url']})")
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(output)
     
-    if links:
-        lines.append(" | ".join(links))
-        lines.append("")
-
-    # Summary
-    if basics.get('summary'):
-        lines.append("## Summary")
-        lines.append(basics['summary'])
-        lines.append("")
-
-    # Experience
-    if profile.get('work'):
-        lines.append("## Experience")
-        for work in profile['work']:
-            name = work.get('name', '')
-            position = work.get('position', '')
-            start = work.get('startDate', '')
-            end = work.get('endDate', 'Present')
-            lines.append(f"### {position} at {name}")
-            lines.append(f"_{start} - {end}_")
-            if work.get('summary'):
-                lines.append(f"\n{work['summary']}")
-            if work.get('highlights'):
-                lines.append("")
-                for highlight in work['highlights']:
-                    lines.append(f"- {highlight}")
-            lines.append("")
-
-    # Skills
-    if profile.get('skills'):
-        lines.append("## Skills")
-        for skill in profile['skills']:
-            name = skill.get('name', '')
-            keywords = ", ".join(skill.get('keywords', []))
-            lines.append(f"- **{name}**: {keywords}")
-        lines.append("")
-
-    # Certificates
-    if profile.get('certificates'):
-        lines.append("## Certificates")
-        for cert in profile['certificates']:
-            lines.append(f"- {cert.get('name')} ({cert.get('issuer')})")
-        lines.append("")
-
-    # Publications
-    if profile.get('publications'):
-        lines.append("## Publications")
-        for pub in profile['publications']:
-            lines.append(f"- [{pub.get('name')}]({pub.get('url')}) - {pub.get('publisher')}")
-        lines.append("")
-
-    # Projects
-    if profile.get('projects'):
-        lines.append("## Projects")
-        for project in profile['projects']:
-            name = project.get('name', '')
-            desc = project.get('description', '')
-            url = project.get('url', '')
-            start = project.get('startDate', '')
-            end = project.get('endDate', '')
-            
-            header = f"### {name}"
-            if url:
-                header += f" ([Link]({url}))"
-            lines.append(header)
-            
-            if start or end:
-                lines.append(f"_{start} - {end}_")
-            
-            if desc:
-                lines.append(f"\n{desc}")
-                
-            if project.get('highlights'):
-                lines.append("")
-                for highlight in project['highlights']:
-                    lines.append(f"- {highlight}")
-            
-            if project.get('keywords'):
-                lines.append(f"\n**Keywords**: {', '.join(project['keywords'])}")
-            
-            lines.append("")
-
-    return "\n".join(lines)
-
+    print(f"Successfully generated {output_path}")
 
 
 def update_readme(md_content, readme_path='README.md'):
@@ -164,8 +75,6 @@ def update_readme(md_content, readme_path='README.md'):
 
 def main():
     data_dir = 'data'
-    output_path = 'RESUME.md'
-    readme_path = 'README.md'
     
     if not os.path.exists(data_dir):
         print(f"Error: {data_dir} directory not found.")
@@ -173,17 +82,20 @@ def main():
 
     try:
         profile = load_profile(data_dir)
-        md_content = generate_markdown(profile)
         
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(md_content)
+        # Generate Markdown
+        generate_resume(profile, 'resume.md.j2', 'RESUME.md')
         
-        print(f"Successfully generated {output_path}")
+        # Generate HTML
+        generate_resume(profile, 'resume.html.j2', 'resume.html')
         
-        # update_readme(md_content, readme_path)
+        # Note: Automatic README update is currently disabled
+        # with open('RESUME.md', 'r', encoding='utf-8') as f:
+        #     md_content = f.read()
+        # update_readme(md_content)
         
     except ImportError:
-        print("Error: PyYAML is not installed. Please run: pip install pyyaml")
+        print("Error: PyYAML or Jinja2 is not installed. Please run: pip install pyyaml jinja2")
     except Exception as e:
         print(f"An error occurred: {e}")
 

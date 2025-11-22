@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ basics.name }} - Resume</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .contact-info { margin-top: 10px; }
+        .contact-info a { margin: 0 10px; color: #3498db; text-decoration: none; }
+        .job, .project { margin-bottom: 20px; }
+        .job-header, .project-header { display: flex; justify-content: space-between; align-items: baseline; }
+        .date { color: #7f8c8d; font-style: italic; }
+        ul { padding-left: 20px; }
+        .skills-list { list-style: none; padding: 0; }
+        .skill-item { margin-bottom: 5px; }
+        .skill-name { font-weight: bold; display: inline-block; width: 150px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ basics.name }}</h1>
+        <h3>{{ basics.label }}</h3>
+        <div class="contact-info">
+            {% if basics.email %}<a href="mailto:{{ basics.email }}">Email</a>{% endif %}
+            {% if basics.url %}<a href="{{ basics.url }}">Website</a>{% endif %}
+            {% for p in basics.profiles %}
+            <a href="{{ p.url }}">{{ p.network }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if basics.summary %}
+    <section>
+        <h2>Summary</h2>
+        <p>{{ basics.summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if work %}
+    <section>
+        <h2>Experience</h2>
+        {% for w in work %}
+        <div class="job">
+            <div class="job-header">
+                <h3>{{ w.position }} at {{ w.name }}</h3>
+                <span class="date">{{ w.startDate }} - {{ w.endDate | default('Present') }}</span>
+            </div>
+            {% if w.summary %}<p>{{ w.summary }}</p>{% endif %}
+            {% if w.highlights %}
+            <ul>
+                {% for highlight in w.highlights %}
+                <li>{{ highlight }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if skills %}
+    <section>
+        <h2>Skills</h2>
+        <ul class="skills-list">
+            {% for skill in skills %}
+            <li class="skill-item">
+                <span class="skill-name">{{ skill.name }}</span>
+                <span>{{ skill.keywords | join(', ') }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if certificates %}
+    <section>
+        <h2>Certificates</h2>
+        <ul>
+            {% for cert in certificates %}
+            <li>{{ cert.name }} ({{ cert.issuer }})</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if publications %}
+    <section>
+        <h2>Publications</h2>
+        <ul>
+            {% for pub in publications %}
+            <li><a href="{{ pub.url }}">{{ pub.name }}</a> - {{ pub.publisher }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if projects %}
+    <section>
+        <h2>Projects</h2>
+        {% for project in projects %}
+        <div class="project">
+            <div class="project-header">
+                <h3>{{ project.name }}{% if project.url %} <a href="{{ project.url }}" style="font-size: 0.8em;">[Link]</a>{% endif %}</h3>
+                {% if project.startDate or project.endDate %}
+                <span class="date">{{ project.startDate }} - {{ project.endDate }}</span>
+                {% endif %}
+            </div>
+            {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+            {% if project.highlights %}
+            <ul>
+                {% for highlight in project.highlights %}
+                <li>{{ highlight }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if project.keywords %}
+            <p><strong>Keywords:</strong> {{ project.keywords | join(', ') }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,74 @@
+# {{ basics.name }}
+**{{ basics.label }}**
+
+{% if basics.email %}[Email](mailto:{{ basics.email }}){% endif %} | {% if basics.url %}[Website]({{ basics.url }}){% endif %} | {% for p in basics.profiles %}[{{ p.network }}]({{ p.url }}){% if not loop.last %} | {% endif %}{% endfor %}
+
+{% if basics.summary %}
+## Summary
+{{ basics.summary }}
+{% endif %}
+
+{% if work %}
+## Experience
+{% for w in work %}
+### {{ w.position }} at {{ w.name }}
+_{{ w.startDate }} - {{ w.endDate | default('Present') }}_
+
+{% if w.summary %}
+{{ w.summary }}
+{% endif %}
+{% if w.highlights %}
+
+{% for highlight in w.highlights %}
+- {{ highlight }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if skills %}
+## Skills
+{% for skill in skills %}
+- **{{ skill.name }}**: {{ skill.keywords | join(', ') }}
+{% endfor %}
+{% endif %}
+
+{% if certificates %}
+## Certificates
+{% for cert in certificates %}
+- {{ cert.name }} ({{ cert.issuer }})
+{% endfor %}
+{% endif %}
+
+{% if publications %}
+## Publications
+{% for pub in publications %}
+- [{{ pub.name }}]({{ pub.url }}) - {{ pub.publisher }}
+{% endfor %}
+{% endif %}
+
+{% if projects %}
+## Projects
+{% for project in projects %}
+### {{ project.name }}{% if project.url %} ([Link]({{ project.url }})){% endif %}
+{% if project.startDate or project.endDate %}
+_{{ project.startDate }} - {{ project.endDate }}_
+{% endif %}
+
+{% if project.description %}
+{{ project.description }}
+{% endif %}
+
+{% if project.highlights %}
+{% for highlight in project.highlights %}
+- {{ highlight }}
+{% endfor %}
+{% endif %}
+
+{% if project.keywords %}
+**Keywords**: {{ project.keywords | join(', ') }}
+{% endif %}
+
+{% endfor %}
+{% endif %}
