@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 'feat/**'
     paths:
       - 'data/**'
       - 'generate_resume.py'
