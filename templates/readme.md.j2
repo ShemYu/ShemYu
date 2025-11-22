@@ -1,0 +1,37 @@
+## Hi there 👋
+
+<img src="https://profile-counter.glitch.me/{{ basics.name | replace(' ', '') }}/count.svg">
+
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Architects+Daughter&color=D79921&size=30&lines=Hey!+It's+{{ basics.name }}!;I'm+a+{{ basics.label | replace(' ', '+') }})](https://git.io/typing-svg)
+
+<img src="https://komarev.com/ghpvc/?username={{ basics.profiles[0].url.split('/')[-1] }}&label=Views&color=brightgreen&style=flat-square" alt="views on github" />
+
+<h3> Here's some fun facts about me: </h3>
+
+- 🔭 I’m currently working as {{ work[0].position }} at {{ work[0].name }}.
+{% if certificates %}
+- 🔭 I have {{ certificates[0].name }}.
+{% endif %}
+- 🌱 I have {{ work | length }} roles of experience focusing on AI/ML development.
+- 👯 I’m looking to collaborate on Machine Learning Projects.
+{% if publications %}
+- 📰 Latest Article: [{{ publications[0].name }}]({{ publications[0].url }})
+{% endif %}
+
+{% if ai_highlight %}
+## 🤖 AI Generated Highlight
+{{ ai_highlight }}
+{% endif %}
+
+## Skills
+{% if skills %}
+<p align="left">
+{% for skill in skills %}
+<img src="https://img.shields.io/badge/{{ skill.name | replace(' ', '%20') }}-{{ skill.keywords | length }}-blue" alt="{{ skill.name }}" />
+{% endfor %}
+</p>
+{% endif %}
+
+## Resume
+
+[View my full Resume](./RESUME.md)

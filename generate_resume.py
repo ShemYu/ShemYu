@@ -73,6 +73,42 @@ def update_readme(md_content, readme_path='README.md'):
     
     print(f"Successfully updated {readme_path}")
 
+import google.generativeai as genai
+
+def generate_ai_highlight(profile):
+    api_key = os.environ.get('GEMINI_API_KEY')
+    if not api_key:
+        print("Warning: GEMINI_API_KEY not found. Skipping AI highlight.")
+        return None
+
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Construct a prompt from the profile
+        basics = profile.get('basics', {})
+        work = profile.get('work', [])
+        skills = profile.get('skills', [])
+        
+        prompt = f"""
+        You are a professional career coach. Write a short, engaging, and impressive "Professional Highlight" (max 100 words) for a GitHub Profile README based on the following profile:
+        
+        Name: {basics.get('name')}
+        Label: {basics.get('label')}
+        Summary: {basics.get('summary')}
+        
+        Latest Role: {work[0].get('position')} at {work[0].get('name')} if work else 'N/A'
+        Top Skills: {', '.join([s.get('name') for s in skills[:3]])}
+        
+        Focus on their unique value proposition and recent achievements. Use emojis sparingly.
+        """
+        
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"Error generating AI highlight: {e}")
+        return None
+
 def main():
     data_dir = 'data'
     
@@ -83,19 +119,23 @@ def main():
     try:
         profile = load_profile(data_dir)
         
-        # Generate Markdown
+        # Generate Markdown Resume
         generate_resume(profile, 'resume.md.j2', 'RESUME.md')
         
-        # Generate HTML
+        # Generate HTML Resume
         generate_resume(profile, 'resume.html.j2', 'resume.html')
         
-        # Note: Automatic README update is currently disabled
-        # with open('RESUME.md', 'r', encoding='utf-8') as f:
-        #     md_content = f.read()
-        # update_readme(md_content)
+        # Generate AI Highlight
+        ai_highlight = generate_ai_highlight(profile)
+        if ai_highlight:
+            profile['ai_highlight'] = ai_highlight
+            
+        # Generate Profile README
+        generate_resume(profile, 'readme.md.j2', 'README.md')
         
     except ImportError:
-        print("Error: PyYAML or Jinja2 is not installed. Please run: pip install pyyaml jinja2")
+        print("Error: PyYAML, Jinja2, or google-generativeai is not installed.")
+        print("Please run: pip install pyyaml jinja2 google-generativeai")
     except Exception as e:
         print(f"An error occurred: {e}")
 
