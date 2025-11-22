@@ -1,5 +1,5 @@
 # Shem Yu
-**ML Engineer, Team Lead**
+**ML Engineer, Team Lead, Technical Writer**
 
 [Email](mailto:shauns4y@gmail.com) | [Website](https://github.com/ShemYu) | [GitHub](https://github.com/ShemYu) | [Medium](https://medium.com/@shemyu)
 
