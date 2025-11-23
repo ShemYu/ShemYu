@@ -26,9 +26,9 @@ Uptime: 5 roles of experience
 
 ### � Neural Link (AI Highlight)
 
-> **Professional Highlight:**
+> **Shem Yu: Driving AI Innovation 🚀**
 
-Shem Yu is a results-driven ML Engineer and Team Lead with a passion for pushing the boundaries of applied AI. He specializes in architecting and deploying sophisticated multi-agent systems and adaptive workflows, driving enterprise-scale automation. Shem's recent leadership on projects like DOGI and GAIA showcases his expertise in building autonomous reasoning systems on cloud platforms, delivering tangible value through Generative AI and LLM-based solutions. 🚀
+Senior Applied AI Engineer and Team Lead specializing in advanced agent development and multi-agent systems. Proven track record leading enterprise-scale projects like DOGI and GAIA, architecting adaptive workflows and LLM-powered automation. Expertise spans Generative AI, Data Engineering, and cloud infrastructure, delivering robust, autonomous reasoning solutions on AWS and Databricks. Passionate about building intelligent systems that solve complex challenges.
 
 
 ### 🛠 Tech Stack
