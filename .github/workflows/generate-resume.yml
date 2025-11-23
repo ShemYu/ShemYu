@@ -28,12 +28,11 @@ jobs:
       - name: Install dependencies
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv pip install pyyaml jinja2 google-generativeai python-dotenv
 
       - name: Generate Resume
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python -m src.main
+        run: uv run python -m src.main
 
       - name: Check for changes
         id: git-check
