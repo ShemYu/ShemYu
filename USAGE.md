@@ -25,12 +25,22 @@ The data is organized in the `data/` directory:
 pip install pyyaml
 ```
 
-### Generate Resume
+### Local Web "Command Center" (RECOMMENDED)
 
-To generate the `RESUME.md` file from the knowledge base:
+The easiest way to manage your resume is via the local web app, which provides a visual editor, AI tailoring, and live preview.
 
 ```bash
-python3 generate_resume.py
+uv run uvicorn src.web.app:app --reload
+```
+
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
+### CLI Generation (Legacy)
+
+To generate artifacts manually via CLI:
+
+```bash
+uv run python -m src.main [optional_jd_file]
 ```
 
 ### Adding New Data

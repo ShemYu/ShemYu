@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShemYu CV Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h1>CV Manager</h1>
+                <span class="version">v2.0 Beta</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="showSection('editor')">
+                    <span class="icon">📝</span> Editor
+                </button>
+                <button class="nav-item" onclick="showSection('tailor')">
+                    <span class="icon">✨</span> AI Tailor
+                </button>
+                <!--
+                <button class="nav-item" onclick="showSection('generate')">
+                    <span class="icon">🚀</span> Generate
+                </button>
+                -->
+            </nav>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="triggerGenerate()">Generate Artifacts</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Editor Section -->
+            <section id="editor-section" class="content-section active">
+                <div class="section-header">
+                    <h2>Data Editor</h2>
+                    <select id="section-selector" onchange="loadSectionEditor()">
+                        <option value="basics">Basics (Profile)</option>
+                        <option value="work">Experience</option>
+                        <option value="projects">Projects</option>
+                        <option value="education">Education</option>
+                        <option value="skills">Skills</option>
+                        <option value="certificates">Certificates</option>
+                        <option value="publications">Publications</option>
+                    </select>
+                </div>
+                <div id="editor-container">
+                    <!-- Dynamic Forms Here -->
+                    <div class="loading">Loading data...</div>
+                </div>
+                <div class="editor-actions">
+                    <button class="btn btn-save" onclick="saveCurrentSection()">Save Changes</button>
+                </div>
+            </section>
+
+            <!-- Tailor Section -->
+            <section id="tailor-section" class="content-section hidden">
+                <div class="section-header">
+                    <h2>AI Tailor</h2>
+                </div>
+                <div class="tailor-container">
+                    <p class="description">Paste a Job Description (JD) below to let AI customize your resume.</p>
+                    <textarea id="jd-input" placeholder="Paste Job Description here..."></textarea>
+                    <div class="tailor-actions">
+                        <button class="btn btn-magic" onclick="runTailoring()">✨ Tailor Resume</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Preview Pane -->
+        <div class="preview-pane">
+            <div class="preview-header">
+                <h3>Live Preview (A4)</h3>
+                <button class="btn btn-sm" onclick="refreshPreview()">Results</button>
+            </div>
+            <div class="preview-wrapper">
+                <iframe id="resume-preview" src="/preview/bible"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

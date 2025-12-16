@@ -5,8 +5,19 @@ class DataLoader(ABC):
     """Interface for loading profile data."""
     
     @abstractmethod
+    @abstractmethod
     def load(self) -> Dict[str, Any]:
         """Load and return the profile data."""
+        pass
+
+    @abstractmethod
+    def save_basics(self, data: Dict[str, Any]) -> None:
+        """Save basics section."""
+        pass
+
+    @abstractmethod
+    def save_section(self, section: str, data: list) -> None:
+        """Save a list-based section (work, projects, etc)."""
         pass
 
 class ContentGenerator(ABC):

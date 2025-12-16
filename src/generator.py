@@ -8,9 +8,12 @@ class Jinja2Generator(ContentGenerator):
     def __init__(self, template_dir: str):
         self.env = Environment(loader=FileSystemLoader(template_dir))
 
-    def generate(self, context: Dict[str, Any], template_name: str, output_path: str) -> None:
+    def render(self, context: Dict[str, Any], template_name: str) -> str:
         template = self.env.get_template(template_name)
-        output = template.render(**context)
+        return template.render(**context)
+
+    def generate(self, context: Dict[str, Any], template_name: str, output_path: str) -> None:
+        output = self.render(context, template_name)
         
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(output)

@@ -1,0 +1,254 @@
+:root {
+    --bg-dark: #1a1b1e;
+    --bg-sidebar: #141517;
+    --bg-card: #25262b;
+    --border-color: #2c2e33;
+    --text-primary: #c1c2c5;
+    --text-secondary: #909296;
+    --accent-color: #228be6;
+    --accent-hover: #1c7ed6;
+    --magic-color: #7950f2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 1fr;
+    /* Sidebar | Editor | Preview */
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.brand h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.brand .version {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.nav-item:hover {
+    background-color: var(--bg-card);
+    color: #fff;
+}
+
+.nav-item.active {
+    background-color: rgba(34, 139, 230, 0.1);
+    color: var(--accent-color);
+}
+
+.nav-item .icon {
+    margin-right: 10px;
+}
+
+/* Main Content */
+.main-content {
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-color);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+#section-selector {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    outline: none;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.form-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.item-card-header {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+/* Preview Pane */
+.preview-pane {
+    background: #525659;
+    /* Browser default PDF bg colorish */
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    background: var(--bg-sidebar);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+iframe {
+    width: 210mm;
+    height: 297mm;
+    border: none;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Utilities */
+.hidden {
+    display: none;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: #fff;
+    width: 100%;
+}
+
+.btn-save {
+    background-color: var(--accent-color);
+    color: #fff;
+    margin-top: 20px;
+}
+
+.btn-magic {
+    background-color: var(--magic-color);
+    color: #fff;
+    width: 100%;
+    padding: 12px;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Tailor */
+#jd-input {
+    width: 100%;
+    height: 300px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
