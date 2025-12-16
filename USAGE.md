@@ -20,9 +20,11 @@ The data is organized in the `data/` directory:
 
 - Python 3
 - `pyyaml`
+- `BasicTeX` (Optional, for PDF generation)
 
 ```bash
 pip install pyyaml
+brew install --cask basictex  # Optional
 ```
 
 ### Local Web "Command Center" (RECOMMENDED)
@@ -34,6 +36,9 @@ uv run uvicorn src.web.app:app --reload
 ```
 
 Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
+**PDF Generation (New)**:
+In the Web UI, click the **"Generate PDF (LaTeX)"** button to compile a high-quality PDF using the new LaTeX template. Requires `xelatex`.
 
 ### CLI Generation (Legacy)
 

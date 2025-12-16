@@ -121,6 +121,23 @@ async def generate_artifacts(background_tasks: BackgroundTasks, profile: Optiona
     background_tasks.add_task(_generate, profile)
     return {"status": "started", "output_dir": OUTPUT_DIR}
 
+@app.post("/api/generate/pdf")
+async def generate_pdf(background_tasks: BackgroundTasks, profile: Optional[Dict[str, Any]] = None):
+    """Trigger PDF generation using LaTeX"""
+    if not profile:
+        profile = loader.load()
+
+    def _compile(prof):
+        try:
+            # Determine logic for filename, for now usage master
+            generator.compile_pdf(prof, 'resume.tex.j2', OUTPUT_DIR, 'resume.pdf')
+            print("PDF Generation complete: resume.pdf")
+        except RuntimeError as e:
+            print(f"PDF Generation failed: {e}")
+
+    background_tasks.add_task(_compile, profile)
+    return {"status": "started", "output_dir": OUTPUT_DIR}
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})

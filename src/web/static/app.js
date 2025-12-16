@@ -79,6 +79,12 @@ async function triggerGenerate() {
     alert(`Generation started! Check ${data.output_dir}`);
 }
 
+async function triggerGeneratePDF() {
+    const res = await fetch('/api/generate/pdf', { method: 'POST' });
+    const data = await res.json();
+    alert(`PDF Generation started! If you have BasicTeX installed, check ${data.output_dir}/resume.pdf`);
+}
+
 async function updatePreviewWithCustom(profile) {
     // We need to render this via backend to get HTML
     // Assuming we added a preview endpoint for custom json

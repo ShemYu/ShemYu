@@ -1,0 +1,134 @@
+\documentclass[10pt, a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[default]{inter} % Use Inter font if available, or similar sans
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fontawesome5}
+\usepackage{parskip}
+
+% Constants
+\geometry{left=1.2cm, right=1.2cm, top=1.2cm, bottom=1.2cm}
+\pagestyle{empty} % No page numbers
+\definecolor{darktext}{HTML}{1A1A1A}
+\definecolor{lighttext}{HTML}{555555}
+\color{darktext}
+
+% Custom macros
+\newcommand{\resumetitle}[1]{
+    {\fontsize{24}{28}\bfseries\MakeUppercase{#1}}
+}
+\newcommand{\resumesubtitle}[1]{
+    {\fontsize{10}{12}\selectfont\color{lighttext}\MakeUppercase{#1}}
+}
+
+% Section formatting
+\titleformat{\section}
+{\large\bfseries\uppercase}
+{}
+{0em}
+{}[\titlerule]
+\titlespacing{\section}{0pt}{12pt}{6pt}
+
+% Itemize formatting
+\setlist[itemize]{left=0pt, label={\footnotesize\faCircle[solid]}, labelsep=0.5em, itemsep=2pt, topsep=0pt, parsep=0pt}
+
+% Hyperlink formatting
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+}
+
+\begin{document}
+
+% HEADER
+\begin{center}
+    \resumetitle{ {{ basics.name }} } \\ \vspace{4pt}
+    \resumesubtitle{ {{ basics.label }} } \\ \vspace{6pt}
+    
+    {\small
+    {% if basics.email %}
+    \faEnvelope \hspace{2pt} \href{mailto:{{ basics.email }}}{ {{ basics.email }} } \quad
+    {% endif %}
+    {% if basics.phone %}
+    \faPhone \hspace{2pt} {{ basics.phone }} \quad
+    {% endif %}
+    {% if basics.url %}
+    \faGlobe \hspace{2pt} \href{ {{ basics.url }} }{Website} \quad
+    {% endif %}
+    {% for p in basics.profiles %}
+    \fa{{ p.network }} \hspace{2pt} \href{ {{ p.url }} }{ {{ p.network }} } \quad
+    {% endfor %}
+    }
+\end{center}
+
+% SUMMARY
+{% if basics.summary %}
+\section*{Summary}
+{{ basics.summary }}
+{% endif %}
+
+% EXPERIENCE
+{% if work %}
+\section*{Experience}
+{% for job in work %}
+\noindent
+\textbf{ {{ job.position }} } \hfill \textbf{ {{ job.name }} } \\
+{\small \color{lighttext} {{ job.startDate }} -- {{ job.endDate | default('Present') }} }
+
+{% if job.highlights %}
+\begin{itemize}
+{% for highlight in job.highlights %}
+    \item {{ highlight }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+\vspace{6pt}
+{% endfor %}
+{% endif %}
+
+% PROJECTS
+{% if projects %}
+\section*{Projects}
+{% for proj in projects %}
+\noindent
+\textbf{ {{ proj.name }} } {% if proj.url %} | \href{ {{ proj.url }} }{Link} {% endif %} \hfill {\small \color{lighttext} {{ proj.startDate }} -- {{ proj.endDate }} } \\
+{% if proj.description %}{{ proj.description }} \\{% endif %}
+{% if proj.highlights %}
+\begin{itemize}
+{% for highlight in proj.highlights %}
+    \item {{ highlight }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+\vspace{6pt}
+{% endfor %}
+{% endif %}
+
+% SKILLS
+{% if skills %}
+\section*{Skills}
+{% for group in skills %}
+\noindent \textbf{ {{ group.name }} }: {{ group.keywords | join(', ') }} \\
+{% endfor %}
+{% endif %}
+
+% EDUCATION
+{% if education %}
+\section*{Education}
+{% for edu in education %}
+\noindent
+\textbf{ {{ edu.institution }} } \hfill {{ edu.startDate }} -- {{ edu.endDate }} \\
+{{ edu.area }} -- {{ edu.studyType }}
+\vspace{4pt}
+{% endfor %}
+{% endif %}
+
+\end{document}

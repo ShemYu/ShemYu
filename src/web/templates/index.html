@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar -->
@@ -15,7 +17,7 @@
                 <h1>CV Manager</h1>
                 <span class="version">v2.0 Beta</span>
             </div>
-            
+
             <nav class="nav-menu">
                 <button class="nav-item active" onclick="showSection('editor')">
                     <span class="icon">📝</span> Editor
@@ -32,6 +34,8 @@
 
             <div class="actions">
                 <button class="btn btn-primary" onclick="triggerGenerate()">Generate Artifacts</button>
+                <button class="btn btn-save" style="margin-top: 10px; background-color: #e6492d;"
+                    onclick="triggerGeneratePDF()">Generate PDF (LaTeX)</button>
             </div>
         </aside>
 
@@ -89,4 +93,5 @@
 
     <script src="/static/app.js"></script>
 </body>
+
 </html>
