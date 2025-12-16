@@ -18,3 +18,9 @@ This document outlines the future development plans for the Career History Knowl
 ## Phase 4: Data Quality
 - [ ] **Schema Validation**: Implement JSON Schema or Pydantic models to validate YAML files to ensure data integrity.
 - [ ] **Linting**: Add linting for YAML files.
+
+## Issues & Technical Debt (2025-12-16)
+1.  **High Learning Curve**: CLI usage is cumbersome for non-technical users. Requires a simpler interface or automation.
+2.  **Fragmented Generation**: Output methods are scattered; need a unified generation pipeline.
+3.  **Manual Data Entry**: Adding/Updating `data/` is manual and prone to friction.
+4.  **Tooling Standardization**: Project operations should strictly use `uv`, but standard is often ignored.

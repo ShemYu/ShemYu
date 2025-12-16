@@ -24,3 +24,8 @@ class AIProvider(ABC):
     def generate_highlight(self, profile: Dict[str, Any]) -> Optional[str]:
         """Generate a professional highlight based on the profile."""
         pass
+
+    @abstractmethod
+    def tailor_profile(self, profile: Dict[str, Any], job_description: str) -> Dict[str, Any]:
+        """Tailor the profile based on the job description."""
+        pass

@@ -54,3 +54,55 @@ class GeminiAIProvider(AIProvider):
         except Exception as e:
             print(f"Error generating AI highlight: {e}")
             return None
+
+    def tailor_profile(self, profile: Dict[str, Any], job_description: str) -> Dict[str, Any]:
+        """
+        Uses Gemini to filter and rewrite the profile to match the JD.
+        """
+        if not self._configure():
+            print("AI not configured, returning original profile.")
+            return profile
+            
+        try:
+            model = genai.GenerativeModel(self.model_name, generation_config={"response_mime_type": "application/json"})
+            
+            # Prepare context (avoid sending too much noise if possible, but sending full profile is usually fine for Gemini 1.5/2.0)
+            import json
+            profile_json = json.dumps(profile, default=str)
+            
+            prompt = f"""
+            You are an expert Resume Tailor. Your goal is to adapt a candidate's "Master Profile" (Bible) to fit a specific "Job Description" (JD).
+            
+            RULES:
+            1.  **Strict Size Limit**: The output MUST fit on ONE PAGE when formatted. This means:
+                -   Select MAX 3-4 most relevant WORK EXPERIENCES.
+                -   For each selected work experience, select MAX 3-4 bullet points that match the JD keywords.
+                -   Select MAX 2-3 most relevant PROJECTS.
+                -   Keep the Summary concise (rewrite it to target the JD, max 3 lines).
+            2.  **Relevance**: Prioritize experiences and skills that directly match the JD.
+            3.  **Structure**: The output must be a valid JSON object matching the exact structure of the input `Profile`.
+            4.  **Content**: 
+                -   You may rewrite bullet points to emphasize impact and JD keywords.
+                -   Do NOT invent facts. Only use info present in the Profile.
+                -   Remove completely irrelevant sections if needed (but keep Basics, Education).
+            
+            ---
+            JOB DESCRIPTION:
+            {job_description}
+            
+            ---
+            CANDIDATE PROFILE (JSON):
+            {profile_json}
+            
+            ---
+            Output the tailored JSON profile:
+            """
+            
+            response = model.generate_content(prompt)
+            tailored_profile = json.loads(response.text)
+            return tailored_profile
+            
+        except Exception as e:
+            print(f"Error tailoring profile: {e}")
+            # Fallback to original if AI fails
+            return profile

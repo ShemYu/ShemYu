@@ -142,25 +142,84 @@ Facilitate communication and project delivery between university and III teams, 
 
 ## Projects
 
-### Example AI Project ([Link](https://github.com/ShemYu/example-project))
+### DOGI Multi-Agent Productivity Suite
 
-_2024-01 - 2024-03_
-
-
-
-An example project demonstrating the YAML structure.
+_2025-01 - 2025-12_
 
 
 
-
-- Built a RAG system using LangChain.
-
-- Improved retrieval accuracy by 20%.
+A suite of internal productivity tools powered by multi-agent workflows, including meeting scheduling, summarization, and FinOps automation.
 
 
 
 
-**Keywords**: Python, LLM, RAG
+
+- Implemented multi-agent delegation patterns for enterprise workflows.
+
+- Developed meeting scheduling agent integrating calendar and internal APIs.
+
+- Designed session persistence and storage strategy using Redis/Postgres.
+
+- Delivered FinOps agent for AWS cost insights and early anomaly detection.
+
+
+
+
+**Keywords**: Multi-Agent System, Workflow Orchestration, Redis, Postgres, FinOps, LangGraph/ADK Pattern
+
+
+
+### GAIA Enterprise Gen-AI Platform
+
+_2024-11 - 2025-06_
+
+
+
+An internal Gen-AI platform providing model hub, guardrails, retrieval systems, evaluation tools, and multi-product orchestration for enterprise AI use cases.
+
+
+
+
+
+- Designed the overall system architecture for the enterprise Gen-AI platform.
+
+- Integrated Databricks VectorSearch and scalable document pipelines.
+
+- Delivered evaluation, guardrail, and governance modules for production workloads.
+
+- Supported multi-product integration including meeting assistants and FinOps agents.
+
+
+
+
+**Keywords**: LLM Ops, Databricks, Vector Search, Agents, RAG, Model Serving
+
+
+
+### Regulatory Knowledge Base (RKB)
+
+_2024-10 - 2025-09_
+
+
+
+A knowledge base system enabling semantic search, retrieval, and Q&A on regulatory and legal documents using enterprise-grade RAG pipelines.
+
+
+
+
+
+- Designed ingestion pipelines for PDFs and structured government rules.
+
+- Implemented chunking, metadata tagging, and cleanup workflows.
+
+- Improved retrieval recall and precision through iterative evaluation.
+
+- Integrated with internal Gen-AI platform for unified access and governance.
+
+
+
+
+**Keywords**: RAG, Vector DB, Databricks, Data Pipeline, Embeddings
 
 
 

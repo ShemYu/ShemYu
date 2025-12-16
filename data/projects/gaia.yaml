@@ -1,0 +1,19 @@
+name: GAIA Enterprise Gen-AI Platform
+description: >
+  An internal Gen-AI platform providing model hub, guardrails, retrieval
+  systems, evaluation tools, and multi-product orchestration for enterprise AI use cases.
+url: ""
+startDate: "2024-11"
+endDate: "2025-06"
+keywords:
+  - LLM Ops
+  - Databricks
+  - Vector Search
+  - Agents
+  - RAG
+  - Model Serving
+highlights:
+  - Designed the overall system architecture for the enterprise Gen-AI platform.
+  - Integrated Databricks VectorSearch and scalable document pipelines.
+  - Delivered evaluation, guardrail, and governance modules for production workloads.
+  - Supported multi-product integration including meeting assistants and FinOps agents.

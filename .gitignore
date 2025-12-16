@@ -154,4 +154,4 @@ cython_debug/
 *.swp
 
 # Resume
-CV_*
+CV_*output/
