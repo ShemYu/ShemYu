@@ -105,10 +105,34 @@ const ModernTemplate = ({ data }) => {
                                         ))}
                                     </ul>
                                 </div>
+
                             ))}
                         </div>
                     </section>
-                </main>
+
+                    {
+                        data.education && data.education.length > 0 && (
+                            <section className="mb-8">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span> Education
+                                </h2>
+                                <div className="space-y-6">
+                                    {data.education.map((edu, i) => (
+                                        <div key={i} className="relative pl-6 border-l-2 border-gray-100">
+                                            <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-gray-300"></div>
+                                            <div>
+                                                <h3 className="font-bold text-lg text-gray-900">{edu.institution}</h3>
+                                                <div className="text-indigo-600 font-medium">{edu.studyType} in {edu.area}</div>
+                                                <div className="text-xs text-gray-500 font-mono mt-1">{edu.startDate} – {edu.endDate}</div>
+                                                {edu.score && <div className="text-sm text-gray-600 mt-1">Score: {edu.score}</div>}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )
+                    }
+                </main >
 
                 <aside>
                     <section className="mb-8">
@@ -126,8 +150,8 @@ const ModernTemplate = ({ data }) => {
                         </div>
                     </section>
                 </aside>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

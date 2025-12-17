@@ -115,9 +115,10 @@ export const DataEditor = ({ data, setData, setIsDirty }) => {
                     {editingSection === 'work' && (
                         <>
                             <StyledInput label="Company" value={item.company} onChange={e => handleUpdate('company', e.target.value)} />
+                            <StyledInput label="Position" value={item.position} onChange={e => handleUpdate('position', e.target.value)} />
                             <div className="grid grid-cols-2 gap-4">
-                                <StyledInput label="Position" value={item.position} onChange={e => handleUpdate('position', e.target.value)} />
-                                <StyledInput label="Dates" value={item.startDate} placeholder="2023-01 / Present" onChange={e => handleUpdate('startDate', e.target.value)} />
+                                <StyledInput label="Start Date" value={item.startDate} placeholder="2023-01" onChange={e => handleUpdate('startDate', e.target.value)} />
+                                <StyledInput label="End Date" value={item.endDate} placeholder="Present" onChange={e => handleUpdate('endDate', e.target.value)} />
                             </div>
                             <StyledTextArea label="Summary" value={item.summary} onChange={e => handleUpdate('summary', e.target.value)} />
                             <HighlightEditor highlights={item.highlights} onChange={h => handleUpdate('highlights', h)} />
@@ -130,8 +131,14 @@ export const DataEditor = ({ data, setData, setIsDirty }) => {
                             <StyledInput label="Institution" value={item.institution} onChange={e => handleUpdate('institution', e.target.value)} />
                             <div className="grid grid-cols-2 gap-4">
                                 <StyledInput label="Area / Degree" value={item.area} onChange={e => handleUpdate('area', e.target.value)} />
-                                <StyledInput label="Dates" value={item.startDate} placeholder="2018-09 / 2022-06" onChange={e => handleUpdate('startDate', e.target.value)} />
+                                <StyledInput label="Study Type" value={item.studyType} placeholder="Bachelor / Master" onChange={e => handleUpdate('studyType', e.target.value)} />
                             </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <StyledInput label="Start Date" value={item.startDate} placeholder="2018-09" onChange={e => handleUpdate('startDate', e.target.value)} />
+                                <StyledInput label="End Date" value={item.endDate} placeholder="2022-06" onChange={e => handleUpdate('endDate', e.target.value)} />
+                            </div>
+                            <StyledInput label="Score" value={item.score} placeholder="GPA 3.8 / 4.0" onChange={e => handleUpdate('score', e.target.value)} />
+                            <HighlightEditor highlights={item.courses} onChange={h => handleUpdate('courses', h)} />
                         </>
                     )}
 
@@ -171,11 +178,26 @@ export const DataEditor = ({ data, setData, setIsDirty }) => {
             </div>
             {data[section]?.map(item => (
                 <div key={item.id || Math.random()} onClick={() => { setEditingSection(section); setEditingId(item.id); }}
-                    className="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-zinc-600 cursor-pointer transition-colors">
-                    <div className="font-bold text-white">
-                        {item.company || item.institution || item.name || "Untitled"}
+                    className="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-zinc-600 cursor-pointer transition-colors relative group">
+
+                    <div className="flex justify-between items-start">
+                        <div className="font-bold text-white pr-4">
+                            {item.company || item.institution || item.name || "Untitled"}
+                        </div>
+                        {/* Dates for Work */}
+                        {(section === 'work' && item.startDate) && (
+                            <div className="text-[10px] font-mono text-zinc-600 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded">
+                                {item.startDate} {item.endDate ? `- ${item.endDate}` : ''}
+                            </div>
+                        )}
                     </div>
-                    {(item.position || item.area) && <div className="text-xs text-zinc-500">{item.position || item.area}</div>}
+
+                    {/* Position or Degree */}
+                    <div className="text-xs text-zinc-500 mt-1">
+                        {item.position || item.studyType || item.area || item.name}
+                        {/* Append Area to StudyType if both exist for Education */}
+                        {section === 'education' && item.studyType && item.area && ` - ${item.area}`}
+                    </div>
                 </div>
             ))}
             {(!data[section] || data[section].length === 0) && (
