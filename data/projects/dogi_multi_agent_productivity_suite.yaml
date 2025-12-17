@@ -19,3 +19,4 @@ highlights:
 - Designed session persistence and storage strategy using Redis/Postgres.
 - Delivered FinOps agent for AWS cost insights and early anomaly detection.
 id: 0
+visible: true
