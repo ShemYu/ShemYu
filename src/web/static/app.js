@@ -8,38 +8,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadSectionEditor();
 });
 
-// API Calls
+// --- API Logic ---
+
 async function loadProfile() {
     const res = await fetch('/api/profile');
     currentProfile = await res.json();
 }
 
 async function saveCurrentSection() {
-    const editorContainer = document.getElementById('editor-container');
+    const btn = document.querySelector('.btn-save');
+    const originalText = btn.innerText;
+    btn.innerText = 'Saving...';
+    btn.disabled = true;
 
-    let updateData;
+    try {
+        const updateData = getCurrentFormData();
 
-    if (currentSection === 'basics') {
-        updateData = getBasicsFormData();
-    } else {
-        updateData = getListFormData();
-    }
+        // Optimistic Update
+        currentProfile[currentSection] = updateData;
 
-    // Optimistic Update
-    currentProfile[currentSection] = updateData;
+        // API Call
+        const res = await fetch(`/api/profile/${currentSection}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: updateData })
+        });
 
-    // API Call
-    const res = await fetch(`/api/profile/${currentSection}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: updateData })
-    });
-
-    if (res.ok) {
-        alert('Saved successfully!');
-        refreshPreview();
-    } else {
-        alert('Error saving data.');
+        if (res.ok) {
+            refreshPreview();
+            setTimeout(() => { btn.innerText = 'Saved!'; }, 200);
+            setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 1500);
+        } else {
+            alert('Error saving data.');
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Save failed');
+        btn.innerText = originalText;
+        btn.disabled = false;
     }
 }
 
@@ -48,8 +56,8 @@ async function runTailoring() {
     if (!jd) return alert('Please paste a Job Description.');
 
     const btn = document.querySelector('.btn-magic');
-    const originalText = btn.innerText;
-    btn.innerText = '✨ Magic Happening...';
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '✨ AI Working...';
     btn.disabled = true;
 
     try {
@@ -63,12 +71,12 @@ async function runTailoring() {
 
         // Update Preview with Custom Data
         updatePreviewWithCustom(tailoredProfile);
-        alert('Tailoring complete! Check the preview.');
+        alert('Tailoring complete! Check preview.');
 
     } catch (e) {
         alert('Error during tailoring: ' + e);
     } finally {
-        btn.innerText = originalText;
+        btn.innerHTML = originalText;
         btn.disabled = false;
     }
 }
@@ -82,31 +90,32 @@ async function triggerGenerate() {
 async function triggerGeneratePDF() {
     const res = await fetch('/api/generate/pdf', { method: 'POST' });
     const data = await res.json();
-    alert(`PDF Generation started! If you have BasicTeX installed, check ${data.output_dir}/resume.pdf`);
+    alert(`PDF Generation started! Check ${data.output_dir}`);
 }
 
 async function updatePreviewWithCustom(profile) {
-    // We need to render this via backend to get HTML
-    // Assuming we added a preview endpoint for custom json
     const res = await fetch('/preview/custom', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profile)
     });
     const html = await res.text();
-
-    // Inject into iframe
     const iframe = document.getElementById('resume-preview');
     iframe.srcdoc = html;
 }
 
 
-// UI Logic
+// --- UI Logic ---
+
 function showSection(id) {
     document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
     document.getElementById(id + '-section').classList.remove('hidden');
 
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    // Find nav item that called this
+    const navItems = document.querySelectorAll('.nav-item');
+    // Simple hack to highlight based on text content usually works or passed `event`
+    // For now handled by onclick in HTML
     event.currentTarget.classList.add('active');
 }
 
@@ -118,124 +127,292 @@ function loadSectionEditor() {
 
     const data = currentProfile[currentSection];
 
+    console.log(`Loading editor for: ${currentSection}`);
+
+    // Switch Based on Section Type for specialized editors
     if (currentSection === 'basics') {
-        renderBasicsForm(data, container);
+        renderBasicsEditor(data, container);
+    } else if (['work', 'projects', 'education', 'certificates'].includes(currentSection)) {
+        renderListEditor(data, container, currentSection);
+    } else if (currentSection === 'skills') {
+        renderListEditor(data, container, 'skills'); // Can be specialized further later
     } else {
-        renderListForm(data, container);
+        // Fallback
+        renderListEditor(data, container, currentSection);
     }
 }
 
-function renderBasicsForm(data, container) {
-    // Simple flat fields
-    for (const [key, value] of Object.entries(data)) {
-        if (typeof value === 'object') continue; // Skip complex nested for now
+// --- Component Renderers ---
 
-        const group = document.createElement('div');
-        group.className = 'form-group';
+function renderBasicsEditor(data, container) {
+    // Basics is flat object mostly
+    const card = createCard('Profile Details');
 
-        const label = document.createElement('label');
-        label.className = 'form-label';
-        label.innerText = key;
+    const fields = [
+        { key: 'name', label: 'Full Name' },
+        { key: 'label', label: 'Professional Title' },
+        { key: 'email', label: 'Email' },
+        { key: 'phone', label: 'Phone' },
+        { key: 'url', label: 'Website' },
+        { key: 'location', label: 'Location (City, Country)' },
+        { key: 'summary', label: 'Professional Summary', type: 'textarea' }
+    ];
 
-        const input = key === 'summary' ? document.createElement('textarea') : document.createElement('input');
-        input.className = key === 'summary' ? 'form-textarea' : 'form-input';
-        input.value = value || '';
-        input.dataset.key = key;
+    fields.forEach(field => {
+        card.appendChild(createField(field.key, field.label, data[field.key], field.type));
+    });
 
-        group.appendChild(label);
-        group.appendChild(input);
-        container.appendChild(group);
+    container.appendChild(card);
+
+    // Profiles (Network)
+    if (data.profiles) {
+        const profileCard = createCard('Social Profiles');
+        const listContainer = document.createElement('div');
+        listContainer.className = 'dynamic-list-container';
+
+        data.profiles.forEach((p, idx) => {
+            const row = document.createElement('div');
+            row.className = 'dynamic-item form-group';
+            row.style.display = 'grid';
+            row.style.gridTemplateColumns = '1fr 2fr';
+            row.style.gap = '8px';
+
+            const netInput = createInput(p.network || '', 'Network (e.g. GitHub)');
+            netInput.dataset.key = 'network';
+            netInput.dataset.isList = 'true';
+            netInput.dataset.listIndex = idx;
+
+            const urlInput = createInput(p.url || '', 'URL');
+            urlInput.dataset.key = 'url';
+            urlInput.dataset.isList = 'true';
+            urlInput.dataset.listIndex = idx;
+
+            row.appendChild(netInput);
+            row.appendChild(urlInput);
+            listContainer.appendChild(row);
+        });
+        profileCard.appendChild(listContainer);
+        container.appendChild(profileCard);
     }
 }
 
-function renderListForm(listData, container) {
-    if (!listData) return;
+function renderListEditor(listData, container, type) {
+    if (!listData) listData = [];
 
     listData.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'item-card';
+        // Title logic
+        let title = `Item ${index + 1}`;
+        if (type === 'work') title = item.company || 'New Position';
+        if (type === 'projects') title = item.name || 'New Project';
+        if (type === 'education') title = item.institution || 'New School';
+        if (type === 'skills') title = item.name || 'Skill Category';
+
+        const card = createCard(title);
         card.dataset.index = index;
+        card.className += ' list-item-card'; // Marker for collector
 
-        const header = document.createElement('div');
-        header.className = 'item-card-header';
-        header.innerText = item.name || item.institution || item.company || `Item ${index + 1}`;
-        card.appendChild(header);
+        // Fields based on type
+        if (type === 'work') {
+            const grid = createGrid(2);
+            grid.appendChild(createField('company', 'Company', item.company));
+            grid.appendChild(createField('position', 'Position', item.position));
+            grid.appendChild(createField('startDate', 'Start Date', item.startDate));
+            grid.appendChild(createField('endDate', 'End Date', item.endDate));
+            card.appendChild(grid);
 
-        for (const [key, value] of Object.entries(item)) {
-            if (key === 'highlights' || key === 'keywords') {
-                // Array fields - simplified as textarea
-                const group = document.createElement('div');
-                group.className = 'form-group';
+            card.appendChild(createField('summary', 'Summary', item.summary, 'textarea'));
 
-                const label = document.createElement('label');
-                label.className = 'form-label';
-                label.innerText = key + ' (one per line)';
+            // Dynamic Highlights
+            card.appendChild(createLabel('Highlights (Bullet Points)'));
+            card.appendChild(createDynamicList(item.highlights || []));
 
-                const input = document.createElement('textarea');
-                input.className = 'form-textarea';
-                input.value = Array.isArray(value) ? value.join('\n') : value;
-                input.dataset.key = key;
-                input.dataset.type = 'array';
+        } else if (type === 'projects') {
+            const grid = createGrid(2);
+            grid.appendChild(createField('name', 'Project Name', item.name));
+            grid.appendChild(createField('url', 'Project URL', item.url));
+            grid.appendChild(createField('startDate', 'Start Date', item.startDate));
+            grid.appendChild(createField('endDate', 'End Date', item.endDate));
+            card.appendChild(grid);
 
-                group.appendChild(label);
-                group.appendChild(input);
-                card.appendChild(group);
-            } else if (typeof value !== 'object') {
-                const group = document.createElement('div');
-                group.className = 'form-group';
+            card.appendChild(createField('description', 'Description', item.description, 'textarea'));
 
-                const label = document.createElement('label');
-                label.className = 'form-label';
-                label.innerText = key;
+            card.appendChild(createLabel('Highlights / Tech Stack'));
+            card.appendChild(createDynamicList(item.highlights || []));
 
-                const input = document.createElement('input');
-                input.className = 'form-input';
-                input.value = value || '';
-                input.dataset.key = key;
-
-                group.appendChild(label);
-                group.appendChild(input);
-                card.appendChild(group);
+        } else if (type === 'skills') {
+            card.appendChild(createField('name', 'Category Name', item.name));
+            // Keywords as Tags or List? List is safer
+            card.appendChild(createLabel('Keywords (Skills)'));
+            card.appendChild(createDynamicList(item.keywords || []));
+        } else {
+            // Generic fallback
+            for (const [k, v] of Object.entries(item)) {
+                if (typeof v !== 'object') {
+                    card.appendChild(createField(k, k, v));
+                }
             }
         }
+
         container.appendChild(card);
     });
 }
 
-function getBasicsFormData() {
-    const data = { ...currentProfile.basics }; // Start with existing to keep nested stuff
-    const inputs = document.querySelectorAll('#editor-container .form-input, #editor-container .form-textarea');
-    inputs.forEach(input => {
-        data[input.dataset.key] = input.value;
-    });
-    return data;
+
+// --- Helper Components ---
+
+function createCard(titleText) {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    const header = document.createElement('div');
+    header.className = 'item-card-header';
+    header.innerText = titleText;
+    card.appendChild(header);
+    return card;
 }
 
-function getListFormData() {
-    const items = [];
-    const cards = document.querySelectorAll('.item-card');
+function createGrid(cols) {
+    const div = document.createElement('div');
+    div.style.display = 'grid';
+    div.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    div.style.gap = '16px';
+    div.style.marginBottom = '16px';
+    return div;
+}
 
-    cards.forEach(card => {
-        const item = {};
-        const inputs = card.querySelectorAll('.form-input, .form-textarea');
+function createLabel(text) {
+    const label = document.createElement('label');
+    label.className = 'form-label';
+    label.innerText = text;
+    return label;
+}
+
+function createInput(val, placeholder = '') {
+    const input = document.createElement('input');
+    input.className = 'form-input';
+    input.value = val || '';
+    input.placeholder = placeholder;
+    return input;
+}
+
+function createField(key, labelText, value, type = 'text') {
+    const group = document.createElement('div');
+    group.className = 'form-group';
+
+    group.appendChild(createLabel(labelText));
+
+    const input = type === 'textarea' ? document.createElement('textarea') : document.createElement('input');
+    input.className = type === 'textarea' ? 'form-textarea' : 'form-input';
+    input.value = value || '';
+    input.dataset.key = key;
+
+    group.appendChild(input);
+    return group;
+}
+
+function createDynamicList(items) {
+    const container = document.createElement('div');
+    container.className = 'dynamic-list';
+
+    // Function to add a row
+    const addRow = (text = '') => {
+        const row = document.createElement('div');
+        row.className = 'dynamic-item';
+
+        const input = document.createElement('input');
+        input.className = 'form-input dynamic-input';
+        input.value = text;
+
+        const btnRemove = document.createElement('button');
+        btnRemove.className = 'btn-icon';
+        btnRemove.innerHTML = '×';
+        btnRemove.onclick = () => row.remove();
+
+        row.appendChild(input);
+        row.appendChild(btnRemove);
+        container.appendChild(row);
+    };
+
+    // Render existing
+    items.forEach(item => addRow(item));
+
+    // Add Button
+    const btnAdd = document.createElement('button');
+    btnAdd.className = 'btn btn-secondary btn-add';
+    btnAdd.innerText = '+ Add Item';
+    btnAdd.onclick = (e) => { e.preventDefault(); addRow(); };
+
+    // We append the button OUTSIDE the list container usually, or at the end
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(container);
+    wrapper.appendChild(btnAdd);
+
+    return wrapper;
+}
+
+// --- Data Collection Logic ---
+
+function getCurrentFormData() {
+    // Strategy: We can't reuse the simple logic because DOM is complex now.
+    // Specialize extraction based on section.
+
+    if (currentSection === 'basics') {
+        const data = { ...currentProfile.basics };
+        // Simple fields
+        const inputs = document.querySelectorAll('#editor-container .form-input, #editor-container .form-textarea');
         inputs.forEach(input => {
-            const key = input.dataset.key;
-            if (input.dataset.type === 'array') {
-                item[key] = input.value.split('\n').filter(line => line.trim() !== '');
-            } else {
-                item[key] = input.value;
-            }
+            if (input.closest('.dynamic-item')) return; // handled separately
+            if (input.dataset.key) data[input.dataset.key] = input.value;
         });
-        // We might lose fields that are not rendered (complex nested), 
-        // but for this MVP we render mostly everything important.
-        items.push(item);
-    });
 
-    return items;
+        // Profiles? (Simplified: we didn't fully implement adding new profiles yet, just editing existing)
+        // If we want to support profiles properly we need list collector logic.
+        return data;
+    }
+    else {
+        // List Sections
+        const items = [];
+        const cards = document.querySelectorAll('.list-item-card');
+
+        cards.forEach(card => {
+            const item = {};
+
+            // Text Fields
+            const inputs = card.querySelectorAll('.form-group > .form-input, .form-group > .form-textarea');
+            inputs.forEach(input => {
+                if (input.dataset.key) item[input.dataset.key] = input.value;
+            });
+
+            // Dynamic Lists (Highlights/Keywords)
+            // Strategy: Find dynamic-list inside card
+            const lists = card.querySelectorAll('.dynamic-list');
+            lists.forEach(list => {
+                // Determine key from the container or previous sibling label
+                // Let's rely on data attributes which we need to set in renderListEditor
+                // Wait, we need to update renderListEditor to set data-key on the label or container?
+                // Simpler: Just check currentSection again, or stick to the hardcoded mapping for MVP robustness.
+
+                let baseKey = 'highlights';
+                if (currentSection === 'skills') baseKey = 'keywords';
+
+                // Override if we add more lists later. For now, this covers Work/Projects (highlights) and Skills (keywords).
+
+                const collected = [];
+                list.querySelectorAll('.dynamic-input').forEach(inp => {
+                    if (inp.value.trim()) collected.push(inp.value.trim());
+                });
+
+                item[baseKey] = collected;
+            });
+
+            items.push(item);
+        });
+
+        return items;
+    }
 }
 
 function refreshPreview() {
     const iframe = document.getElementById('resume-preview');
     iframe.src = '/preview/bible?t=' + new Date().getTime();
-    if (iframe.srcdoc) iframe.srcdoc = ''; // Clear srcdoc if it was tailored
+    if (iframe.srcdoc) iframe.srcdoc = '';
 }
