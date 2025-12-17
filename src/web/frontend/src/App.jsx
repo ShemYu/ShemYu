@@ -56,11 +56,12 @@ const App = () => {
   useEffect(() => {
     API.getProfile().then(prof => {
       // Ensure IDs
-      ['work', 'education', 'projects'].forEach(section => {
+      ['work', 'education', 'projects', 'skills'].forEach(section => {
         if (prof[section]) {
           prof[section] = prof[section].map((item, i) => ({ ...item, id: item.id || i }));
         }
       });
+
 
       const masterVersion = {
         id: 'master',
@@ -111,7 +112,7 @@ const App = () => {
       const tailored = await API.tailorResume(jd);
 
       // Ensure IDs
-      ['work', 'education', 'projects'].forEach(section => {
+      ['work', 'education', 'projects', 'skills'].forEach(section => {
         if (tailored[section]) {
           tailored[section] = tailored[section].map((item, i) => ({ ...item, id: item.id || i }));
         }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, GripVertical, Trash2 } from 'lucide-react';
+import { ArrowLeft, GripVertical, Trash2, Eye, EyeOff } from 'lucide-react';
 
 const StyledInput = ({ label, value, onChange, placeholder, className = "" }) => (
     <div className={`flex flex-col gap-1.5 ${className}`}>
@@ -69,8 +69,24 @@ export const DataEditor = ({ data, setData, setIsDirty }) => {
         setIsDirty(true);
     };
 
+    const toggleVisibility = (section, id, e) => {
+        e.stopPropagation(); // Prevent entering edit mode
+        setData(prev => ({
+            ...prev,
+            [section]: prev[section].map(i => {
+                if (i.id === id) {
+                    // Default to true if undefined, so toggle makes it false
+                    const current = i.visible !== false;
+                    return { ...i, visible: !current };
+                }
+                return i;
+            })
+        }));
+        setIsDirty(true);
+    };
+
     const addItem = (section) => {
-        const newItem = { id: Date.now() }; // temporary ID
+        const newItem = { id: Date.now(), visible: true }; // Default visible
         if (section === 'work') newItem.highlights = [];
         if (section === 'projects') newItem.highlights = [];
         if (section === 'skills') { newItem.name = "New Skill"; newItem.keywords = []; }
@@ -176,30 +192,42 @@ export const DataEditor = ({ data, setData, setIsDirty }) => {
                     + Add
                 </button>
             </div>
-            {data[section]?.map(item => (
-                <div key={item.id || Math.random()} onClick={() => { setEditingSection(section); setEditingId(item.id); }}
-                    className="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-zinc-600 cursor-pointer transition-colors relative group">
+            {data[section]?.map(item => {
+                const isHidden = item.visible === false;
+                return (
+                    <div key={item.id || Math.random()} onClick={() => { setEditingSection(section); setEditingId(item.id); }}
+                        className={`bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-zinc-600 cursor-pointer transition-colors relative group ${isHidden ? 'opacity-50 grayscale' : ''}`}>
 
-                    <div className="flex justify-between items-start">
-                        <div className="font-bold text-white pr-4">
-                            {item.company || item.institution || item.name || "Untitled"}
-                        </div>
-                        {/* Dates for Work */}
-                        {(section === 'work' && item.startDate) && (
-                            <div className="text-[10px] font-mono text-zinc-600 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded">
-                                {item.startDate} {item.endDate ? `- ${item.endDate}` : ''}
+                        {/* Visibility Toggle Button */}
+                        <button
+                            onClick={(e) => toggleVisibility(section, item.id, e)}
+                            className="absolute top-3 right-3 text-zinc-600 hover:text-white z-10 p-1 rounded hover:bg-zinc-700 transition-all opacity-0 group-hover:opacity-100"
+                            title={isHidden ? "Show Item" : "Hide Item"}
+                        >
+                            {isHidden ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+
+                        <div className="flex justify-between items-start pr-6">
+                            <div className="font-bold text-white pr-4">
+                                {item.company || item.institution || item.name || "Untitled"}
                             </div>
-                        )}
-                    </div>
+                            {/* Dates for Work */}
+                            {(section === 'work' && item.startDate) && (
+                                <div className="text-[10px] font-mono text-zinc-600 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded">
+                                    {item.startDate} {item.endDate ? `- ${item.endDate}` : ''}
+                                </div>
+                            )}
+                        </div>
 
-                    {/* Position or Degree */}
-                    <div className="text-xs text-zinc-500 mt-1">
-                        {item.position || item.studyType || item.area || item.name}
-                        {/* Append Area to StudyType if both exist for Education */}
-                        {section === 'education' && item.studyType && item.area && ` - ${item.area}`}
+                        {/* Position or Degree */}
+                        <div className="text-xs text-zinc-500 mt-1">
+                            {item.position || item.studyType || item.area || item.name}
+                            {/* Append Area to StudyType if both exist for Education */}
+                            {section === 'education' && item.studyType && item.area && ` - ${item.area}`}
+                        </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
             {(!data[section] || data[section].length === 0) && (
                 <div className="text-zinc-600 text-xs italic p-2">No items yet.</div>
             )}
