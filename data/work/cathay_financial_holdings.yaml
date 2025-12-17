@@ -1,0 +1,23 @@
+name: Cathay Financial Holdings
+position: ML Engineer, MLE Team Lead, AI Dept.
+startDate: '2023-11-01'
+endDate: Present
+summary: ' - Led a team of 7 to architect and productionize multi-agent systems, establishing
+  core components adopted across business units.'
+highlights:
+- Architected the agent orchestrator layer for DOGI, GAIA, and RKB, enabling cross-agent
+  communication, workflow orchestration, and tool-calling pipelines.
+- Defined enterprise-wide frameworks to evaluate agent issues (slow, costly, unstable)
+  and established core agent design patterns adopted across teams.
+- Integrated agent workflows with repository-level validation and testing routines,
+  supporting automated checks and pipeline-triggered actions.
+- Developed regulation-focused Agent, improving F1 from 0.67 to 0.89, and deployed
+  event-driven batch inference workflows on Databricks.
+- Developed a FinOps agent for autonomous GPU workload analysis and scaling, reducing
+  GPU cost by 30% and total cloud expenses by 40%.
+- Designed and implemented scalable GenAI infrastructure as the agent runtime layer,
+  including the AI Gateway and Guardrails, reducing service latency by 60%.
+- Led cross-team alignment for GenAI adoption and standardization of tools, vector
+  DB integrations, and agent workflows.
+id: 0
+company: Cathay Financial Holdings

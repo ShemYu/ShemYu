@@ -72,6 +72,9 @@ class YamlDataLoader(DataLoader):
             elif 'institution' in item: # Education
                 safe_name = "".join([c if c.isalnum() else "_" for c in item['institution']]).lower()
                 filename = f"{safe_name}.yaml"
+            elif 'company' in item: # Work
+                safe_name = "".join([c if c.isalnum() else "_" for c in item['company']]).lower()
+                filename = f"{safe_name}.yaml"
                 
             file_path = os.path.join(section_dir, filename)
             with open(file_path, 'w', encoding='utf-8') as f:

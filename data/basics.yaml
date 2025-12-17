@@ -1,21 +1,26 @@
 name: Shem Yu
 label: ML Engineer, Team Lead
 image: https://avatars.githubusercontent.com/u/ShemYu?v=4
-email: "shauns4y@gmail.com"
-phone: "+886 953 240 855"
+email: shauns4y@gmail.com
+phone: +886 953 240 855
 url: https://github.com/ShemYu
-summary: |
-  Senior Applied AI Engineer specializing in agent development and multi-agent system architecture. Experienced in building adaptive task workflows, tool-calling execution engines, repository-integrated validation pipelines, and LLM-based automation. Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks.
+summary: 'Senior Applied AI Engineer specializing in agent development and multi-agent
+  system architecture. Experienced in building adaptive task workflows, tool-calling
+  execution engines, repository-integrated validation pipelines, and LLM-based automation.
+  Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous
+  reasoning systems on AWS/Databricks.
+
+  '
 location:
-  address: ""
-  postalCode: ""
-  city: "Taipei"
-  countryCode: "TW"
-  region: "Taiwan"
+  address: ''
+  postalCode: ''
+  city: Taipei
+  countryCode: TW
+  region: Taiwan
 profiles:
-  - network: GitHub
-    username: ShemYu
-    url: https://github.com/ShemYu
-  - network: Medium
-    username: shemyu
-    url: https://medium.com/@shemyu
+- network: GitHub
+  username: ShemYu
+  url: https://github.com/ShemYu
+- network: Medium
+  username: shemyu
+  url: https://medium.com/@shemyu

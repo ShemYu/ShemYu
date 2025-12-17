@@ -9,6 +9,10 @@ This document outlines the future development plans for the Career History Knowl
 ## Phase 2: Enhanced Generation
 - [ ] **Multiple Templates**: Support different resume styles (e.g., Classic, Modern, Tech-focused).
 - [ ] **Format Support**: Generate PDF (via LaTeX or HTML-to-PDF) and HTML versions alongside Markdown.
+- [ ] **Web UI**: Refactor CSS to Premium Dark Theme.
+- [ ] **Web UI**: specialized editors for Work/Skills.
+- [ ] **Feature**: Git Integration in Web UI (View diff, Commit, Push).
+- [ ] **Data**: Split `basics.yaml` for multiple personas?
 - [ ] **Cover Letter Generator**: Generate basic cover letters based on the profile and a job description.
 
 ## Phase 3: Profile Integration

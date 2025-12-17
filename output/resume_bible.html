@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shem Yu - Resume</title>
+    <style>
+        :root {
+            --font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --color-text: #000;
+            --color-light: #444;
+            --color-accent: #000;
+            --page-width: 210mm; /* A4 width */
+            --page-height: 297mm; /* A4 height */
+            --margin: 10mm;
+            --sidebar-width: 65mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--color-text);
+            line-height: 1.35;
+            font-size: 9pt; /* Extreme density */
+            background: #fff;
+            width: var(--page-width);
+            max-width: var(--page-width);
+            margin: 0 auto;
+            padding: var(--margin);
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 0 5mm;
+            height: calc(var(--page-height) - 2 * var(--margin));
+        }
+
+        /* Typography */
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            border-bottom: 0.5px dotted var(--color-light);
+        }
+
+        h1 {
+            font-size: 22pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 1mm;
+        }
+
+        h2 {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            border-bottom: 1px solid #000;
+            margin: 4mm 0 2mm 0;
+            padding-bottom: 0.5mm;
+        }
+        
+        /* Sidebar specific h2 */
+        .sidebar h2 {
+            border-bottom: 1px solid #666;
+            margin-top: 5mm;
+        }
+        .sidebar h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 9.5pt;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .subtitle {
+            font-size: 10pt;
+            font-weight: 500;
+            color: var(--color-light);
+            margin-bottom: 0; /* Tightened */
+        }
+
+        p {
+            margin-bottom: 3px;
+            text-align: justify;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 3mm;
+            margin-bottom: 1px;
+        }
+
+        ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--color-light);
+            font-size: 0.7em;
+            top: 0.1em;
+        }
+
+        /* Layout Zones */
+        .header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid #000;
+            margin-bottom: 5mm;
+            padding-bottom: 2mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .sidebar {
+            padding-right: 3mm;
+            border-right: 1px solid #eee;
+        }
+
+        .main {
+            padding-left: 3mm;
+        }
+
+        /* Components */
+        .contact-item {
+            display: block;
+            margin-bottom: 1mm;
+            font-size: 8.5pt;
+        }
+        
+        .contact-item span {
+             color: var(--color-light);
+        }
+
+        .skill-group {
+            margin-bottom: 3mm;
+        }
+        .skill-name {
+            font-weight: 700;
+            font-size: 8.5pt;
+            display: block;
+        }
+        .skill-keywords {
+            font-size: 8.5pt;
+            color: #333;
+        }
+
+        .job-entry, .project-entry {
+            margin-bottom: 3mm;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1px;
+        }
+
+        .company {
+            font-weight: 600;
+        }
+
+        .date {
+            font-size: 8.5pt;
+            white-space: nowrap;
+            color: #444;
+        }
+        
+        .edu-entry {
+            margin-bottom: 2mm;
+        }
+
+        /* Print Override */
+        @media print {
+            body { 
+                margin: 0;
+                padding: var(--margin);
+                width: 210mm;
+                height: 297mm;
+                -webkit-print-color-adjust: exact;
+            }
+            @page {
+                margin: 0;
+                size: A4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Full Width Header -->
+    <header class="header">
+        <div>
+            <h1>Shem Yu</h1>
+            <div class="subtitle">ML Engineer, Team Lead</div>
+        </div>
+    </header>
+
+    <!-- Sidebar (Left) -->
+    <aside class="sidebar">
+        <!-- Contact -->
+        <section>
+            <h2>Contact</h2>
+            
+            <div class="contact-item">shauns4y@gmail.com</div>
+            
+            
+            <div class="contact-item">+886 953 240 855</div>
+            
+            
+            <div class="contact-item"><a href="https://github.com/ShemYu">Website</a></div>
+            
+            
+            <div class="contact-item"><a href="https://github.com/ShemYu">GitHub</a></div>
+            
+            <div class="contact-item"><a href="https://medium.com/@shemyu">Medium</a></div>
+            
+            
+            <div class="contact-item">Taipei, Taiwan</div>
+            
+        </section>
+
+        <!-- Education -->
+        
+        <section>
+            <h2>Education</h2>
+            
+            <div class="edu-entry">
+                <div style="font-weight:700;">Ming Chuan University</div>
+                <div style="font-size:8pt;">Computer Science & Information Engineering</div>
+                <div class="date" style="font-size:8pt;">2017 – 2019</div>
+            </div>
+            
+            <div class="edu-entry">
+                <div style="font-weight:700;">Ming Chuan University</div>
+                <div style="font-size:8pt;">Computer Science & Information Engineering</div>
+                <div class="date" style="font-size:8pt;">2012 – 2016</div>
+            </div>
+            
+        </section>
+        
+
+        <!-- Skills -->
+        
+        <section>
+            <h2>Skills</h2>
+            
+            <div class="skill-group">
+                <span class="skill-name">Cloud & Infra</span>
+                <div class="skill-keywords">AWS (EC2, Fargate, Lambda, Route53), Databricks, Distributed Systems, High-Availability Analytics, AI Gateway, Guardrails, MCP Protocol, A2A Protocol</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">Data Engineering</span>
+                <div class="skill-keywords">AP Data Layer Design, SQL, NoSQL, Data Pipeline Design, ETL, Data Visualization</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">Generative AI & NLP</span>
+                <div class="skill-keywords">Agent System Design, Retrieval-Augmented Generation (RAG), Large Language Models (LLM), Prompt Engineering, ASR/TTS, Embedding Databases, Search/Indexing Techniques</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">Language</span>
+                <div class="skill-keywords">Chinese (Native), English (Proficient)</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">Leadership & Communication</span>
+                <div class="skill-keywords">Team Leadership, Project Management, Cross-Team Collaboration</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">MLOps & Deployment</span>
+                <div class="skill-keywords">Databricks, MLflow, Docker, CI/CD (Azure DevOps), Kubernetes, AWS SageMaker, AWS Lambda</div>
+            </div>
+            
+            <div class="skill-group">
+                <span class="skill-name">Programming & ML Frameworks</span>
+                <div class="skill-keywords">Python (expert), R (basic), C/C++ (familiar), Hugging Face, FastAPI, GoogleADK, LangChain, LangGraph, PyTorch, TensorFlow, scikit-learn, pandas, NumPy, SciPy, Matplotlib</div>
+            </div>
+            
+        </section>
+        
+
+        <!-- Certificates -->
+        
+        <section>
+            <h2>Certificates</h2>
+            <ul>
+                
+                <li>AWS Certified Machine Learning - Specialty (MLS)</li>
+                
+            </ul>
+        </section>
+        
+    </aside>
+
+    <!-- Main Content (Right) -->
+    <main class="main">
+        <!-- Summary - Moved to Top of Main -->
+        
+        <section style="margin-bottom: 5mm;">
+             <p style="font-style: italic; color: #444; border-left: 2px solid #ddd; padding-left: 10px;">
+                Senior Applied AI Engineer specializing in agent development and multi-agent system architecture. Experienced in building adaptive task workflows, tool-calling execution engines, repository-integrated validation pipelines, and LLM-based automation. Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks.
+
+            </p>
+        </section>
+        
+
+        <!-- Experience -->
+        
+        <section>
+            <h2 style="margin-top:0;">Experience</h2>
+            
+            <div class="job-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>ML Engineer, MLE Team Lead, AI Dept.</h3> <span style="font-size:9pt;">@ Cathay Financial Holdings</span>
+                    </div>
+                    <div class="date">2023-11-01 – Present</div>
+                </div>
+                
+                <ul>
+                    
+                    <li>Architected the agent orchestrator layer for DOGI, GAIA, and RKB, enabling cross-agent communication, workflow orchestration, and tool-calling pipelines.</li>
+                    
+                    <li>Defined enterprise-wide frameworks to evaluate agent issues (slow, costly, unstable) and established core agent design patterns adopted across teams.</li>
+                    
+                    <li>Integrated agent workflows with repository-level validation and testing routines, supporting automated checks and pipeline-triggered actions.</li>
+                    
+                    <li>Developed regulation-focused Agent, improving F1 from 0.67 to 0.89, and deployed event-driven batch inference workflows on Databricks.</li>
+                    
+                    <li>Developed a FinOps agent for autonomous GPU workload analysis and scaling, reducing GPU cost by 30% and total cloud expenses by 40%.</li>
+                    
+                    <li>Designed and implemented scalable GenAI infrastructure as the agent runtime layer, including the AI Gateway and Guardrails, reducing service latency by 60%.</li>
+                    
+                    <li>Led cross-team alignment for GenAI adoption and standardization of tools, vector DB integrations, and agent workflows.</li>
+                    
+                </ul>
+                
+            </div>
+            
+            <div class="job-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Senior AI Platform Engineer</h3> <span style="font-size:9pt;">@ Wisers Information Limited</span>
+                    </div>
+                    <div class="date">2020-11-01 – 2022-05-01</div>
+                </div>
+                
+                <ul>
+                    
+                    <li>Develop standardized ML project templates (FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.</li>
+                    
+                    <li>Implement NLP-focused Python library with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.</li>
+                    
+                    <li>Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.</li>
+                    
+                </ul>
+                
+            </div>
+            
+            <div class="job-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Data Scientist</h3> <span style="font-size:9pt;">@ TripSaaS</span>
+                    </div>
+                    <div class="date">2019-12-01 – 2020-11-01</div>
+                </div>
+                
+                <ul>
+                    
+                    <li>Analyze customer order data using statistical modeling (FP-Growth, K-means) to support marketing and segmentation strategies.</li>
+                    
+                    <li>Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.</li>
+                    
+                </ul>
+                
+            </div>
+            
+            <div class="job-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Research assistant</h3> <span style="font-size:9pt;">@ Ming Chuan University - data science Lab.</span>
+                    </div>
+                    <div class="date">2017-06-01 – 2019-06-01</div>
+                </div>
+                
+                <ul>
+                    
+                    <li>Lead student research teams in multiple industry-university collaboration projects, coordinating with external partners and delivering actionable data science solutions.</li>
+                    
+                </ul>
+                
+            </div>
+            
+            <div class="job-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Intern</h3> <span style="font-size:9pt;">@ Institute for Information Industry, III</span>
+                    </div>
+                    <div class="date">2017-05-01 – 2017-11-01</div>
+                </div>
+                
+                <ul>
+                    
+                    <li>Develop full-stack web applications from end to end for social data analysis, supporting the transformation of raw posts into interactive word clouds and buzzword visualizations.</li>
+                    
+                    <li>Analyze and extract insights from social media data, applying NLP and visualization tools to generate actionable reports for industry partners.</li>
+                    
+                </ul>
+                
+            </div>
+            
+        </section>
+        
+
+        <!-- Projects -->
+        
+        <section>
+            <h2>Projects</h2>
+            
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>DOGI Multi-Agent Productivity Suite</h3> 
+                        
+                    </div>
+                    
+                    <div class="date">2025-01 – 2025-12</div>
+                    
+                </div>
+                
+                <ul>
+                    
+                    <li>Implemented multi-agent delegation patterns for enterprise workflows.</li>
+                    
+                    <li>Developed meeting scheduling agent integrating calendar and internal APIs.</li>
+                    
+                    <li>Designed session persistence and storage strategy using Redis/Postgres.</li>
+                    
+                    <li>Delivered FinOps agent for AWS cost insights and early anomaly detection.</li>
+                    
+                </ul>
+                
+                
+            </div>
+            
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>GAIA Enterprise Gen-AI Platform</h3> 
+                        
+                    </div>
+                    
+                    <div class="date">2024-11 – 2025-06</div>
+                    
+                </div>
+                
+                <ul>
+                    
+                    <li>Designed the overall system architecture for the enterprise Gen-AI platform.</li>
+                    
+                    <li>Integrated Databricks VectorSearch and scalable document pipelines.</li>
+                    
+                    <li>Delivered evaluation, guardrail, and governance modules for production workloads.</li>
+                    
+                    <li>Supported multi-product integration including meeting assistants and FinOps agents.</li>
+                    
+                </ul>
+                
+                
+            </div>
+            
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Regulatory Knowledge Base (RKB)</h3> 
+                        
+                    </div>
+                    
+                    <div class="date">2024-10 – 2025-09</div>
+                    
+                </div>
+                
+                <ul>
+                    
+                    <li>Designed ingestion pipelines for PDFs and structured government rules.</li>
+                    
+                    <li>Implemented chunking, metadata tagging, and cleanup workflows.</li>
+                    
+                    <li>Improved retrieval recall and precision through iterative evaluation.</li>
+                    
+                    <li>Integrated with internal Gen-AI platform for unified access and governance.</li>
+                    
+                </ul>
+                
+                
+            </div>
+            
+        </section>
+        
+        
+        <!-- Publications -->
+         
+        <section>
+            <h2>Publications</h2>
+            <ul>
+                
+                <li><a href="https://medium.com/@shemyu/ai-agent-%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90-8d8613fde368">AI Agent 專案架構最佳實踐</a></li>
+                
+                <li><a href="https://medium.com/@shemyu/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93-podman%E7%9A%84%E5%88%9D%E9%AB%94%E9%A9%97-f85cc07beff6">容器化技術Podman的初體驗</a></li>
+                
+            </ul>
+        </section>
+        
+    </main>
+</body>
+</html>

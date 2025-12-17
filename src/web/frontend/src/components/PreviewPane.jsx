@@ -1,6 +1,12 @@
 import React from 'react';
 import { Minimize2, Layers, Download } from 'lucide-react';
 
+const formatLocation = (loc) => {
+    if (!loc) return null;
+    if (typeof loc === 'string') return loc;
+    return [loc.city, loc.region, loc.countryCode].filter(Boolean).join(', ');
+};
+
 const CompactTemplate = ({ data }) => (
     <div className="font-serif text-black p-[10mm]">
         <div className="text-center mb-4">
@@ -9,7 +15,7 @@ const CompactTemplate = ({ data }) => (
                 <span>{data.basics?.phone}</span><span>|</span>
                 <a href={`mailto:${data.basics?.email}`} className="text-black">{data.basics?.email}</a><span>|</span>
                 <a href={`https://${data.basics?.website}`} className="text-black">{data.basics?.website}</a>
-                {data.basics?.location && <><span>|</span><span>{data.basics?.location}</span></>}
+                {formatLocation(data.basics?.location) && <><span>|</span><span>{formatLocation(data.basics?.location)}</span></>}
             </div>
         </div>
 
@@ -42,74 +48,88 @@ const CompactTemplate = ({ data }) => (
 
         <div>
             <h2 className="font-bold text-sm uppercase border-b border-black mb-2">Technical Skills</h2>
-            <p className="text-sm"><span className="font-bold">Languages & Tools:</span> {data.skills?.join(', ')}</p>
-        </div>
-    </div>
-);
-
-const ModernTemplate = ({ data }) => (
-    <div className="font-sans text-gray-800 p-[15mm]">
-        <header className="border-b-2 border-gray-800 pb-6 mb-8">
-            <h1 className="text-5xl font-bold text-gray-900 tracking-tight mb-2">{data.basics?.name}</h1>
-            <p className="text-xl text-indigo-700 font-medium">{data.basics?.label}</p>
-            <div className="flex gap-4 mt-4 text-sm text-gray-600 font-mono">
-                <span>{data.basics?.email}</span>
-                <span>•</span>
-                <span>{data.basics?.phone}</span>
-                <span>•</span>
-                <span>{data.basics?.website}</span>
+            <div className="text-sm">
+                <span className="font-bold">Languages & Tools:</span>
+                {data.skills?.map(s => typeof s === 'object' ? (s.keywords?.join(', ') || s.name) : s).join(', ')}
             </div>
-        </header>
-
-        <div className="grid grid-cols-[2fr_1fr] gap-10">
-            <main>
-                <section className="mb-8">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
-                        <span className="w-2 h-2 bg-indigo-500 rounded-full"></span> Professional Experience
-                    </h2>
-                    <div className="space-y-8">
-                        {data.work?.map((job) => (
-                            <div key={job.id || Math.random()} className="relative pl-6 border-l-2 border-gray-100">
-                                <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-gray-300"></div>
-                                <div className="mb-2">
-                                    <h3 className="font-bold text-lg text-gray-900">{job.position}</h3>
-                                    <div className="text-indigo-600 font-medium">{job.company}</div>
-                                    <div className="text-xs text-gray-500 font-mono mt-1">{job.startDate} – {job.endDate}</div>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3 italic">{job.summary}</p>
-                                <ul className="space-y-2">
-                                    {job.highlights?.map((point, idx) => (
-                                        <li key={idx} className="text-sm text-gray-700 leading-relaxed flex items-start gap-2">
-                                            <span className="text-indigo-400 mt-1.5 text-[8px]">▶</span>
-                                            {point}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            </main>
-
-            <aside>
-                <section className="mb-8">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">About</h2>
-                    <p className="text-sm text-gray-600 leading-relaxed">{data.basics?.summary}</p>
-                </section>
-                <section>
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Stack</h2>
-                    <div className="flex flex-wrap gap-2">
-                        {data.skills?.map((skill, i) => (
-                            <span key={i} className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200">
-                                {skill}
-                            </span>
-                        ))}
-                    </div>
-                </section>
-            </aside>
         </div>
     </div>
 );
+
+const ModernTemplate = ({ data }) => {
+    // Helper to flatten skills for display
+    const flatSkills = React.useMemo(() => {
+        if (!data.skills) return [];
+        return data.skills.flatMap(s => {
+            if (typeof s === 'string') return [s];
+            return s.keywords || [s.name];
+        });
+    }, [data.skills]);
+
+    return (
+        <div className="font-sans text-gray-800 p-[15mm]">
+            <header className="border-b-2 border-gray-800 pb-6 mb-8">
+                <h1 className="text-5xl font-bold text-gray-900 tracking-tight mb-2">{data.basics?.name}</h1>
+                <p className="text-xl text-indigo-700 font-medium">{data.basics?.label}</p>
+                <div className="flex gap-4 mt-4 text-sm text-gray-600 font-mono">
+                    <span>{data.basics?.email}</span>
+                    <span>•</span>
+                    <span>{data.basics?.phone}</span>
+                    <span>•</span>
+                    <span>{data.basics?.website}</span>
+                </div>
+            </header>
+
+            <div className="grid grid-cols-[2fr_1fr] gap-10">
+                <main>
+                    <section className="mb-8">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+                            <span className="w-2 h-2 bg-indigo-500 rounded-full"></span> Professional Experience
+                        </h2>
+                        <div className="space-y-8">
+                            {data.work?.map((job) => (
+                                <div key={job.id || Math.random()} className="relative pl-6 border-l-2 border-gray-100">
+                                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-gray-300"></div>
+                                    <div className="mb-2">
+                                        <h3 className="font-bold text-lg text-gray-900">{job.position}</h3>
+                                        <div className="text-indigo-600 font-medium">{job.company}</div>
+                                        <div className="text-xs text-gray-500 font-mono mt-1">{job.startDate} – {job.endDate}</div>
+                                    </div>
+                                    <p className="text-sm text-gray-600 mb-3 italic">{job.summary}</p>
+                                    <ul className="space-y-2">
+                                        {job.highlights?.map((point, idx) => (
+                                            <li key={idx} className="text-sm text-gray-700 leading-relaxed flex items-start gap-2">
+                                                <span className="text-indigo-400 mt-1.5 text-[8px]">▶</span>
+                                                {point}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </main>
+
+                <aside>
+                    <section className="mb-8">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">About</h2>
+                        <p className="text-sm text-gray-600 leading-relaxed">{data.basics?.summary}</p>
+                    </section>
+                    <section>
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Stack</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {flatSkills.map((skill, i) => (
+                                <span key={i} className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200">
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    );
+};
 
 export const PreviewPane = ({ data, template, setTemplate, onDownloadPDF }) => {
     const handlePrint = () => {

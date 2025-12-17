@@ -8,7 +8,8 @@ const INITIAL_DATA_TEMPLATE = {
   basics: { name: "", label: "", summary: "", email: "", phone: "", website: "" },
   work: [],
   education: [],
-  skills: []
+  skills: [],
+  projects: []
 };
 
 // Simple API Layer
@@ -38,17 +39,31 @@ const App = () => {
     // We need to map the flat API response to our UI structure
     // API returns { basics: {}, work: [], ... } which matches mostly
     API.getProfile().then(prof => {
-      // Add 'id' to work items for React keys/editing if missing
-      if (prof.work) prof.work = prof.work.map((j, i) => ({ ...j, id: j.id || i }));
+      // Add 'id' to list items for React keys/editing if missing
+      ['work', 'education', 'projects'].forEach(section => {
+        if (prof[section]) {
+          prof[section] = prof[section].map((item, i) => ({ ...item, id: item.id || i }));
+        }
+      });
+      console.log("Loaded Profile:", prof); // Debug
       setData(prev => ({ ...prev, ...prof }));
     }).catch(err => console.error(err));
   }, []);
 
   const handleSave = async () => {
-    // Save all modified sections? For MVP, assume we save basics + work
-    // In real app, track which sections are dirty
+    // Save all modified sections
     await API.saveSection('basics', data.basics);
-    await API.saveSection('work', data.work); // Note: Server expects list but we added IDs
+    await API.saveSection('work', data.work);
+    await API.saveSection('education', data.education);
+    await API.saveSection('projects', data.projects);
+    // Skills are usually a flat list of objects or strings in our data model
+    // But verify structure. Backend expects list of objects for saving as individual files?
+    // Actually loader.save_section saves a list of generic items. 
+    // Skills might be special if they are in one file? 
+    // Checking loader.py: generic save_section saves list as separate files 00_item.yaml etc.
+    // Existing data structure: data/skills/*.yaml. So it matches.
+    await API.saveSection('skills', data.skills);
+
     setIsDirty(false);
     alert('Saved!');
   };
