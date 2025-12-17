@@ -161,7 +161,7 @@ export const PreviewPane = ({ data, template, setTemplate, onDownloadPDF }) => {
     };
 
     return (
-        <div className="bg-zinc-900 h-full flex flex-col border-l border-zinc-800 relative">
+        <div className="bg-zinc-900 h-full flex flex-col border-l border-zinc-800 relative print:border-none">
             <div className="h-12 border-b border-zinc-800 flex items-center justify-between px-4 bg-zinc-950/80 backdrop-blur print:hidden">
                 <div className="flex items-center gap-1 bg-zinc-900 rounded p-1 border border-zinc-800">
                     <button onClick={() => setTemplate('compact')}
@@ -179,10 +179,16 @@ export const PreviewPane = ({ data, template, setTemplate, onDownloadPDF }) => {
                 </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 flex justify-center bg-zinc-900 scrollbar-hide">
-                <div className="print:w-full print:h-full print:absolute print:top-0 print:left-0 print:m-0 print:z-50 print:block">
-                    <div className="bg-white shadow-2xl transition-all duration-300 print:shadow-none"
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 flex justify-center bg-zinc-900 scrollbar-hide print:p-0 print:overflow-visible">
+                <div className="print:fixed print:top-0 print:left-0 print:w-screen print:h-screen print:z-[9999] print:bg-white print:block">
+                    <div className="bg-white shadow-2xl transition-all duration-300 print:shadow-none relative"
                         style={{ width: '210mm', minHeight: '297mm' }}>
+
+                        {/* A4 Limit Guide - Visible in Preview, Hidden in Print */}
+                        <div className="absolute top-[297mm] left-0 w-full border-b border-red-400 border-dashed opacity-50 pointer-events-none print:hidden flex items-end justify-end pb-1 pr-2">
+                            <span className="text-[10px] text-red-400 font-mono uppercase">A4 Page Limit</span>
+                        </div>
+
                         {template === 'compact' ? <CompactTemplate data={data} /> : <ModernTemplate data={data} />}
                     </div>
                 </div>
