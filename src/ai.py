@@ -16,7 +16,7 @@ class GeminiAIProvider(AIProvider):
 
     def _configure(self):
         if not self.api_key:
-            print("Warning: GEMINI_API_KEY not found. Skipping AI highlight.")
+            print("Warning: GEMINI_API_KEY not found. AI features are unavailable.")
             return False
         
         if not self._configured:
@@ -60,8 +60,7 @@ class GeminiAIProvider(AIProvider):
         Uses Gemini to filter and rewrite the profile to match the JD.
         """
         if not self._configure():
-            print("AI not configured, returning original profile.")
-            return profile
+            raise RuntimeError("GEMINI_API_KEY is required to tailor a resume.")
             
         try:
             model = genai.GenerativeModel(self.model_name, generation_config={"response_mime_type": "application/json"})
@@ -103,6 +102,4 @@ class GeminiAIProvider(AIProvider):
             return tailored_profile
             
         except Exception as e:
-            print(f"Error tailoring profile: {e}")
-            # Fallback to original if AI fails
-            return profile
+            raise RuntimeError(f"Error tailoring profile: {e}") from e

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ basics.name }} - Resume</title>
+    <title>Shem Yu - Resume</title>
     <style>
         :root {
             --page-width: 210mm;
@@ -208,82 +208,138 @@
 <body>
     <main class="resume">
         <header class="header">
-            <h1>{{ basics.name }}</h1>
-            <div class="headline">{{ basics.label }}</div>
+            <h1>Shem Yu</h1>
+            <div class="headline">ML Engineer, Team Lead</div>
             <div class="contact">
-                {% if basics.email %}<span><a href="mailto:{{ basics.email }}">{{ basics.email }}</a></span>{% endif %}
-                {% if basics.phone %}<span>{{ basics.phone }}</span>{% endif %}
-                {% if basics.location.city %}<span>{{ basics.location.city }}, {{ basics.location.region }}</span>{% endif %}
-                {% if basics.url %}<span><a href="{{ basics.url }}">{{ basics.url | replace('https://', '') | replace('http://', '') }}</a></span>{% endif %}
+                <span><a href="mailto:shauns4y@gmail.com">shauns4y@gmail.com</a></span>
+                <span>+886 953 240 855</span>
+                <span>Taipei, Taiwan</span>
+                <span><a href="https://github.com/ShemYu">github.com/ShemYu</a></span>
             </div>
         </header>
 
-        {% if basics.summary %}
+
         <section>
             <h2>Professional Summary</h2>
-            <p class="summary">{{ basics.summary }}</p>
+            <p class="summary">Senior Applied AI Engineer specializing in agent development and multi-agent system architecture. Experienced in building adaptive task workflows, tool-calling execution engines, repository-integrated validation pipelines, and LLM-based automation. Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks.
+</p>
         </section>
-        {% endif %}
 
-        {% if skills %}
+
+
         <section>
             <h2>Technical Skills</h2>
-            {% for skill in skills if skill.name not in ['Language', 'Leadership & Communication'] %}
-            <p class="skill-row"><span class="skill-name">{{ skill.name }}:</span> {{ skill.keywords[:7] | join(', ') }}</p>
-            {% endfor %}
-            {% for skill in skills if skill.name == 'Language' %}
-            <p class="skill-row"><span class="skill-name">Languages:</span> {{ skill.keywords | join(', ') }}</p>
-            {% endfor %}
-        </section>
-        {% endif %}
 
-        {% if work %}
+            <p class="skill-row"><span class="skill-name">Cloud & Infra:</span> AWS (EC2, Fargate, Lambda, Route53), Databricks, Distributed Systems, High-Availability Analytics, AI Gateway, Guardrails, MCP Protocol</p>
+
+            <p class="skill-row"><span class="skill-name">Data Engineering:</span> AP Data Layer Design, SQL, NoSQL, Data Pipeline Design, ETL, Data Visualization</p>
+
+            <p class="skill-row"><span class="skill-name">Generative AI & NLP:</span> Agent System Design, Retrieval-Augmented Generation (RAG), Large Language Models (LLM), Prompt Engineering, ASR/TTS, Embedding Databases, Search/Indexing Techniques</p>
+
+            <p class="skill-row"><span class="skill-name">MLOps & Deployment:</span> Databricks, MLflow, Docker, CI/CD (Azure DevOps), Kubernetes, AWS SageMaker, AWS Lambda</p>
+
+            <p class="skill-row"><span class="skill-name">Programming & ML Frameworks:</span> Python (expert), R (basic), C/C++ (familiar), Hugging Face, FastAPI, GoogleADK, LangChain</p>
+
+
+            <p class="skill-row"><span class="skill-name">Languages:</span> Chinese (Native), English (Proficient)</p>
+
+        </section>
+
+
+
         <section>
             <h2>Professional Experience</h2>
-            {% for w in work[:3] %}
+
             <article class="entry">
                 <div class="entry-header">
-                    <div class="entry-title">{{ w.position }}</div>
-                    <div class="entry-date">{{ w.startDate | format_date }} - {{ w.endDate | default('Present', true) | format_date }}</div>
+                    <div class="entry-title">ML Engineer, MLE Team Lead, AI Dept.</div>
+                    <div class="entry-date">Nov 2023 - Present</div>
                 </div>
-                <div class="entry-subtitle">{{ w.name }}</div>
-                {% if w.highlights %}
-                <ul>
-                    {% for highlight in w.highlights[:3] %}
-                    <li>{{ highlight }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </article>
-            {% endfor %}
-        </section>
-        {% endif %}
+                <div class="entry-subtitle">Cathay Financial Holdings</div>
 
-        {% if education %}
+                <ul>
+
+                    <li>Architected the agent orchestrator layer for DOGI, GAIA, and RKB, enabling cross-agent communication, workflow orchestration, and tool-calling pipelines.</li>
+
+                    <li>Defined enterprise-wide frameworks to evaluate agent issues (slow, costly, unstable) and established core agent design patterns adopted across teams.</li>
+
+                    <li>Integrated agent workflows with repository-level validation and testing routines, supporting automated checks and pipeline-triggered actions.</li>
+
+                </ul>
+
+            </article>
+
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-title">Senior AI Platform Engineer</div>
+                    <div class="entry-date">Nov 2020 - May 2022</div>
+                </div>
+                <div class="entry-subtitle">Wisers Information Limited</div>
+
+                <ul>
+
+                    <li>Develop standardized ML project templates (FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.</li>
+
+                    <li>Implement NLP-focused Python library with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.</li>
+
+                    <li>Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.</li>
+
+                </ul>
+
+            </article>
+
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-title">Data Scientist</div>
+                    <div class="entry-date">Dec 2019 - Nov 2020</div>
+                </div>
+                <div class="entry-subtitle">TripSaaS</div>
+
+                <ul>
+
+                    <li>Analyze customer order data using statistical modeling (FP-Growth, K-means) to support marketing and segmentation strategies.</li>
+
+                    <li>Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.</li>
+
+                </ul>
+
+            </article>
+
+        </section>
+
+
+
         <section>
             <h2>Education</h2>
-            {% for edu in education %}
+
             <div class="education-row">
                 <div>
-                    <span class="education-main">{{ edu.studyType }} in {{ edu.area }}</span><span class="education-detail">, {{ edu.institution }}{% if edu.score %} - GPA {{ edu.score }}{% endif %}</span>
+                    <span class="education-main">Master in Computer Science & Information Engineering</span><span class="education-detail">, Ming Chuan University - GPA 3.82/4</span>
                 </div>
-                <div class="entry-date">{{ edu.startDate | format_date }} - {{ edu.endDate | format_date }}</div>
+                <div class="entry-date">2017 - 2019</div>
             </div>
-            {% endfor %}
-        </section>
-        {% endif %}
 
-        {% if certificates %}
+            <div class="education-row">
+                <div>
+                    <span class="education-main">Bachelor in Computer Science & Information Engineering</span><span class="education-detail">, Ming Chuan University</span>
+                </div>
+                <div class="entry-date">2012 - 2016</div>
+            </div>
+
+        </section>
+
+
+
         <section>
             <h2>Certifications</h2>
-            {% for cert in certificates %}
+
             <div class="certificate-row">
-                <div><span class="certificate-main">{{ cert.name }}</span>, {{ cert.issuer }}</div>
-                {% if cert.date %}<div class="entry-date">{{ cert.date | format_date }}</div>{% endif %}
+                <div><span class="certificate-main">AWS Certified Machine Learning - Specialty (MLS)</span>, Amazon Web Services</div>
+
             </div>
-            {% endfor %}
+
         </section>
-        {% endif %}
+
     </main>
 </body>
 </html>

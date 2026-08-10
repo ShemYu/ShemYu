@@ -1,14 +1,14 @@
 <div align="center">
   <h1>Shem Yu</h1>
   <p><code>ML Engineer, Team Lead</code></p>
-  
-  <a href="https://github.com/ShemYu">Website</a> •
+
+  <a href="./RESUME.md">Resume</a> •
   <a href="mailto:shauns4y@gmail.com">Email</a> •
-  
-  <a href="https://github.com/ShemYu">GitHub</a> • 
-  
+
+  <a href="https://github.com/ShemYu">GitHub</a> •
+
   <a href="https://medium.com/@shemyu">Medium</a>
-  
+
 </div>
 
 <br />
@@ -19,16 +19,15 @@
 User: Shem Yu
 Role: ML Engineer, MLE Team Lead, AI Dept.
 Company: Cathay Financial Holdings
-Location: {'address': '', 'postalCode': '', 'city': 'Taipei', 'countryCode': 'TW', 'region': 'Taiwan'}
+Location: Taipei, Taiwan
 Uptime: 5 roles of experience
 ```
 
 
-### � Neural Link (AI Highlight)
+### 🎯 Professional Highlight
 
-> **Shem Yu: Driving AI Innovation as ML Engineer & Team Lead**
+> Senior Applied AI Engineer specializing in agent development and multi-agent system architecture. Experienced in building adaptive task workflows, tool-calling execution engines, repository-integrated validation pipelines, and LLM-based automation. Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks.
 
-Senior Applied AI Engineer & Team Lead specializing in cutting-edge agent development and multi-agent systems. Proven track record leading enterprise-scale projects like DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks. Expert in building adaptive workflows, tool-calling engines, and LLM-based automation. Passionate about delivering robust, scalable AI solutions that push the boundaries of what's possible. 🚀
 
 
 ### 🛠 Tech Stack

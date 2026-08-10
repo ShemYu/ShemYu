@@ -222,4 +222,3 @@ A knowledge base system enabling semantic search, retrieval, and Q&A on regulato
 **Keywords**: RAG, Vector DB, Databricks, Data Pipeline, Embeddings
 
 
-
