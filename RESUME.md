@@ -1,39 +1,51 @@
 # Shem Yu
-**ML Engineer, Team Lead**
+**Senior AI Engineer @ Cookpad | GenAI, AI Agents & MLOps | Tokyo**
 
-[Email](mailto:shauns4y@gmail.com) | [Website](https://github.com/ShemYu) | [GitHub](https://github.com/ShemYu) | [Medium](https://medium.com/@shemyu)
+[Email](mailto:shauns4y@gmail.com) | [Website](https://github.com/ShemYu) | [GitHub](https://github.com/ShemYu) | [LinkedIn](https://www.linkedin.com/in/shem-yu-a10494219/) | [Medium](https://medium.com/@shemyu)
 
 
 ## Summary
-Senior Applied AI Engineer specializing in agent development and multi-agent system architecture. Experienced in building adaptive task workflows, tool-calling execution engines, repository-integrated validation pipelines, and LLM-based automation. Led enterprise-scale agent projects including DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks.
+Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
 
 
 
 
 ## Experience
 
-### ML Engineer, MLE Team Lead, AI Dept. at Cathay Financial Holdings
-_2023-11-01 - Present_
+### Senior AI Engineer at Cookpad
+_2026-02 - Present_
 
 
-Led a team of 7 to architect and productionize multi-agent systems, establishing core components adopted across business units.
+Building AI that makes everyday life more joyful. Currently part of the Moment team at Cookpad.
 
 
 
 
-- Architected the agent orchestrator layer for DOGI, GAIA, and RKB, enabling cross-agent communication, workflow orchestration, and tool-calling pipelines.
+- Developed and deployed improvements to a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit internal benchmark.
 
-- Defined enterprise-wide frameworks to evaluate agent issues (slow, costly, unstable) and established core agent design patterns adopted across teams.
+- Designed versioned, capability-based agent evaluations across eight coaching aspects and automated coverage, truth, coherence, and per-turn scoring; a 56-case full run completed in under 9 minutes with cache/resume and case-level backtraces.
 
-- Integrated agent workflows with repository-level validation and testing routines, supporting automated checks and pipeline-triggered actions.
+- Led RCA across 73 flaky misses, finding 64% originated as incomplete candidate hypotheses; fixed merge and extraction losses and reduced run-to-run Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp, a 62% reduction.
 
-- Developed regulation-focused Agent, improving F1 from 0.67 to 0.89, and deployed event-driven batch inference workflows on Databricks.
 
-- Developed a FinOps agent for autonomous GPU workload analysis and scaling, reducing GPU cost by 30% and total cloud expenses by 40%.
 
-- Designed and implemented scalable GenAI infrastructure as the agent runtime layer, including the AI Gateway and Guardrails, reducing service latency by 60%.
 
-- Led cross-team alignment for GenAI adoption and standardization of tools, vector DB integrations, and agent workflows.
+### Machine Learning Engineer, team lead at Cathay Financial Holdings
+_2022-09 - 2026-03_
+
+
+Led a 4-person MLE team, overseeing AI project deployment and departmental internal agent development.
+
+
+
+
+- Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
+
+- Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.
+
+- Implemented FinOps agent, achieving 30% GPU cost reduction.
+
+- Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
 
 
 
@@ -105,6 +117,31 @@ Facilitate communication and project delivery between university and III teams, 
 
 
 
+## Education
+
+### Master in Computer Science & Information Engineering at Ming Chuan University
+_2017-06 - 2019-07_
+
+
+
+
+- Graduate thesis: Yu, H. Y. and Lee, Y. S. 'The Portfolio Analysis of the Key Fans for FB fan pages,' 2019.
+
+- Presented the research results twice on behalf of the laboratory and won the third prize once
+
+
+
+
+### Bachelor in Computer Science & Information Engineering at Ming Chuan University
+_2012-06 - 2016-06_
+
+
+
+
+
+
+
+
 ## Skills
 
 - **Cloud & Infra**: AWS (EC2, Fargate, Lambda, Route53), Databricks, Distributed Systems, High-Availability Analytics, AI Gateway, Guardrails, MCP Protocol, A2A Protocol
@@ -113,7 +150,7 @@ Facilitate communication and project delivery between university and III teams, 
 
 - **Generative AI & NLP**: Agent System Design, Retrieval-Augmented Generation (RAG), Large Language Models (LLM), Prompt Engineering, ASR/TTS, Embedding Databases, Search/Indexing Techniques
 
-- **Language**: Chinese (Native), English (Proficient)
+- **Language**: Chinese (Native), English (Limited Working)
 
 - **Leadership & Communication**: Team Leadership, Project Management, Cross-Team Collaboration
 
@@ -126,7 +163,11 @@ Facilitate communication and project delivery between university and III teams, 
 
 ## Certificates
 
-- AWS Certified Machine Learning - Specialty (MLS) (Amazon Web Services)
+- AWS Certified Cloud Practitioner
+
+- AWS Cloud Quest: Cloud Practitioner
+
+- AWS Certified Machine Learning - Specialty
 
 
 

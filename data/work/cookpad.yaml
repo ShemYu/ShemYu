@@ -1,0 +1,10 @@
+name: Cookpad
+position: Senior AI Engineer
+startDate: "2026-02"
+endDate: "Present"
+location: Tokyo, Japan
+summary: Building AI that makes everyday life more joyful. Currently part of the Moment team at Cookpad.
+highlights:
+  - Developed and deployed improvements to a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit internal benchmark.
+  - Designed versioned, capability-based agent evaluations across eight coaching aspects and automated coverage, truth, coherence, and per-turn scoring; a 56-case full run completed in under 9 minutes with cache/resume and case-level backtraces.
+  - Led RCA across 73 flaky misses, finding 64% originated as incomplete candidate hypotheses; fixed merge and extraction losses and reduced run-to-run Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp, a 62% reduction.

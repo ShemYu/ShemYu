@@ -249,7 +249,7 @@
                 <div class="entry-subtitle">{{ w.name }}</div>
                 {% if w.highlights %}
                 <ul>
-                    {% for highlight in w.highlights[:3] %}
+                    {% for highlight in w.highlights[:(3 if loop.index0 < 2 else 2)] %}
                     <li>{{ highlight }}</li>
                     {% endfor %}
                 </ul>
@@ -262,7 +262,7 @@
         {% if education %}
         <section>
             <h2>Education</h2>
-            {% for edu in education %}
+            {% for edu in education[:1] %}
             <div class="education-row">
                 <div>
                     <span class="education-main">{{ edu.studyType }} in {{ edu.area }}</span><span class="education-detail">, {{ edu.institution }}{% if edu.score %} - GPA {{ edu.score }}{% endif %}</span>
@@ -276,7 +276,7 @@
         {% if certificates %}
         <section>
             <h2>Certifications</h2>
-            {% for cert in certificates %}
+            {% for cert in certificates if 'Cloud Quest' not in cert.name %}
             <div class="certificate-row">
                 <div><span class="certificate-main">{{ cert.name }}</span>{% if cert.issuer %}, {{ cert.issuer }}{% endif %}</div>
                 {% if cert.date %}<div class="entry-date">{{ cert.date | format_date }}</div>{% endif %}
