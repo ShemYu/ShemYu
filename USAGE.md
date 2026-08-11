@@ -1,75 +1,113 @@
 # Resume Management
 
-This repository uses the YAML files in `data/` as the single source of truth for the GitHub profile and resume.
+The YAML files under `data/` are the single source of truth for the GitHub profile and resumes. Every load is checked against the shared profile schema before a template or AI agent can use the data.
 
-## Structure
+## Evidence-first content standard
 
-The data is organized in the `data/` directory:
+Treat the canonical YAML as the publication layer, not as a place to invent or inflate career facts. Keep a detailed, source-backed evidence record upstream when an experience needs more context than a resume can carry, then promote only verified claims into `data/`.
 
-- `data/basics.yaml`: Personal information and summary.
-- `data/work/`: Work experiences (one YAML file per role).
-- `data/education/`: Education history.
-- `data/certificates/`: Certifications.
-- `data/publications/`: Articles and publications.
-- `data/skills/`: Skill sets by category.
-- `data/projects/`: Significant projects.
+- Capture detail before compression: product problem, personal contribution, outcome, dates, denominator, cohort, metric definition, evaluator or system version, and important limitations.
+- Keep employment dates, project or evidence windows, and individual experiment windows separate.
+- Distinguish repository-verified facts, user-confirmed context, derived calculations, unresolved interview fields, and claims that must not be made.
+- Do not join incompatible cohorts, single runs, multi-run unions, evaluator versions, or release states into one improvement curve.
+- Do not translate an internal benchmark or production deployment into customer adoption, live-traffic impact, or an online A/B result without matching evidence.
+- Leave unknown impact numbers out of public YAML until the user can substantiate them; never estimate a resume metric merely to complete a bullet.
+- Tailoring may select, shorten, and reorder source facts for a job description. It must not strengthen causality, change scope, or add facts absent from the canonical data.
 
-## Usage
+The full or Bible output may remain detailed. Concise and job-specific outputs are downstream selections from the same evidence, not separate versions of truth.
 
-### Prerequisites
+Repository-local evidence guidance lives in [`career_evidence/README.md`](career_evidence/README.md). Detailed company masters belong under `career_evidence/private/`, which is intentionally ignored so internal context cannot enter the public profile by accident. Promote only disclosure-safe, verified wording from a private master into `data/`.
+
+## Prerequisites
 
 - Python 3.11+
 - [`uv`](https://docs.astral.sh/uv/)
 
-### Update the Profile and Resume
-
-1. Edit or add the relevant YAML file under `data/`.
-2. Preview the generated files locally:
+Install the exact locked dependencies:
 
 ```bash
-uv run python -m src.main
+uv sync --locked
 ```
 
-This updates:
+## Update the canonical resume
 
-- `README.md`: GitHub profile homepage.
-- `RESUME.md`: Markdown resume.
-- `output/resume.html`: One-page, ATS-friendly HTML resume for applications.
-- `output/resume_bible.html`: Full HTML resume.
-
-3. Commit and push the YAML changes. A push to `main` automatically regenerates and commits the profile and resume files.
-
-The normal generation path is deterministic and does not require an AI API key.
-
-### Tailor a Resume to a Job Description
-
-Set `GEMINI_API_KEY` in `.env`, put the job description in a text file, and run:
+1. Edit or add YAML under `data/`.
+2. Generate all canonical files as one atomic batch:
 
 ```bash
-uv run python -m src.main target_jd.txt
+uv run --locked python -m src.main
 ```
 
-Tailored files are written under `output/` with the `_tailored` suffix. This is an opt-in local workflow and is not run by GitHub Actions.
+The command updates these files only after every template renders successfully:
 
-### Adding New Data
+- `README.md`: GitHub profile homepage
+- `RESUME.md`: public Markdown resume
+- `output/resume.html`: concise A4 HTML resume
+- `output/resume_bible.html`: full HTML resume
 
-Create a YAML file in the corresponding directory under `data/`. Work experience, education, and projects are automatically sorted by `startDate` in descending order.
+The concise HTML includes the three newest roles, up to three highlights per role, and up to seven keywords per technical skill group. Use the Bible HTML or Markdown resume when you need the complete source-backed history.
 
-For example, to add a new project, create `data/projects/my_new_project.yaml`:
+Commit the YAML changes and all four canonical files together. The main GitHub Actions workflow validates pull requests without write access. After a push to `main`, it regenerates them as a drift backstop in a read-only job; only a separate commit job can write a missing correction.
+
+The normal generation path is deterministic and does not load an AI provider or require an API key. Invalid fields, malformed dates, unknown schema fields, and unsafe URL schemes fail with a source-aware validation error.
+
+## Tailor a resume to a job description
+
+Copy the environment template and place your own key in the ignored `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+```dotenv
+OPENAI_API_KEY=your-key-here
+# Optional; defaults to gpt-5.6-luna
+OPENAI_MODEL=gpt-5.6-luna
+```
+
+Save a job description as `target_jd.txt` (an ignored local file), then run:
+
+```bash
+uv run --locked --extra tailoring python -m src.main target_jd.txt
+```
+
+To label the ignored output files for a particular role:
+
+```bash
+uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name cookpad_ai
+```
+
+This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
+
+For GitHub Actions, create a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. This workflow is read-only, does not commit job-specific resumes, and is the only workflow that receives the secret. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
+
+## Add structured data
+
+Create one YAML file per entry in the corresponding directory:
+
+- `data/basics.yaml`
+- `data/work/`
+- `data/education/`
+- `data/certificates/`
+- `data/publications/`
+- `data/skills/`
+- `data/projects/`
+
+Work, education, and projects are sorted by normalized `startDate` in descending order. Use `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`; use `Present` only as an end date.
+
+Example project:
 
 ```yaml
 name: My New Project
 description: Description of the project.
-url: https://...
+url: https://example.com/project
 startDate: "2024-01"
 endDate: "2024-06"
 keywords:
   - Python
   - AI
 highlights:
-  - Achieved X result.
+  - Achieved a measured result.
 ```
 
-## Generated Resume
-
-See [RESUME.md](./RESUME.md) for the latest generated version.
+See [RESUME.md](./RESUME.md) for the latest generated Markdown resume.

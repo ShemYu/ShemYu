@@ -278,7 +278,7 @@
             <h2>Certifications</h2>
             {% for cert in certificates %}
             <div class="certificate-row">
-                <div><span class="certificate-main">{{ cert.name }}</span>, {{ cert.issuer }}</div>
+                <div><span class="certificate-main">{{ cert.name }}</span>{% if cert.issuer %}, {{ cert.issuer }}{% endif %}</div>
                 {% if cert.date %}<div class="entry-date">{{ cert.date | format_date }}</div>{% endif %}
             </div>
             {% endfor %}

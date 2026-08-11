@@ -1,105 +1,288 @@
+"""OpenAI Agents SDK integration for deterministic profile tailoring."""
+
+from __future__ import annotations
+
+import copy
+import json
 import os
-import google.generativeai as genai
-from dotenv import load_dotenv
-from typing import Dict, Any, Optional
+from collections.abc import Mapping
+from typing import Any, Optional
+
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
+
 from src.interfaces import AIProvider
+from src.schema import profile_dict
 
-load_dotenv()
+try:  # The SDK is an optional dependency used only by the tailoring command.
+    from agents import Agent, RunConfig, Runner
+except ModuleNotFoundError:  # pragma: no cover - core-only installs.
+    Agent = None  # type: ignore[assignment,misc]
+    RunConfig = None  # type: ignore[assignment,misc]
+    Runner = None  # type: ignore[assignment,misc]
 
-class GeminiAIProvider(AIProvider):
-    """Provides AI features using Google Gemini."""
-    
-    def __init__(self, model_name: str = 'gemini-2.5-flash-lite'):
-        self.api_key = os.environ.get('GEMINI_API_KEY')
-        self.model_name = model_name
-        self._configured = False
+try:  # Keep importing this module harmless when the optional extra is absent.
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - core-only installs.
+    load_dotenv = None  # type: ignore[assignment]
 
-    def _configure(self):
-        if not self.api_key:
-            print("Warning: GEMINI_API_KEY not found. AI features are unavailable.")
-            return False
-        
-        if not self._configured:
-            genai.configure(api_key=self.api_key)
-            self._configured = True
-        return True
 
-    def generate_highlight(self, profile: Dict[str, Any]) -> Optional[str]:
-        if not self._configure():
-            return None
+DEFAULT_MODEL = "gpt-5.6-luna"
+_INDEX_FIELDS = ("work", "projects", "skills", "certificates", "publications")
 
+
+class HighlightSelection(BaseModel):
+    """Select bullet indices for one source work or project item."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    item_index: StrictInt
+    highlight_indices: list[StrictInt] = Field(default_factory=list, max_length=3)
+
+    @model_validator(mode="after")
+    def validate_indices(self) -> "HighlightSelection":
+        if self.item_index < 0:
+            raise ValueError("item_index must be non-negative")
+        if any(index < 0 for index in self.highlight_indices):
+            raise ValueError("highlight_indices must be non-negative")
+        if len(self.highlight_indices) != len(set(self.highlight_indices)):
+            raise ValueError("highlight_indices contains duplicate indices")
+        return self
+
+
+class TailoringPlan(BaseModel):
+    """Selection-only output returned by the specialist agent.
+
+    The model can select source entries and (optionally) their bullet
+    indices.  It has no fields for basics, education, summaries, or prose;
+    those values are copied locally from the validated source profile.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    # Required and bounded so a valid model response cannot produce an empty
+    # or unreasonably long work history in a one-page resume.
+    work: list[StrictInt] = Field(min_length=1, max_length=4)
+    projects: list[StrictInt] = Field(default_factory=list, max_length=3)
+    work_highlights: list[HighlightSelection] = Field(default_factory=list, max_length=4)
+    project_highlights: list[HighlightSelection] = Field(default_factory=list, max_length=3)
+    skills: list[StrictInt] = Field(default_factory=list)
+    certificates: list[StrictInt] = Field(default_factory=list)
+    publications: list[StrictInt] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def reject_duplicate_indices(self) -> "TailoringPlan":
+        for field_name in _INDEX_FIELDS:
+            values = getattr(self, field_name)
+            if any(index < 0 for index in values):
+                raise ValueError(f"{field_name} must contain non-negative indices")
+            if len(values) != len(set(values)):
+                raise ValueError(f"{field_name} contains duplicate indices")
+
+        for field_name in ("work_highlights", "project_highlights"):
+            selections = getattr(self, field_name)
+            item_indices = [selection.item_index for selection in selections]
+            if len(item_indices) != len(set(item_indices)):
+                raise ValueError(f"{field_name} contains duplicate item indices")
+        return self
+
+
+def _validated_profile(profile: Any) -> dict[str, Any]:
+    """Validate a dict/Profile with the shared YAML/render profile contract."""
+
+    # profile_dict accepts both the concrete Profile model and a mapping.
+    return profile_dict(profile)
+
+
+def _select_items(
+    source: dict[str, Any], section: str, indices: list[int]
+) -> list[dict[str, Any]]:
+    items = source.get(section, [])
+    for index in indices:
+        if index < 0 or index >= len(items):
+            raise ValueError(
+                f"{section} index {index} is out of range (size={len(items)})"
+            )
+    return [copy.deepcopy(items[index]) for index in indices]
+
+
+def _apply_highlight_selection(
+    selected: list[dict[str, Any]],
+    source_items: list[Mapping[str, Any]],
+    selected_indices: list[int],
+    selections: list[HighlightSelection],
+    section: str,
+) -> None:
+    """Apply explicit bullet selections or retain at most three bullets."""
+
+    selected_positions = {
+        source_index: position
+        for position, source_index in enumerate(selected_indices)
+    }
+    explicit = {selection.item_index: selection for selection in selections}
+    for source_index, selection in explicit.items():
+        if source_index < 0 or source_index >= len(source_items):
+            raise ValueError(
+                f"{section} highlight selection references out-of-range item {source_index}"
+            )
+        if source_index not in selected_positions:
+            raise ValueError(
+                f"{section} highlight selection references unselected item {source_index}"
+            )
+
+        highlights = source_items[source_index].get("highlights", [])
+        if highlights is None:
+            highlights = []
+        if not isinstance(highlights, list):
+            raise ValueError(f"profile.{section}[{source_index}].highlights must be a list")
+        for highlight_index in selection.highlight_indices:
+            if highlight_index >= len(highlights):
+                raise ValueError(
+                    f"{section}[{source_index}] highlight index {highlight_index} "
+                    f"is out of range (size={len(highlights)})"
+                )
+        selected[selected_positions[source_index]]["highlights"] = [
+            copy.deepcopy(highlights[index]) for index in selection.highlight_indices
+        ]
+
+    # Keep a compact deterministic prefix when the model leaves a selected
+    # item's bullets unspecified.
+    for source_index, position in selected_positions.items():
+        if source_index in explicit:
+            continue
+        highlights = source_items[source_index].get("highlights", [])
+        if highlights is None:
+            highlights = []
+        if not isinstance(highlights, list):
+            raise ValueError(f"profile.{section}[{source_index}].highlights must be a list")
+        selected[position]["highlights"] = copy.deepcopy(highlights[:3])
+
+
+def assemble_profile(
+    profile: Any, plan: TailoringPlan | Mapping[str, Any]
+) -> dict[str, Any]:
+    """Build a tailored profile from source facts and a validated plan."""
+
+    source = _validated_profile(profile)
+    if not isinstance(plan, TailoringPlan):
+        plan = TailoringPlan.model_validate(plan)
+
+    result = copy.deepcopy(source)
+    for section in _INDEX_FIELDS:
+        result[section] = _select_items(source, section, list(getattr(plan, section)))
+
+    _apply_highlight_selection(
+        result["work"],
+        source["work"],
+        list(plan.work),
+        list(plan.work_highlights),
+        "work",
+    )
+    _apply_highlight_selection(
+        result["projects"],
+        source["projects"],
+        list(plan.projects),
+        list(plan.project_highlights),
+        "projects",
+    )
+    # Education and basics intentionally remain complete source copies.
+    result["education"] = copy.deepcopy(source["education"])
+
+    # Validate the assembled result with the same model used by YamlDataLoader
+    # and return its JSON-compatible representation to templates.
+    return _validated_profile(result)
+
+
+def _profile_for_prompt(profile: dict[str, Any]) -> str:
+    """Serialize only the source sections the agent can select."""
+
+    selectable_profile = {
+        section: copy.deepcopy(profile[section]) for section in _INDEX_FIELDS
+    }
+    return json.dumps(selectable_profile, ensure_ascii=False, default=str, sort_keys=True)
+
+
+class OpenAIAgentProvider(AIProvider):
+    """Single specialist Agent that selects source profile indices."""
+
+    def __init__(self, model_name: Optional[str] = None):
+        # Read local development configuration only when this opt-in provider
+        # is instantiated.  Deterministic generation never imports this module.
+        if load_dotenv is not None:
+            load_dotenv(override=False)
+
+        self.model_name = model_name or os.environ.get("OPENAI_MODEL") or DEFAULT_MODEL
+        if Agent is None or RunConfig is None or Runner is None:
+            raise RuntimeError(
+                "OpenAI tailoring is unavailable; install the 'tailoring' extra"
+            )
+
+        self.agent = Agent(
+            name="Resume tailoring specialist",
+            model=self.model_name,
+            output_type=TailoringPlan,
+            instructions=(
+                "Select relevant source profile entries for the supplied job description. "
+                "Return only zero-based indices in TailoringPlan; never write, rewrite, "
+                "summarize, or invent profile content. Basics and every education entry "
+                "are always retained by the local assembler. Select at most four work "
+                "entries, three projects, and three bullets per selected item."
+            ),
+        )
+        # Resume/JD contents are sensitive personal data. The model request is
+        # required for tailoring, but duplicate storage in SDK traces is not.
+        self.run_config = RunConfig(tracing_disabled=True)
+
+    def generate_highlight(self, profile: dict[str, Any]) -> Optional[str]:
+        """Return the validated source summary; never generate new facts."""
+
+        basics = profile.get("basics", {}) if isinstance(profile, Mapping) else {}
+        summary = basics.get("summary") if isinstance(basics, Mapping) else None
+        return summary if isinstance(summary, str) else None
+
+    def tailor_profile(
+        self, profile: dict[str, Any], job_description: str
+    ) -> dict[str, Any]:
+        """Select and assemble source facts for ``job_description``."""
+
+        if not isinstance(job_description, str) or not job_description.strip():
+            raise ValueError("job_description must not be empty")
+        if not os.environ.get("OPENAI_API_KEY", "").strip():
+            raise RuntimeError("OPENAI_API_KEY is required to tailor a resume")
+
+        source = _validated_profile(profile)
+        if not source["work"]:
+            raise ValueError("profile.work must contain at least one entry")
+
+        prompt = (
+            "JOB DESCRIPTION\n---\n"
+            f"{job_description.strip()}\n---\n"
+            "SOURCE PROFILE (use indices only; do not reproduce or edit content)\n"
+            f"{_profile_for_prompt(source)}\n---\n"
+            "Return a TailoringPlan; the local assembler copies all non-selectable source "
+            "fields unchanged."
+        )
+        run_result = Runner.run_sync(
+            self.agent,
+            prompt,
+            max_turns=1,
+            run_config=self.run_config,
+        )
+        raw_plan = getattr(run_result, "final_output", run_result)
         try:
-            model = genai.GenerativeModel(self.model_name)
-            
-            # Construct a prompt from the profile
-            basics = profile.get('basics', {})
-            work = profile.get('work', [])
-            skills = profile.get('skills', [])
-            
-            prompt = f"""
-            You are a professional career coach. Write a short, engaging, and impressive "Professional Highlight" (max 100 words) for a GitHub Profile README based on the following profile:
-            
-            Name: {basics.get('name')}
-            Label: {basics.get('label')}
-            Summary: {basics.get('summary')}
-            
-            Latest Role: {work[0].get('position')} at {work[0].get('name')} if work else 'N/A'
-            Top Skills: {', '.join([s.get('name') for s in skills[:3]])}
-            
-            Focus on their unique value proposition and recent achievements. Use emojis sparingly.
-            """
-            
-            response = model.generate_content(prompt)
-            return response.text
-        except Exception as e:
-            print(f"Error generating AI highlight: {e}")
-            return None
+            plan = (
+                raw_plan
+                if isinstance(raw_plan, TailoringPlan)
+                else TailoringPlan.model_validate(raw_plan)
+            )
+        except Exception as exc:
+            raise ValueError("Agent returned an invalid TailoringPlan") from exc
+        return assemble_profile(source, plan)
 
-    def tailor_profile(self, profile: Dict[str, Any], job_description: str) -> Dict[str, Any]:
-        """
-        Uses Gemini to filter and rewrite the profile to match the JD.
-        """
-        if not self._configure():
-            raise RuntimeError("GEMINI_API_KEY is required to tailor a resume.")
-            
-        try:
-            model = genai.GenerativeModel(self.model_name, generation_config={"response_mime_type": "application/json"})
-            
-            # Prepare context (avoid sending too much noise if possible, but sending full profile is usually fine for Gemini 1.5/2.0)
-            import json
-            profile_json = json.dumps(profile, default=str)
-            
-            prompt = f"""
-            You are an expert Resume Tailor. Your goal is to adapt a candidate's "Master Profile" (Bible) to fit a specific "Job Description" (JD).
-            
-            RULES:
-            1.  **Strict Size Limit**: The output MUST fit on ONE PAGE when formatted. This means:
-                -   Select MAX 3-4 most relevant WORK EXPERIENCES.
-                -   For each selected work experience, select MAX 3-4 bullet points that match the JD keywords.
-                -   Select MAX 2-3 most relevant PROJECTS.
-                -   Keep the Summary concise (rewrite it to target the JD, max 3 lines).
-            2.  **Relevance**: Prioritize experiences and skills that directly match the JD.
-            3.  **Structure**: The output must be a valid JSON object matching the exact structure of the input `Profile`.
-            4.  **Content**: 
-                -   You may rewrite bullet points to emphasize impact and JD keywords.
-                -   Do NOT invent facts. Only use info present in the Profile.
-                -   Remove completely irrelevant sections if needed (but keep Basics, Education).
-            
-            ---
-            JOB DESCRIPTION:
-            {job_description}
-            
-            ---
-            CANDIDATE PROFILE (JSON):
-            {profile_json}
-            
-            ---
-            Output the tailored JSON profile:
-            """
-            
-            response = model.generate_content(prompt)
-            tailored_profile = json.loads(response.text)
-            return tailored_profile
-            
-        except Exception as e:
-            raise RuntimeError(f"Error tailoring profile: {e}") from e
+
+__all__ = [
+    "DEFAULT_MODEL",
+    "HighlightSelection",
+    "TailoringPlan",
+    "assemble_profile",
+    "OpenAIAgentProvider",
+]

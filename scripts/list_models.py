@@ -1,14 +1,21 @@
-import google.generativeai as genai
+"""List models visible to the configured OpenAI API account."""
+
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - optional tailoring extra.
+    load_dotenv = None
 
-api_key = os.environ.get('GEMINI_API_KEY')
-if not api_key:
-    print("GEMINI_API_KEY not found.")
+
+if load_dotenv is not None:
+    load_dotenv(override=False)
+
+if not os.environ.get("OPENAI_API_KEY", "").strip():
+    print("OPENAI_API_KEY not found.")
 else:
-    genai.configure(api_key=api_key)
-    for m in genai.list_models():
-        if 'generateContent' in m.supported_generation_methods:
-            print(m.name)
+    from openai import OpenAI
+
+    client = OpenAI()
+    for model in client.models.list().data:
+        print(model.id)

@@ -9,6 +9,7 @@ This document outlines the future development plans for the Career History Knowl
 ## Phase 2: Enhanced Generation
 - [ ] **Multiple Templates**: Support different resume styles (e.g., Classic, Modern, Tech-focused).
 - [x] **HTML Support**: Generate HTML versions alongside Markdown.
+- [x] **Agent-assisted Tailoring**: Select source-backed resume content for a job description with structured OpenAI agent output.
 - [ ] **PDF Support**: Generate a PDF from the HTML resume.
 - [ ] **Cover Letter Generator**: Generate basic cover letters based on the profile and a job description.
 
@@ -17,9 +18,9 @@ This document outlines the future development plans for the Career History Knowl
 - [ ] **Personal Website**: Generate a static website (e.g., using Hugo or Jekyll) from the YAML data.
 
 ## Phase 4: Data Quality
-- [ ] **Schema Validation**: Implement JSON Schema or Pydantic models to validate YAML files to ensure data integrity.
+- [x] **Schema Validation**: Validate every YAML-backed profile with shared Pydantic models before rendering or tailoring.
 - [ ] **Linting**: Add linting for YAML files.
 
-## Issues & Technical Debt (2025-12-16)
-1.  **High Learning Curve**: CLI usage is cumbersome for non-technical users. Requires a simpler interface or automation.
-2.  **Manual Data Entry**: Adding/Updating `data/` is manual and prone to friction.
+## Remaining usability work
+1. **Guided data editing**: Adding or updating files under `data/` is still manual.
+2. **PDF releases**: HTML-to-PDF export and versioned release artifacts are not automated yet.
