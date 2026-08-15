@@ -82,6 +82,19 @@ class ProfileSchemaTest(unittest.TestCase):
         )
         json.dumps(profile.model_dump(mode="json"))
 
+    def test_work_keeps_evidence_off_highlights(self):
+        work = Work.model_validate(
+            {
+                "name": "Cookpad",
+                "position": "Engineer",
+                "startDate": "2026-02",
+                "highlights": ["Public coverage 40% to 95%."],
+                "evidence": ["15-case internal benchmark"],
+            }
+        )
+        self.assertEqual(work.highlights, ["Public coverage 40% to 95%."])
+        self.assertEqual(work.evidence, ["15-case internal benchmark"])
+
 
 if __name__ == "__main__":
     unittest.main()

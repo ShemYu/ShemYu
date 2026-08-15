@@ -172,5 +172,33 @@ class GeneratorSafetyTest(unittest.TestCase):
         self.assertNotIn('github-stats-extended', rendered_without_github)
 
 
+class PublicResumeLayerTest(unittest.TestCase):
+    def test_public_resume_templates_drop_evidence(self):
+        profile = {
+            "work": [
+                {
+                    "name": "Cookpad",
+                    "highlights": ["coverage 40% to 95%"],
+                    "evidence": ["15-case / 103-unit internal benchmark"],
+                }
+            ]
+        }
+        with tempfile.TemporaryDirectory() as template_dir:
+            Path(template_dir, "resume.html.j2").write_text(
+                "{% for w in work %}{{ w.highlights[0] }}|{% if w.evidence is defined %}{{ w.evidence }}{% endif %}{% endfor %}",
+                encoding="utf-8",
+            )
+            Path(template_dir, "resume_bible.html.j2").write_text(
+                "{% for w in work %}{{ w.evidence[0] }}{% endfor %}",
+                encoding="utf-8",
+            )
+            generator = Jinja2Generator(template_dir)
+            public = generator.render(profile, "resume.html.j2")
+            bible = generator.render(profile, "resume_bible.html.j2")
+        self.assertIn("coverage 40% to 95%", public)
+        self.assertNotIn("15-case", public)
+        self.assertIn("15-case / 103-unit internal benchmark", bible)
+
+
 if __name__ == '__main__':
     unittest.main()

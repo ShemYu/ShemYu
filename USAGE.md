@@ -16,6 +16,8 @@ Treat the canonical YAML as the publication layer, not as a place to invent or i
 
 The full or Bible output may remain detailed. Concise and job-specific outputs are downstream selections from the same evidence, not separate versions of truth.
 
+Work and project `highlights` are the public layer (role, product, disclosure-safe results). Put internal benchmarks, case counts, pp swings, and similar eval notes in `evidence`. The generator strips `evidence` from `resume.html`, `RESUME.md`, and `README.md`; the Bible template can still show it.
+
 Repository-local evidence guidance lives in [`career_evidence/README.md`](career_evidence/README.md). Detailed company masters belong under `career_evidence/private/`, which is intentionally ignored so internal context cannot enter the public profile by accident. Promote only disclosure-safe, verified wording from a private master into `data/`.
 
 ## Prerequisites

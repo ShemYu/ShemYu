@@ -155,6 +155,7 @@ class Work(ProfileModel):
     location: str = ""
     summary: str = ""
     highlights: list[str] = Field(default_factory=list)
+    evidence: list[str] = Field(default_factory=list)
 
     _start_date = field_validator("startDate", mode="before")(
         lambda value: validate_date(value, allow_empty=False)
@@ -214,6 +215,7 @@ class Project(ProfileModel):
     endDate: str = ""
     keywords: list[str] = Field(default_factory=list)
     highlights: list[str] = Field(default_factory=list)
+    evidence: list[str] = Field(default_factory=list)
 
     _start_date = field_validator("startDate", mode="before")(
         validate_date
