@@ -5,11 +5,12 @@ endDate: "Present"
 location: Tokyo, Japan
 summary: Building AI that makes everyday life more joyful.
 highlights:
-  - "Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%."
+  - "Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%."
   - "Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality."
-  - "Designed a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions to improve debuggability and reduce failure propagation across agent stages."
+  - "Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages."
 evidence:
   - "[User confirmed] Role: video question-understanding agent. Inputs are cooking video and learner voice. The job is to infer where the learner is stuck, then decide reteach, narrow, or advance so the next prompt targets that gap instead of a generic next step."
+  - "[User confirmed] Previous public highlight 1, now evidence only: Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%."
   - "[User confirmed] Prior public wording also included cross-session history to personalize those decisions. Keep that as extra context; do not add model names or fusion methods."
   - "[User confirmed] Previous public highlight 3, now evidence only: From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step."
   - "[User confirmed] Public / outbound coverage: chef-grounded candidate coverage 40% to 95%. This is the only coverage number allowed on the one-page resume."

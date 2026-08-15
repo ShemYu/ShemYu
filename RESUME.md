@@ -21,11 +21,11 @@ Building AI that makes everyday life more joyful.
 
 
 
-- Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.
+- Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.
 
 - Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.
 
-- Designed a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions to improve debuggability and reduce failure propagation across agent stages.
+- Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages.
 
 
 
