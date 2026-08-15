@@ -2,7 +2,7 @@
   <h1>{{ basics.name }}</h1>
   <p><code>{{ basics.label }}</code></p>
   
-  <a href="{{ basics.url }}">Website</a> •
+  <a href="./RESUME.md">Resume</a> •
   <a href="mailto:{{ basics.email }}">Email</a> •
   {% for p in basics.profiles %}
   <a href="{{ p.url }}">{{ p.network }}</a>{% if not loop.last %} • {% endif %}
@@ -17,14 +17,14 @@
 User: {{ basics.name }}
 Role: {{ work[0].position }}
 Company: {{ work[0].name }}
-Location: {{ basics.location }}
+Location: {{ basics.location.city }}, {{ basics.location.region }}
 Uptime: {{ work | length }} roles of experience
 ```
 
-{% if ai_highlight %}
-### � Neural Link (AI Highlight)
+{% if basics.summary %}
+### 🎯 Professional Highlight
 
-> {{ ai_highlight }}
+> {{ basics.summary }}
 {% endif %}
 
 ### 🛠 Tech Stack
@@ -39,10 +39,13 @@ Uptime: {{ work | length }} roles of experience
 
 ### 📊 GitHub Stats
 
+{% set github_profiles = basics.profiles | selectattr('network', 'equalto', 'GitHub') | list %}
+{% if github_profiles and github_profiles[0].username %}
 <div align="center">
-  <img src="https://github-stats-extended.vercel.app/api?username={{ basics.profiles[0].url.split('/')[-1] }}&show_icons=true&theme=radical&hide_border=true" height="150" alt="stats graph"  />
-  <img src="https://github-stats-extended.vercel.app/api/top-langs/?username={{ basics.profiles[0].url.split('/')[-1] }}&layout=compact&theme=radical&hide_border=true" height="150" alt="languages graph" />
+  <img src="https://github-stats-extended.vercel.app/api?username={{ github_profiles[0].username }}&show_icons=true&theme=radical&hide_border=true" height="150" alt="stats graph"  />
+  <img src="https://github-stats-extended.vercel.app/api/top-langs/?username={{ github_profiles[0].username }}&layout=compact&theme=radical&hide_border=true" height="150" alt="languages graph" />
 </div>
+{% endif %}
 
 <br />
 

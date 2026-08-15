@@ -159,6 +159,16 @@
             margin-bottom: 3mm;
         }
 
+        .project-entry {
+            break-inside: avoid-page;
+            page-break-inside: avoid;
+        }
+
+        .projects-heading {
+            break-after: avoid-page;
+            page-break-after: avoid;
+        }
+
         .entry-header {
             display: flex;
             justify-content: space-between;
@@ -305,7 +315,7 @@
         <!-- Projects -->
         {% if projects %}
         <section>
-            <h2>Projects</h2>
+            <h2 class="projects-heading">Projects</h2>
             {% for project in projects %}
             <div class="project-entry">
                 <div class="entry-header">

@@ -1,74 +1,86 @@
+import argparse
 import os
+import re
 import sys
-from src.loader import YamlDataLoader
+from pathlib import Path
+from typing import Sequence
+
 from src.generator import Jinja2Generator
-from src.ai import GeminiAIProvider
+from src.loader import YamlDataLoader
 
-def main():
-    data_dir = 'data'
-    template_dir = 'templates'
-    
-    # Check for JD file argument
-    target_jd = None
-    if len(sys.argv) > 1:
-        target_jd = sys.argv[1]
-        print(f"Targeting JD: {target_jd}")
-    
-    if not os.path.exists(data_dir):
-        print(f"Error: {data_dir} directory not found.")
-        return
 
-    try:
-        # Dependency Injection
-        loader = YamlDataLoader(data_dir)
-        generator = Jinja2Generator(template_dir)
-        ai_provider = GeminiAIProvider()
-        
-        # Prepare Output Directory
-        output_dir = 'output'
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+CANONICAL_OUTPUTS = (
+    ("resume.md.j2", "RESUME.md"),
+    ("resume.html.j2", "output/resume.html"),
+    ("resume_bible.html.j2", "output/resume_bible.html"),
+    ("readme.md.j2", "README.md"),
+)
+DEFAULT_TAILORED_NAME = "resume_tailored"
+OUTPUT_NAME_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}")
 
-        # Load Data
-        profile = loader.load()
 
-            
-        # Tailor Profile if JD provided
-        if target_jd and os.path.exists(target_jd):
-            with open(target_jd, 'r') as f:
-                jd_text = f.read()
-            print("Tailoring profile with AI...")
-            profile = ai_provider.tailor_profile(profile, jd_text)
-            output_suffix = "_tailored"
-        else:
-            output_suffix = ""
-        
-        # Generate Markdown Resume
-        generator.generate(profile, 'resume.md.j2', os.path.join(output_dir, f'RESUME{output_suffix}.md'))
-        
-        # Generate HTML Resume
-        generator.generate(profile, 'resume.html.j2', os.path.join(output_dir, f'resume{output_suffix}.html'))
-        
-        # Generate Bible HTML Resume
-        generator.generate(profile, 'resume_bible.html.j2', os.path.join(output_dir, f'resume_bible{output_suffix}.html'))
-        
-        # Generate AI Highlight (Only for full profile)
-        if not output_suffix:
-            ai_highlight = ai_provider.generate_highlight(profile)
-            if ai_highlight:
-                profile['ai_highlight'] = ai_highlight
-                
-            # Generate Profile README
-            # Keep README in root as it's for GitHub Profile
-            generator.generate(profile, 'readme.md.j2', 'README.md')
-        
-    except ImportError:
-        print("Error: Required libraries not installed.")
-        print("Please run: pip install pyyaml jinja2 google-generativeai python-dotenv")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        import traceback
-        traceback.print_exc()
+def _tailored_outputs(output_name: str) -> Sequence[tuple[str, str]]:
+    if not OUTPUT_NAME_PATTERN.fullmatch(output_name):
+        raise ValueError(
+            "Output name must be 1-64 letters, numbers, underscores, or hyphens "
+            "and must start with a letter or number."
+        )
+
+    return (
+        ("resume.md.j2", f"output/tailored/{output_name}.md"),
+        ("resume.html.j2", f"output/tailored/{output_name}.html"),
+        ("resume_bible.html.j2", f"output/tailored/{output_name}_bible.html"),
+    )
+
+
+def main(target_jd: str | None = None, output_name: str = DEFAULT_TAILORED_NAME) -> None:
+    data_dir = "data"
+    template_dir = "templates"
+
+    if not os.path.isdir(data_dir):
+        raise FileNotFoundError(f"{data_dir} directory not found.")
+    if target_jd and not os.path.isfile(target_jd):
+        raise FileNotFoundError(f"JD file not found: {target_jd}")
+
+    outputs = _tailored_outputs(output_name) if target_jd else CANONICAL_OUTPUTS
+    profile = YamlDataLoader(data_dir).load()
+
+    if target_jd:
+        jd_text = Path(target_jd).read_text(encoding="utf-8")
+        print(f"Tailoring resume for JD: {target_jd}")
+
+        # Keep the deterministic generation path independent from the AI stack.
+        from src.ai import OpenAIAgentProvider
+
+        profile = OpenAIAgentProvider().tailor_profile(profile, jd_text)
+
+    Jinja2Generator(template_dir).generate_batch(profile, outputs)
+
+
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate canonical or job-tailored resume artifacts."
+    )
+    parser.add_argument(
+        "target_jd",
+        nargs="?",
+        help="Path to a job description. Omit it for deterministic canonical output.",
+    )
+    parser.add_argument(
+        "--output-name",
+        default=DEFAULT_TAILORED_NAME,
+        help="Safe basename for tailored files under output/.",
+    )
+    args = parser.parse_args(argv)
+    if not args.target_jd and args.output_name != DEFAULT_TAILORED_NAME:
+        parser.error("--output-name requires a target_jd file")
+    return args
+
 
 if __name__ == "__main__":
-    main()
+    try:
+        cli_args = parse_args()
+        main(cli_args.target_jd, cli_args.output_name)
+    except Exception as error:
+        print(f"Error: {error}", file=sys.stderr)
+        sys.exit(1)

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shem Yu - Resume</title>
+    <style>
+        :root {
+            --page-width: 210mm;
+            --page-height: 297mm;
+            --text: #111;
+            --muted: #444;
+            --rule: #222;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #e9e9e9;
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            line-height: 1.28;
+        }
+
+        .resume {
+            width: var(--page-width);
+            min-height: var(--page-height);
+            margin: 12px auto;
+            padding: 13mm 16mm 12mm;
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.16);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3.5mm;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24pt;
+            line-height: 1.05;
+            letter-spacing: 0.01em;
+        }
+
+        .headline {
+            margin-top: 1.2mm;
+            font-size: 11pt;
+            font-weight: 700;
+        }
+
+        .contact {
+            margin-top: 1.8mm;
+            color: var(--muted);
+            font-size: 9pt;
+        }
+
+        .contact span + span::before {
+            content: " | ";
+            padding: 0 1.2mm;
+            color: #777;
+        }
+
+        section {
+            margin-top: 3.2mm;
+        }
+
+        h2 {
+            margin: 0 0 1.7mm;
+            padding-bottom: 0.7mm;
+            border-bottom: 0.8pt solid var(--rule);
+            font-size: 10.5pt;
+            line-height: 1.1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .summary {
+            color: #222;
+        }
+
+        .skill-row {
+            margin-bottom: 0.7mm;
+            font-size: 9.2pt;
+        }
+
+        .skill-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-name {
+            font-weight: 700;
+        }
+
+        .entry {
+            margin-bottom: 2.7mm;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 6mm;
+        }
+
+        .entry-title {
+            font-size: 10pt;
+            font-weight: 700;
+        }
+
+        .entry-date {
+            flex: 0 0 auto;
+            color: var(--muted);
+            font-size: 9pt;
+            white-space: nowrap;
+        }
+
+        .entry-subtitle {
+            margin-top: 0.3mm;
+            color: #333;
+            font-size: 9.4pt;
+            font-weight: 600;
+        }
+
+        ul {
+            margin: 1mm 0 0;
+            padding-left: 4.5mm;
+        }
+
+        li {
+            margin-bottom: 0.7mm;
+            padding-left: 0.5mm;
+        }
+
+        li:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-row,
+        .certificate-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 6mm;
+            margin-bottom: 1mm;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .education-row:last-child,
+        .certificate-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-main,
+        .certificate-main {
+            font-weight: 700;
+        }
+
+        .education-detail {
+            color: #333;
+            font-weight: 400;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            .resume {
+                width: var(--page-width);
+                min-height: var(--page-height);
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="resume">
+        <header class="header">
+            <h1>Shem Yu</h1>
+            <div class="headline">Senior AI Engineer @ Cookpad | GenAI, AI Agents &amp; MLOps | Tokyo</div>
+            <div class="contact">
+                <span><a href="mailto:shauns4y@gmail.com">shauns4y@gmail.com</a></span>
+                <span>+886 953 240 855</span>
+                <span>Taipei, Taiwan</span>
+                <span><a href="https://github.com/ShemYu">github.com/ShemYu</a></span>
+            </div>
+        </header>
+
+
+        <section>
+            <h2>Professional Summary</h2>
+            <p class="summary">Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
+</p>
+        </section>
+
+
+
+        <section>
+            <h2>Technical Skills</h2>
+
+            <p class="skill-row"><span class="skill-name">Cloud &amp; Infra:</span> AWS (EC2, Fargate, Lambda, Route53), Databricks, Distributed Systems, High-Availability Analytics, AI Gateway, Guardrails, MCP Protocol</p>
+
+            <p class="skill-row"><span class="skill-name">Data Engineering:</span> AP Data Layer Design, SQL, NoSQL, Data Pipeline Design, ETL, Data Visualization</p>
+
+            <p class="skill-row"><span class="skill-name">Generative AI &amp; NLP:</span> Agent System Design, Retrieval-Augmented Generation (RAG), Large Language Models (LLM), Prompt Engineering, ASR/TTS, Embedding Databases, Search/Indexing Techniques</p>
+
+            <p class="skill-row"><span class="skill-name">MLOps &amp; Deployment:</span> Databricks, MLflow, Docker, CI/CD (Azure DevOps), Kubernetes, AWS SageMaker, AWS Lambda</p>
+
+            <p class="skill-row"><span class="skill-name">Programming &amp; ML Frameworks:</span> Python (expert), R (basic), C/C++ (familiar), Hugging Face, FastAPI, GoogleADK, LangChain</p>
+
+
+            <p class="skill-row"><span class="skill-name">Languages:</span> Chinese (Native), English (Limited Working)</p>
+
+        </section>
+
+
+
+        <section>
+            <h2>Professional Experience</h2>
+
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-title">Senior AI Engineer</div>
+                    <div class="entry-date">Feb 2026 - Present</div>
+                </div>
+                <div class="entry-subtitle">Cookpad</div>
+
+                <ul>
+
+                    <li>Developed and deployed improvements to a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit internal benchmark.</li>
+
+                    <li>Designed versioned, capability-based agent evaluations across eight coaching aspects and automated coverage, truth, coherence, and per-turn scoring; a 56-case full run completed in under 9 minutes with cache/resume and case-level backtraces.</li>
+
+                    <li>Led RCA across 73 flaky misses, finding 64% originated as incomplete candidate hypotheses; fixed merge and extraction losses and reduced run-to-run Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp, a 62% reduction.</li>
+
+                </ul>
+
+            </article>
+
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-title">Machine Learning Engineer, team lead</div>
+                    <div class="entry-date">Sep 2022 - Mar 2026</div>
+                </div>
+                <div class="entry-subtitle">Cathay Financial Holdings</div>
+
+                <ul>
+
+                    <li>Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.</li>
+
+                    <li>Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.</li>
+
+                    <li>Implemented FinOps agent, achieving 30% GPU cost reduction.</li>
+
+                </ul>
+
+            </article>
+
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-title">Senior AI Platform Engineer</div>
+                    <div class="entry-date">Nov 2020 - May 2022</div>
+                </div>
+                <div class="entry-subtitle">Wisers Information Limited</div>
+
+                <ul>
+
+                    <li>Develop standardized ML project templates (FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.</li>
+
+                    <li>Implement NLP-focused Python library with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.</li>
+
+                </ul>
+
+            </article>
+
+        </section>
+
+
+
+        <section>
+            <h2>Education</h2>
+
+            <div class="education-row">
+                <div>
+                    <span class="education-main">Master in Computer Science &amp; Information Engineering</span><span class="education-detail">, Ming Chuan University</span>
+                </div>
+                <div class="entry-date">Jun 2017 - Jul 2019</div>
+            </div>
+
+        </section>
+
+
+
+        <section>
+            <h2>Certifications</h2>
+
+            <div class="certificate-row">
+                <div><span class="certificate-main">AWS Certified Cloud Practitioner</span></div>
+
+            </div>
+
+            <div class="certificate-row">
+                <div><span class="certificate-main">AWS Certified Machine Learning - Specialty</span></div>
+
+            </div>
+
+        </section>
+
+    </main>
+</body>
+</html>

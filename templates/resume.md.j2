@@ -27,6 +27,24 @@ _{{ w.startDate }} - {{ w.endDate | default('Present') }}_
 {% endfor %}
 {% endif %}
 
+{% if education %}
+## Education
+{% for edu in education %}
+### {% if edu.studyType %}{{ edu.studyType }}{% if edu.area %} in {% endif %}{% endif %}{{ edu.area }}{% if edu.institution %} at {{ edu.institution }}{% endif %}
+{% if edu.startDate or edu.endDate %}_{{ edu.startDate }} - {{ edu.endDate }}_{% endif %}
+{% if edu.score %}Score: {{ edu.score }}{% endif %}
+{% if edu.courses %}
+Courses: {{ edu.courses | join(', ') }}
+{% endif %}
+{% if edu.highlights %}
+{% for highlight in edu.highlights %}
+- {{ highlight }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
 {% if skills %}
 ## Skills
 {% for skill in skills %}
@@ -37,7 +55,7 @@ _{{ w.startDate }} - {{ w.endDate | default('Present') }}_
 {% if certificates %}
 ## Certificates
 {% for cert in certificates %}
-- {{ cert.name }} ({{ cert.issuer }})
+- {{ cert.name }}{% if cert.issuer %} ({{ cert.issuer }}){% endif %}
 {% endfor %}
 {% endif %}
 

@@ -1,14 +1,16 @@
 <div align="center">
   <h1>Shem Yu</h1>
-  <p><code>ML Engineer, Team Lead</code></p>
-  
-  <a href="https://github.com/ShemYu">Website</a> •
+  <p><code>Senior AI Engineer @ Cookpad | GenAI, AI Agents & MLOps | Tokyo</code></p>
+
+  <a href="./RESUME.md">Resume</a> •
   <a href="mailto:shauns4y@gmail.com">Email</a> •
-  
-  <a href="https://github.com/ShemYu">GitHub</a> • 
-  
+
+  <a href="https://github.com/ShemYu">GitHub</a> •
+
+  <a href="https://www.linkedin.com/in/shem-yu-a10494219/">LinkedIn</a> •
+
   <a href="https://medium.com/@shemyu">Medium</a>
-  
+
 </div>
 
 <br />
@@ -17,18 +19,17 @@
 
 ```yaml
 User: Shem Yu
-Role: ML Engineer, MLE Team Lead, AI Dept.
-Company: Cathay Financial Holdings
-Location: {'address': '', 'postalCode': '', 'city': 'Taipei', 'countryCode': 'TW', 'region': 'Taiwan'}
-Uptime: 5 roles of experience
+Role: Senior AI Engineer
+Company: Cookpad
+Location: Taipei, Taiwan
+Uptime: 6 roles of experience
 ```
 
 
-### � Neural Link (AI Highlight)
+### 🎯 Professional Highlight
 
-> **Shem Yu: Driving AI Innovation as ML Engineer & Team Lead**
+> Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
 
-Senior Applied AI Engineer & Team Lead specializing in cutting-edge agent development and multi-agent systems. Proven track record leading enterprise-scale projects like DOGI, GAIA, and RKB, deploying autonomous reasoning systems on AWS/Databricks. Expert in building adaptive workflows, tool-calling engines, and LLM-based automation. Passionate about delivering robust, scalable AI solutions that push the boundaries of what's possible. 🚀
 
 
 ### 🛠 Tech Stack
@@ -55,10 +56,13 @@ Senior Applied AI Engineer & Team Lead specializing in cutting-edge agent develo
 
 ### 📊 GitHub Stats
 
+
+
 <div align="center">
   <img src="https://github-stats-extended.vercel.app/api?username=ShemYu&show_icons=true&theme=radical&hide_border=true" height="150" alt="stats graph"  />
   <img src="https://github-stats-extended.vercel.app/api/top-langs/?username=ShemYu&layout=compact&theme=radical&hide_border=true" height="150" alt="languages graph" />
 </div>
+
 
 <br />
 

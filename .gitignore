@@ -154,4 +154,11 @@ cython_debug/
 *.swp
 
 # Resume
-CV_*output/
+CV_*.pdf
+target_jd.txt
+output/*
+!output/resume.html
+!output/resume_bible.html
+
+# Detailed career evidence may contain internal project context.
+career_evidence/private/
