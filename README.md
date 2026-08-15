@@ -28,7 +28,7 @@ Uptime: 6 roles of experience
 
 ### 🎯 Professional Highlight
 
-> Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
+> Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering production GenAI agents and shared LLM infrastructure across AWS and Databricks, with earlier travel-domain work in itinerary search.
 
 
 

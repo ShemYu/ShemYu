@@ -5,7 +5,7 @@
 
 
 ## Summary
-Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
+Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering production GenAI agents and shared LLM infrastructure across AWS and Databricks, with earlier travel-domain work in itinerary search.
 
 
 
@@ -25,7 +25,7 @@ Building AI that makes everyday life more joyful.
 
 - Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.
 
-- From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step.
+- Designed a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions to improve debuggability and reduce failure propagation across agent stages.
 
 
 
@@ -203,6 +203,8 @@ A suite of internal productivity tools powered by multi-agent workflows, includi
 
 
 
+- Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.
+
 - Implemented multi-agent delegation patterns for enterprise workflows.
 
 - Developed meeting scheduling agent integrating calendar and internal APIs.
@@ -210,10 +212,6 @@ A suite of internal productivity tools powered by multi-agent workflows, includi
 - Designed session persistence and storage strategy using Redis/Postgres.
 
 - Delivered FinOps agent for AWS cost insights and early anomaly detection.
-
-- Scoped 13 requirements down to a top-5 MVP and delivered 5 agents.
-
-- First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.
 
 
 
