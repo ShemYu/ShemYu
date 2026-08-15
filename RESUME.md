@@ -45,6 +45,14 @@ Led a 4-person MLE team, overseeing AI project deployment and departmental inter
 
 - Implemented FinOps agent, achieving 30% GPU cost reduction.
 
+- Reduced overall cloud spend by 40% through FinOps practices.
+
+- Improved regulatory Agent F1 from 0.67 to 0.89.
+
+- Won CFH Cloud Creative Award 2024 (1st place).
+
+- Named departmental MVP, Q1 2025.
+
 - Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
 
 
@@ -59,9 +67,9 @@ Support cross-team AI solution integration, enabling seamless transition to unif
 
 
 
-- Develop standardized ML project templates (FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.
+- Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.
 
-- Implement NLP-focused Python library with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.
+- Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.
 
 - Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.
 
@@ -77,7 +85,7 @@ Assist in maintaining ETL pipelines and data collection, ensuring stable analyti
 
 
 
-- Analyze customer order data using statistical modeling (FP-Growth, K-means) to support marketing and segmentation strategies.
+- Analyze customer order data using statistical modeling (FP-Growth, K-means, 4 clusters) to support marketing and segmentation strategies.
 
 - Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.
 
@@ -121,7 +129,7 @@ Facilitate communication and project delivery between university and III teams, 
 
 ### Master in Computer Science & Information Engineering at Ming Chuan University
 _2017-06 - 2019-07_
-
+Score: 3.82
 
 
 
@@ -163,11 +171,13 @@ _2012-06 - 2016-06_
 
 ## Certificates
 
-- AWS Certified Cloud Practitioner
+- AWS Certified Cloud Practitioner (Amazon Web Services)
 
 - AWS Cloud Quest: Cloud Practitioner
 
-- AWS Certified Machine Learning - Specialty
+- AWS Certified Machine Learning - Specialty (Amazon Web Services)
+
+- Duolingo English Test (80) (Duolingo)
 
 
 
@@ -202,6 +212,10 @@ A suite of internal productivity tools powered by multi-agent workflows, includi
 - Designed session persistence and storage strategy using Redis/Postgres.
 
 - Delivered FinOps agent for AWS cost insights and early anomaly detection.
+
+- Scoped 13 requirements down to a top-5 MVP and delivered 5 agents.
+
+- First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.
 
 
 
@@ -256,6 +270,8 @@ A knowledge base system enabling semantic search, retrieval, and Q&A on regulato
 - Improved retrieval recall and precision through iterative evaluation.
 
 - Integrated with internal Gen-AI platform for unified access and governance.
+
+- Adopted by 2 of 5 subsidiaries.
 
 
 
