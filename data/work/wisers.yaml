@@ -4,6 +4,6 @@ startDate: "2020-11-01"
 endDate: "2022-05-01"
 summary: Support cross-team AI solution integration, enabling seamless transition to unified platforms across new and legacy projects.
 highlights:
-  - Develop standardized ML project templates (FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.
-  - Implement NLP-focused Python library with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.
+  - Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.
+  - Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.
   - Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.
