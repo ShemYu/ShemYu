@@ -16,3 +16,5 @@ highlights:
   - Implemented chunking, metadata tagging, and cleanup workflows.
   - Improved retrieval recall and precision through iterative evaluation.
   - Integrated with internal Gen-AI platform for unified access and governance.
+  # source: 2025-09 interview deck
+  - Adopted by 2 of 5 subsidiaries.

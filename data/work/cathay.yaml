@@ -8,4 +8,10 @@ highlights:
   - Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
   - Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.
   - Implemented FinOps agent, achieving 30% GPU cost reduction.
+  - Reduced overall cloud spend by 40% through FinOps practices.
+  - Improved regulatory Agent F1 from 0.67 to 0.89.
+  # source: 2025-09 interview deck
+  - Won CFH Cloud Creative Award 2024 (1st place).
+  # source: 2025-09 interview deck
+  - Named departmental MVP, Q1 2025.
   - Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
