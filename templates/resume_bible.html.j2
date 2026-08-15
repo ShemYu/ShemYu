@@ -307,6 +307,14 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
+                {% if w.evidence %}
+                <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
+                <ul>
+                    {% for item in w.evidence %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
             {% endfor %}
         </section>

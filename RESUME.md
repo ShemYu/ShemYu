@@ -16,16 +16,16 @@ Applied AI engineer and team lead with 6 years of experience building ML/AI syst
 _2026-02 - Present_
 
 
-Building AI that makes everyday life more joyful. Currently part of the Moment team at Cookpad.
+Building AI that makes everyday life more joyful.
 
 
 
 
-- Developed and deployed improvements to a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit internal benchmark.
+- Developed and deployed a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 40% to 95%.
 
-- Designed versioned, capability-based agent evaluations across eight coaching aspects and automated coverage, truth, coherence, and per-turn scoring; a 56-case full run completed in under 9 minutes with cache/resume and case-level backtraces.
+- Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.
 
-- Led RCA across 73 flaky misses, finding 64% originated as incomplete candidate hypotheses; fixed merge and extraction losses and reduced run-to-run Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp, a 62% reduction.
+- Improved evaluation reliability by tracing flaky misses to incomplete candidate hypotheses and fixing merge and extraction losses.
 
 
 
@@ -176,8 +176,6 @@ _2012-06 - 2016-06_
 - AWS Cloud Quest: Cloud Practitioner
 
 - AWS Certified Machine Learning - Specialty (Amazon Web Services)
-
-- Duolingo English Test (80) (Duolingo)
 
 
 

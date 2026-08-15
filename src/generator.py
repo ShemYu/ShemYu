@@ -14,6 +14,36 @@ from pydantic import BaseModel
 from src.interfaces import ContentGenerator
 from src.schema import validate_url
 
+import copy
+
+PUBLIC_RESUME_TEMPLATES = frozenset(
+    {
+        "resume.html.j2",
+        "resume.md.j2",
+        "readme.md.j2",
+    }
+)
+
+
+def for_public_resume(profile: Mapping[str, Any] | BaseModel) -> dict[str, Any]:
+    """Return a profile copy with internal evidence stripped.
+
+    ``highlights`` are the public layer. ``evidence`` stays in YAML / the
+    bible template and must not reach one-page outbound resumes.
+    """
+
+    if isinstance(profile, BaseModel):
+        data = profile.model_dump(mode="json")
+    else:
+        data = copy.deepcopy(dict(profile))
+    for section in ("work", "projects"):
+        items = []
+        for item in data.get(section) or []:
+            item = dict(item)
+            item.pop("evidence", None)
+            items.append(item)
+        data[section] = items
+    return data
 
 def format_date(value: Any) -> str:
     """Format resume dates consistently while preserving unknown values."""
@@ -108,6 +138,8 @@ class Jinja2Generator(ContentGenerator):
         if not isinstance(context, Mapping):
             raise TypeError("template context must be a mapping or Pydantic model")
         _validate_context_urls(context)
+        if template_name in PUBLIC_RESUME_TEMPLATES:
+            context = for_public_resume(context)
         template = self.env.get_template(template_name)
         output = template.render(**context)
         # Match the historical single-file API's whitespace normalization.
@@ -245,4 +277,4 @@ class Jinja2Generator(ContentGenerator):
         self.generate_batch(context, [(template_name, output_path)])
 
 
-__all__ = ["Jinja2Generator", "format_date"]
+__all__ = ["Jinja2Generator", "PUBLIC_RESUME_TEMPLATES", "for_public_resume", "format_date"]
