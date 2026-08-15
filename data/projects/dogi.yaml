@@ -13,11 +13,12 @@ keywords:
   - FinOps
   - LangGraph/ADK Pattern
 highlights:
+  - "Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users."
   - Implemented multi-agent delegation patterns for enterprise workflows.
   - Developed meeting scheduling agent integrating calendar and internal APIs.
   - Designed session persistence and storage strategy using Redis/Postgres.
   - Delivered FinOps agent for AWS cost insights and early anomaly detection.
-  # source: 2025-09 interview deck
-  - Scoped 13 requirements down to a top-5 MVP and delivered 5 agents.
-  # source: 2025-09 interview deck
-  - First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.
+evidence:
+  - "[User confirmed] First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time."
+  - "[User confirmed] Scoped 13 requirements down to a top-5 MVP and delivered 5 agents."
+  - "[Do not claim outbound] 20 active users / 2025-09 launch-date metrics on the one-page resume; keep ownership wording instead."

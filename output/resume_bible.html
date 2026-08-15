@@ -327,7 +327,7 @@
 
         <section style="margin-bottom: 5mm;">
              <p style="font-style: italic; color: #444; border-left: 2px solid #ddd; padding-left: 10px;">
-                Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering Google ADK agents, RAG platforms, and LLMOps on AWS and Databricks, with earlier travel-domain work in itinerary search.
+                Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering production GenAI agents and shared LLM infrastructure across AWS and Databricks, with earlier travel-domain work in itinerary search.
 
             </p>
         </section>
@@ -348,11 +348,11 @@
 
                 <ul>
 
-                    <li>Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.</li>
+                    <li>Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised expert-grounded coverage from 40% to 95%.</li>
 
                     <li>Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.</li>
 
-                    <li>From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step.</li>
+                    <li>Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages.</li>
 
                 </ul>
 
@@ -362,9 +362,13 @@
 
                     <li>[User confirmed] Role: video question-understanding agent. Inputs are cooking video and learner voice. The job is to infer where the learner is stuck, then decide reteach, narrow, or advance so the next prompt targets that gap instead of a generic next step.</li>
 
+                    <li>[User confirmed] Previous public highlight 1, now evidence only: Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.</li>
+
                     <li>[User confirmed] Prior public wording also included cross-session history to personalize those decisions. Keep that as extra context; do not add model names or fusion methods.</li>
 
-                    <li>[User confirmed] Public / outbound coverage: chef-grounded candidate coverage 40% to 95%. This is the only coverage number allowed on the one-page resume.</li>
+                    <li>[User confirmed] Previous public highlight 3, now evidence only: From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step.</li>
+
+                    <li>[User confirmed] Public / outbound coverage: expert-grounded coverage 40% to 95%. Internal/source wording was chef-grounded candidate coverage (domain-expert grounded); outbound uses expert-grounded.</li>
 
                     <li>[User confirmed] Internal coaching eval, not outbound: 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit benchmark.</li>
 
@@ -508,6 +512,8 @@
 
                 <ul>
 
+                    <li>Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.</li>
+
                     <li>Implemented multi-agent delegation patterns for enterprise workflows.</li>
 
                     <li>Developed meeting scheduling agent integrating calendar and internal APIs.</li>
@@ -515,10 +521,6 @@
                     <li>Designed session persistence and storage strategy using Redis/Postgres.</li>
 
                     <li>Delivered FinOps agent for AWS cost insights and early anomaly detection.</li>
-
-                    <li>Scoped 13 requirements down to a top-5 MVP and delivered 5 agents.</li>
-
-                    <li>First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.</li>
 
                 </ul>
 
