@@ -17,3 +17,7 @@ highlights:
   - Developed meeting scheduling agent integrating calendar and internal APIs.
   - Designed session persistence and storage strategy using Redis/Postgres.
   - Delivered FinOps agent for AWS cost insights and early anomaly detection.
+  # source: 2025-09 interview deck
+  - Scoped 13 requirements down to a top-5 MVP and delivered 5 agents.
+  # source: 2025-09 interview deck
+  - First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.
