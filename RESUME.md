@@ -21,11 +21,11 @@ Building AI that makes everyday life more joyful.
 
 
 
-- Developed and deployed a multimodal coaching agent using cooking video, learner voiceover, and cross-session history to personalize reteach, narrow, or advance decisions; raised chef-grounded candidate coverage from 40% to 95%.
+- Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.
 
 - Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.
 
-- Improved evaluation reliability by tracing flaky misses to incomplete candidate hypotheses and fixing merge and extraction losses.
+- From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step.
 
 
 
