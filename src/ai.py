@@ -227,6 +227,8 @@ def build_provider(
     name: str | None = None,
     model_name: str | None = None,
 ) -> AIProvider:
+    if load_dotenv is not None:
+        load_dotenv(override=False)
     provider = (name or os.environ.get("TAILOR_PROVIDER") or DEFAULT_PROVIDER).strip().lower()
     if provider == "openai":
         return OpenAIAgentProvider(model_name)

@@ -111,6 +111,10 @@ class TailoringPlanTest(unittest.TestCase):
         self.assertEqual(tailored["basics"], original["basics"])
         self.assertEqual(tailored["education"], original["education"])
         self.assertEqual(tailored["work"][0]["highlights"], ["Second fact"])
+        self.assertEqual(tailored["work"][0]["evidence"], original["work"][0]["evidence"])
+        self.assertEqual(
+            tailored["projects"][0]["evidence"], original["projects"][0]["evidence"]
+        )
         self.assertEqual(tailored["skills"], [original["skills"][1]])
         self.assertEqual(profile_dict(profile), original)
         tailored["basics"]["name"] = "Changed locally"
@@ -245,33 +249,49 @@ class OpenAIAgentProviderTest(unittest.TestCase):
 class BuildProviderTest(unittest.TestCase):
     def test_default_provider_is_openai(self):
         self.assertEqual(DEFAULT_PROVIDER, "openai")
-        with patch.dict(os.environ, {}, clear=True):
-            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
-                instance = provider_cls.return_value
-                result = build_provider()
+        with patch("src.ai.load_dotenv"):
+            with patch.dict(os.environ, {}, clear=True):
+                with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                    instance = provider_cls.return_value
+                    result = build_provider()
         provider_cls.assert_called_once_with(None)
         self.assertIs(result, instance)
 
+    def test_dotenv_tailor_provider_is_visible_to_factory(self):
+        def load_env(**_kwargs):
+            os.environ["TAILOR_PROVIDER"] = "xai"
+
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("src.ai.load_dotenv", side_effect=load_env) as load_env_mock:
+                with self.assertRaisesRegex(
+                    ValueError, r"Unknown tailoring provider: xai"
+                ):
+                    build_provider()
+        load_env_mock.assert_called_once_with(override=False)
+
     def test_name_and_model_are_passed_through(self):
-        with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
-            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
-                build_provider("openai", "gpt-test")
+        with patch("src.ai.load_dotenv"):
+            with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
+                with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                    build_provider("openai", "gpt-test")
         provider_cls.assert_called_once_with("gpt-test")
 
     def test_env_selects_openai(self):
-        with patch.dict(os.environ, {"TAILOR_PROVIDER": "OpenAI"}, clear=True):
-            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
-                build_provider()
+        with patch("src.ai.load_dotenv"):
+            with patch.dict(os.environ, {"TAILOR_PROVIDER": "OpenAI"}, clear=True):
+                with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                    build_provider()
         provider_cls.assert_called_once_with(None)
 
     def test_unknown_and_xai_raise(self):
-        with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: xai"):
-            build_provider("xai")
-        with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: grok"):
-            build_provider("grok")
-        with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
+        with patch("src.ai.load_dotenv"):
             with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: xai"):
-                build_provider()
+                build_provider("xai")
+            with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: grok"):
+                build_provider("grok")
+            with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
+                with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: xai"):
+                    build_provider()
 
 
 if __name__ == "__main__":
