@@ -83,6 +83,17 @@ This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, 
 
 For GitHub Actions, create a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. This workflow is read-only, does not commit job-specific resumes, and is the only workflow that receives the secret. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
 
+## Check tailoring faithfulness (offline)
+
+Pull-request CI is `unittest` only. The core job runs `tests.test_tailor_eval` with no API keys and no `tailoring` extra. Those tests assemble a hand-written plan, render the real templates, and scan public MD/HTML for source-faithful strings.
+
+`python -m src.tailor_eval` is validate-only: it loads case YAML and resolves `must_*` / `preferred_*` names. It does not assemble, render, or call a provider.
+
+```bash
+uv run --locked python -m unittest tests.test_tailor_eval -v
+uv run --locked python -m src.tailor_eval
+```
+
 ## Add structured data
 
 Create one YAML file per entry in the corresponding directory:

@@ -1,0 +1,9 @@
+name: TripNorth Analytics
+position: NLP Engineer
+startDate: "2021-03"
+endDate: "2022-12"
+summary: Implemented production itinerary search for travel ranking.
+highlights:
+  - "Ranked travel itineraries with CKIP NLP and frequent-pattern mining."
+  - "Built production search indexes for itinerary retrieval."
+  - "Implemented travel NLP ranking for city-pair queries."

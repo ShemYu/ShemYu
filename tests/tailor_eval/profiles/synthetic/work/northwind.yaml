@@ -1,0 +1,12 @@
+name: Northwind Robotics
+position: Senior AI Engineer
+startDate: "2026-02"
+endDate: Present
+summary: Building agents that coach factory technicians from video.
+highlights:
+  - "Raised expert-grounded coverage from 40% to 95%."
+  - "Designed versioned, capability-based agent evaluations."
+  - "Separated observation, gap inference, and coaching decisions."
+evidence:
+  - "Internal only: 67.6% to 83.0% on a 15-case benchmark."
+  - "Do not claim outbound: Moment team."

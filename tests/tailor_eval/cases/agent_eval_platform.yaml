@@ -1,0 +1,26 @@
+id: agent-eval-platform
+profile_dir: tests/tailor_eval/profiles/synthetic
+jd: |
+  We need a senior engineer to build multimodal coaching agents,
+  versioned capability evaluations, and production GenAI gateways.
+  Leadership of a small ML team is a plus. Travel-search NLP is irrelevant.
+must_include_work:
+  - Northwind Robotics
+  - Contoso Financial
+must_exclude_work:
+  - Legacy Retail Analytics
+must_include_projects:
+  - Harbor Coach
+must_exclude_projects:
+  - Weekend Weather Bot
+must_include_highlights:
+  - "Raised expert-grounded coverage from 40% to 95%."
+preferred_work:
+  - Northwind Robotics
+  - Contoso Financial
+preferred_projects:
+  - Harbor Coach
+forbidden_tokens:
+  - "67.6%"
+  - "Moment team"
+min_keyword_coverage: 0.25

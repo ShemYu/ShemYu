@@ -1,0 +1,22 @@
+id: travel-search-ic
+profile_dir: tests/tailor_eval/profiles/synthetic
+jd: |
+  Implement production itinerary search and travel NLP ranking.
+  This is an individual-contributor engineer role. No people management.
+must_include_work:
+  - TripNorth Analytics
+must_exclude_work:
+  - Legacy Retail Analytics
+must_include_projects: []
+must_exclude_projects:
+  - Weekend Weather Bot
+must_include_highlights:
+  - "Ranked travel itineraries with CKIP NLP and frequent-pattern mining."
+preferred_work:
+  - TripNorth Analytics
+  - Contoso Financial
+preferred_projects: []
+forbidden_tokens:
+  - "67.6%"
+  - "Moment team"
+min_keyword_coverage: 0.20
