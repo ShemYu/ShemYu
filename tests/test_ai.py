@@ -7,10 +7,13 @@ from unittest.mock import patch
 from pydantic import ValidationError
 
 from src.ai import (
+    DEFAULT_PROVIDER,
     HighlightSelection,
     OpenAIAgentProvider,
     TailoringPlan,
     assemble_profile,
+    build_provider,
+    public_selectable_profile,
 )
 from src.generator import for_public_resume
 from src.schema import profile_dict
@@ -31,6 +34,10 @@ def _profile():
                 "startDate": "2022-01",
                 "endDate": "Present",
                 "highlights": ["First fact", "Second fact", "Third fact", "Fourth fact"],
+                "evidence": [
+                    "Internal only: 67.6% to 83.0% on a 15-case benchmark.",
+                    "Do not claim outbound: Moment team.",
+                ],
             },
             {
                 "name": "Second Company",
@@ -56,6 +63,7 @@ def _profile():
                 "startDate": "2023-01",
                 "endDate": "2023-06",
                 "highlights": ["Project fact"],
+                "evidence": ["Project-only internal note 67.6%"],
             }
         ],
         "skills": [{"name": "Python", "keywords": ["Python"]}, {"name": "SQL", "keywords": ["SQL"]}],
@@ -107,6 +115,19 @@ class TailoringPlanTest(unittest.TestCase):
         self.assertEqual(profile_dict(profile), original)
         tailored["basics"]["name"] = "Changed locally"
         self.assertEqual(profile["basics"]["name"], "Source Name")
+
+    def test_public_selectable_profile_strips_evidence_without_mutating_source(self):
+        profile = _profile()
+        original_work_evidence = list(profile["work"][0]["evidence"])
+        original_project_evidence = list(profile["projects"][0]["evidence"])
+
+        pub = public_selectable_profile(profile)
+
+        self.assertEqual(set(pub), {"work", "projects", "skills", "certificates", "publications"})
+        self.assertNotIn("evidence", pub["work"][0])
+        self.assertNotIn("evidence", pub["projects"][0])
+        self.assertEqual(profile["work"][0]["evidence"], original_work_evidence)
+        self.assertEqual(profile["projects"][0]["evidence"], original_project_evidence)
 
     def test_unselected_highlights_are_limited_to_three(self):
         tailored = assemble_profile(_profile(), TailoringPlan(work=[0]))
@@ -189,6 +210,9 @@ class OpenAIAgentProviderTest(unittest.TestCase):
         self.assertNotIn("source@example.com", prompt)
         self.assertNotIn("+886 900 000 000", prompt)
         self.assertNotIn("Source University", prompt)
+        self.assertNotIn("67.6%", prompt)
+        self.assertNotIn("Moment team", prompt)
+        self.assertNotIn('"evidence"', prompt)
 
     def test_empty_jd_is_rejected_before_runner(self):
         provider = self._provider()
@@ -216,6 +240,38 @@ class OpenAIAgentProviderTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 provider.tailor_profile(empty_profile, "ML platform engineer")
             run_sync.assert_not_called()
+
+
+class BuildProviderTest(unittest.TestCase):
+    def test_default_provider_is_openai(self):
+        self.assertEqual(DEFAULT_PROVIDER, "openai")
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                instance = provider_cls.return_value
+                result = build_provider()
+        provider_cls.assert_called_once_with(None)
+        self.assertIs(result, instance)
+
+    def test_name_and_model_are_passed_through(self):
+        with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
+            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                build_provider("openai", "gpt-test")
+        provider_cls.assert_called_once_with("gpt-test")
+
+    def test_env_selects_openai(self):
+        with patch.dict(os.environ, {"TAILOR_PROVIDER": "OpenAI"}, clear=True):
+            with patch("src.ai.OpenAIAgentProvider") as provider_cls:
+                build_provider()
+        provider_cls.assert_called_once_with(None)
+
+    def test_unknown_and_xai_raise(self):
+        with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: xai"):
+            build_provider("xai")
+        with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: grok"):
+            build_provider("grok")
+        with patch.dict(os.environ, {"TAILOR_PROVIDER": "xai"}, clear=True):
+            with self.assertRaisesRegex(ValueError, r"Unknown tailoring provider: xai"):
+                build_provider()
 
 
 if __name__ == "__main__":

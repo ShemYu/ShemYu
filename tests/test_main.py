@@ -51,9 +51,8 @@ class MainTest(unittest.TestCase):
         loader_class.return_value.load.return_value = profile
         provider = Mock()
         provider.tailor_profile.return_value = tailored_profile
-        provider_class = Mock(return_value=provider)
         fake_ai_module = types.ModuleType("src.ai")
-        fake_ai_module.OpenAIAgentProvider = provider_class
+        fake_ai_module.build_provider = Mock(return_value=provider)
 
         with tempfile.TemporaryDirectory() as project_dir:
             os.makedirs(os.path.join(project_dir, "data"))
@@ -68,6 +67,7 @@ class MainTest(unittest.TestCase):
             finally:
                 os.chdir(previous_dir)
 
+        fake_ai_module.build_provider.assert_called_once_with(None, None)
         provider.tailor_profile.assert_called_once_with(profile, "Senior AI Engineer")
         generator_class.return_value.generate_batch.assert_called_once_with(
             tailored_profile,
@@ -104,6 +104,50 @@ class MainTest(unittest.TestCase):
     def test_cli_rejects_custom_output_without_jd(self):
         with self.assertRaises(SystemExit):
             parse_args(["--output-name", "custom"])
+
+    def test_cli_rejects_provider_and_model_without_jd(self):
+        with self.assertRaises(SystemExit):
+            parse_args(["--provider", "openai"])
+        with self.assertRaises(SystemExit):
+            parse_args(["--model", "gpt-5.6-luna"])
+
+    def test_cli_accepts_provider_and_model_with_jd(self):
+        args = parse_args(
+            ["jd.txt", "--provider", "openai", "--model", "gpt-5.6-luna"]
+        )
+        self.assertEqual(args.target_jd, "jd.txt")
+        self.assertEqual(args.provider, "openai")
+        self.assertEqual(args.model, "gpt-5.6-luna")
+
+    @patch("src.main.Jinja2Generator")
+    @patch("src.main.YamlDataLoader")
+    def test_jd_generation_forwards_provider_and_model(
+        self, loader_class, generator_class
+    ):
+        profile = {"basics": {"name": "Test"}}
+        tailored_profile = {"basics": {"name": "Tailored Test"}}
+        loader_class.return_value.load.return_value = profile
+        provider = Mock()
+        provider.tailor_profile.return_value = tailored_profile
+        fake_ai_module = types.ModuleType("src.ai")
+        fake_ai_module.build_provider = Mock(return_value=provider)
+
+        with tempfile.TemporaryDirectory() as project_dir:
+            os.makedirs(os.path.join(project_dir, "data"))
+            jd_path = os.path.join(project_dir, "jd.txt")
+            with open(jd_path, "w", encoding="utf-8") as file:
+                file.write("Senior AI Engineer")
+            previous_dir = os.getcwd()
+            try:
+                os.chdir(project_dir)
+                with patch.dict(sys.modules, {"src.ai": fake_ai_module}):
+                    main(jd_path, "cookpad_ai", "openai", "gpt-test")
+            finally:
+                os.chdir(previous_dir)
+
+        fake_ai_module.build_provider.assert_called_once_with("openai", "gpt-test")
+        provider.tailor_profile.assert_called_once_with(profile, "Senior AI Engineer")
+        generator_class.return_value.generate_batch.assert_called_once()
 
 
 if __name__ == "__main__":
