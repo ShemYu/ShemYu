@@ -1,4 +1,4 @@
-"""Offline tailor eval: source-faithful scanners, golden cases, and CLI validate."""
+"""Tailor eval: source-faithful scanners, golden cases, and opt-in live repeats."""
 
 from __future__ import annotations
 
@@ -6,11 +6,13 @@ import argparse
 import hashlib
 import html
 import json
+import os
 import re
 import sys
 import time
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Literal
@@ -18,18 +20,32 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.ai import TailoringPlan, assemble_profile
-from src.generator import for_public_resume, format_date
+from src.ai import (
+    DEFAULT_PROVIDER,
+    PROMPT_INSTRUCTIONS,
+    TailoringPlan,
+    TailorTransportError,
+    assemble_profile,
+    build_provider,
+)
+from src.generator import Jinja2Generator, for_public_resume, format_date
 from src.loader import YamlDataLoader
 
 
 PUBLIC_SCAN_TEMPLATES = ("resume.md.j2", "resume.html.j2")
 BIBLE_SCAN_TEMPLATE = "resume_bible.html.j2"
 DEFAULT_CASES_DIR = "tests/tailor_eval/cases"
-LIVE_FRAGMENTS_PATH = (
-    Path(__file__).resolve().parent.parent / "tests" / "tailor_eval" / "fragments_live.yaml"
-)
+DEFAULT_OUTPUT_DIR = "output/tailor_eval"
+DEFAULT_LIVE_REPEATS = 5
+MIN_LIVE_REPEATS = 3
+MAX_LIVE_REPEATS = 9
+JACCARD_PASS = 0.60
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_TEMPLATES_DIR = _REPO_ROOT / "templates"
+LIVE_FRAGMENTS_PATH = _REPO_ROOT / "tests" / "tailor_eval" / "fragments_live.yaml"
 ASSEMBLER_VERSION = "1"
+_KNOWN_PROVIDERS = frozenset({"openai", "xai"})
+_PROVIDER_KEY = {"openai": "OPENAI_API_KEY", "xai": "XAI_API_KEY"}
 
 SECTION_HEADINGS = frozenset(
     {
@@ -960,8 +976,239 @@ def score_quality(source: dict[str, Any], tailored: dict[str, Any], jd: str) -> 
 
 
 def _prompt_version() -> str:
-    payload = json.dumps(TailoringPlan.model_json_schema(), sort_keys=True, default=str)
-    return hashlib.sha256(f"{ASSEMBLER_VERSION}\n{payload}".encode()).hexdigest()
+    schema = json.dumps(TailoringPlan.model_json_schema(), sort_keys=True, default=str)
+    payload = f"{PROMPT_INSTRUCTIONS}\n{schema}\n{ASSEMBLER_VERSION}"
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def mean_pairwise_jaccard(sets: list[set[str]]) -> float | None:
+    if len(sets) < 2:
+        return None
+    scores: list[float] = []
+    for i, left in enumerate(sets):
+        for right in sets[i + 1 :]:
+            union = left | right
+            scores.append(1.0 if not union else len(left & right) / len(union))
+    return sum(scores) / len(scores)
+
+
+def _classify_unexpected(exc: BaseException) -> str:
+    status = getattr(exc, "status_code", None)
+    if isinstance(status, int) and 400 <= status < 500 and status != 429:
+        return "plan"
+    return "transport"
+
+
+def _load_env() -> None:
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(override=False)
+
+
+def _elapsed_from_provider(ai_provider: Any | None, started: float) -> float:
+    if ai_provider is not None:
+        elapsed = getattr(ai_provider, "last_elapsed_s", None)
+        if elapsed is not None:
+            return float(elapsed)
+    return time.perf_counter() - started
+
+
+def _usage_from_provider(ai_provider: Any | None) -> dict[str, int] | None:
+    if ai_provider is None:
+        return None
+    usage = getattr(ai_provider, "last_usage", None)
+    if not isinstance(usage, Mapping):
+        return None
+    result: dict[str, int] = {}
+    for key, value in usage.items():
+        if isinstance(value, int) and not isinstance(value, bool):
+            result[str(key)] = value
+    return result or None
+
+
+def _section_indices(
+    source_items: list[dict[str, Any]], selected_items: list[dict[str, Any]]
+) -> list[int]:
+    indices: list[int] = []
+    for item in selected_items:
+        name = item.get("name")
+        matches = [i for i, src in enumerate(source_items) if src.get("name") == name]
+        if len(matches) == 1:
+            indices.append(matches[0])
+    return indices
+
+
+def _plan_from_tailored(
+    source: dict[str, Any], tailored: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Name-index reconstruction for the report; highlight selections are omitted."""
+
+    payload = {
+        "work": _section_indices(list(source.get("work") or []), list(tailored.get("work") or [])),
+        "projects": _section_indices(
+            list(source.get("projects") or []), list(tailored.get("projects") or [])
+        ),
+        "skills": _section_indices(
+            list(source.get("skills") or []), list(tailored.get("skills") or [])
+        ),
+        "certificates": _section_indices(
+            list(source.get("certificates") or []), list(tailored.get("certificates") or [])
+        ),
+        "publications": _section_indices(
+            list(source.get("publications") or []), list(tailored.get("publications") or [])
+        ),
+    }
+    try:
+        return TailoringPlan.model_validate(payload).model_dump()
+    except Exception:
+        return payload if payload["work"] else None
+
+
+def _render_public_and_bible(tailored: dict[str, Any]) -> dict[str, str]:
+    gen = Jinja2Generator(str(_TEMPLATES_DIR))
+    return {
+        template: gen.render(tailored, template)
+        for template in (*PUBLIC_SCAN_TEMPLATES, BIBLE_SCAN_TEMPLATE)
+    }
+
+
+def _score_artifacts(
+    case: GoldenCase,
+    source: dict[str, Any],
+    tailored: dict[str, Any],
+    rendered: dict[str, str] | None,
+) -> tuple[list[ScanFinding], dict[str, float], list[str], list[str]]:
+    selected_work = [item.get("name") or "" for item in tailored.get("work") or []]
+    selected_projects = [item.get("name") or "" for item in tailored.get("projects") or []]
+    findings = _identity_findings(case, tailored)
+    quality = score_quality(source, tailored, case.jd)
+    if (
+        case.min_keyword_coverage is not None
+        and quality["keyword_coverage"] < case.min_keyword_coverage
+    ):
+        findings.append(
+            _warn("min_keyword_coverage", "keyword_coverage is below the recorded minimum")
+        )
+    if rendered:
+        public_rendered = {key: rendered[key] for key in PUBLIC_SCAN_TEMPLATES if key in rendered}
+        findings.extend(scan_rendered(source, tailored, public_rendered))
+        if BIBLE_SCAN_TEMPLATE in rendered:
+            findings.extend(scan_bible(source, tailored, rendered[BIBLE_SCAN_TEMPLATE]))
+        findings.extend(_forbidden_findings(case, source, public_rendered))
+    return findings, quality, selected_work, selected_projects
+
+
+def _empty_record(
+    case: GoldenCase,
+    *,
+    provider: str | None,
+    model: str | None,
+    elapsed_s: float | None,
+    usage: dict[str, int] | None,
+    error_class: str | None,
+    plan: dict[str, Any] | None = None,
+    selected_work: list[str] | None = None,
+    selected_projects: list[str] | None = None,
+    findings: list[ScanFinding] | None = None,
+    quality: dict[str, float] | None = None,
+) -> RunRecord:
+    return RunRecord(
+        case_id=case.id,
+        provider=provider,
+        model=model,
+        plan=plan,
+        selected_work=list(selected_work or []),
+        selected_projects=list(selected_projects or []),
+        findings=list(findings or []),
+        quality=dict(quality or {}),
+        elapsed_s=elapsed_s,
+        usage=usage,
+        error_class=error_class,
+    )
+
+
+def _live_repeat(
+    case: GoldenCase,
+    source: dict[str, Any],
+    *,
+    ai_provider: Any | None,
+    provider: str | None,
+    model: str | None,
+) -> RunRecord:
+    started = time.perf_counter()
+    model_name = model or (getattr(ai_provider, "model_name", None) if ai_provider else None)
+    try:
+        if ai_provider is None:
+            raise RuntimeError("live tailor eval requires a provider")
+        tailored = ai_provider.tailor_profile(source, case.jd)
+        elapsed = _elapsed_from_provider(ai_provider, started)
+        usage = _usage_from_provider(ai_provider)
+        rendered = _render_public_and_bible(tailored)
+        findings, quality, selected_work, selected_projects = _score_artifacts(
+            case, source, tailored, rendered
+        )
+        return _empty_record(
+            case,
+            provider=provider,
+            model=model_name,
+            elapsed_s=elapsed,
+            usage=usage,
+            error_class=None,
+            plan=_plan_from_tailored(source, tailored),
+            selected_work=selected_work,
+            selected_projects=selected_projects,
+            findings=findings,
+            quality=quality,
+        )
+    except TailorTransportError:
+        return _empty_record(
+            case,
+            provider=provider,
+            model=model_name,
+            elapsed_s=_elapsed_from_provider(ai_provider, started),
+            usage=_usage_from_provider(ai_provider),
+            error_class="transport",
+        )
+    except RuntimeError:
+        return _empty_record(
+            case,
+            provider=provider,
+            model=model_name,
+            elapsed_s=_elapsed_from_provider(ai_provider, started),
+            usage=_usage_from_provider(ai_provider),
+            error_class="config",
+        )
+    except ValueError:
+        return _empty_record(
+            case,
+            provider=provider,
+            model=model_name,
+            elapsed_s=_elapsed_from_provider(ai_provider, started),
+            usage=_usage_from_provider(ai_provider),
+            error_class="plan",
+        )
+    except Exception as exc:
+        return _empty_record(
+            case,
+            provider=provider,
+            model=model_name,
+            elapsed_s=_elapsed_from_provider(ai_provider, started),
+            usage=_usage_from_provider(ai_provider),
+            error_class=_classify_unexpected(exc),
+        )
+
+
+def write_eval_report(report: EvalReport, path: Path | str) -> None:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
+
+
+def _report_path(output_dir: Path, case_id: str, provider: str) -> Path:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return output_dir / f"{case_id}-{provider}-{stamp}.json"
 
 
 def _plan_dict(plan: TailoringPlan | Mapping[str, Any] | None) -> dict[str, Any] | None:
@@ -1046,10 +1293,49 @@ def evaluate_case(
     live: bool = False,
     provider: str | None = None,
     repeats: int = 1,
+    ai_provider: Any | None = None,
+    model: str | None = None,
+    report_path: Path | str | None = None,
 ) -> EvalReport:
-    if live:
-        raise ValueError("live tailor eval is not available")
     started = time.perf_counter()
+    if live:
+        records = [
+            _live_repeat(
+                case,
+                source,
+                ai_provider=ai_provider,
+                provider=provider,
+                model=model,
+            )
+            for _ in range(max(repeats, 0))
+        ]
+        successful = [rec for rec in records if rec.error_class is None]
+        jaccard = mean_pairwise_jaccard(
+            [set(rec.selected_work) | set(rec.selected_projects) for rec in successful]
+        )
+        all_valid = bool(records) and all(rec.error_class is None for rec in records)
+        no_fails = all(
+            not any(item.severity == "fail" for item in rec.findings) for rec in records
+        )
+        passed = (
+            all_valid
+            and no_fails
+            and jaccard is not None
+            and jaccard >= JACCARD_PASS
+        )
+        report = EvalReport(
+            offline=False,
+            repeats=repeats,
+            prompt_version=_prompt_version(),
+            jaccard=jaccard,
+            passed=passed,
+            elapsed_s=time.perf_counter() - started,
+            records=records,
+        )
+        if report_path is not None:
+            write_eval_report(report, report_path)
+        return report
+
     if tailored is None and plan is not None:
         tailored = assemble_profile(source, plan)
     findings: list[ScanFinding] = []
@@ -1061,33 +1347,14 @@ def evaluate_case(
         error_class = "config"
         findings.append(_fail("identity_gate", "evaluate_case requires tailored or plan"))
     else:
-        selected_work = [item.get("name") or "" for item in tailored.get("work") or []]
-        selected_projects = [item.get("name") or "" for item in tailored.get("projects") or []]
-        findings.extend(_identity_findings(case, tailored))
-        quality = score_quality(source, tailored, case.jd)
-        if (
-            case.min_keyword_coverage is not None
-            and quality["keyword_coverage"] < case.min_keyword_coverage
-        ):
-            findings.append(
-                _warn(
-                    "min_keyword_coverage",
-                    "keyword_coverage is below the recorded minimum",
-                )
-            )
-        if rendered:
-            public_rendered = {
-                key: rendered[key] for key in PUBLIC_SCAN_TEMPLATES if key in rendered
-            }
-            findings.extend(scan_rendered(source, tailored, public_rendered))
-            if BIBLE_SCAN_TEMPLATE in rendered:
-                findings.extend(scan_bible(source, tailored, rendered[BIBLE_SCAN_TEMPLATE]))
-            findings.extend(_forbidden_findings(case, source, public_rendered))
+        findings, quality, selected_work, selected_projects = _score_artifacts(
+            case, source, tailored, rendered
+        )
     elapsed = time.perf_counter() - started
     record = RunRecord(
         case_id=case.id,
         provider=provider,
-        model=None,
+        model=model,
         plan=_plan_dict(plan),
         selected_work=selected_work,
         selected_projects=selected_projects,
@@ -1098,7 +1365,7 @@ def evaluate_case(
         error_class=error_class,
     )
     fails = [item for item in findings if item.severity == "fail"]
-    return EvalReport(
+    report = EvalReport(
         offline=True,
         repeats=repeats,
         prompt_version=_prompt_version(),
@@ -1107,6 +1374,9 @@ def evaluate_case(
         elapsed_s=elapsed,
         records=[record],
     )
+    if report_path is not None:
+        write_eval_report(report, report_path)
+    return report
 
 
 def _resolve_case_names(case: GoldenCase, source: dict[str, Any]) -> int:
@@ -1118,9 +1388,44 @@ def _resolve_case_names(case: GoldenCase, source: dict[str, Any]) -> int:
     return resolved
 
 
+def _resolve_provider_name(raw: str | None) -> str:
+    return (raw or os.environ.get("TAILOR_PROVIDER") or DEFAULT_PROVIDER).strip().lower()
+
+
+def _live_line(report: EvalReport, case_id: str, provider: str) -> str:
+    coverages = [
+        rec.quality["keyword_coverage"]
+        for rec in report.records
+        if "keyword_coverage" in rec.quality
+    ]
+    coverage = sum(coverages) / len(coverages) if coverages else None
+    errors = [rec.error_class for rec in report.records if rec.error_class]
+    jaccard = "-" if report.jaccard is None else f"{report.jaccard:.2f}"
+    coverage_text = "-" if coverage is None else f"{coverage:.2f}"
+    error = errors[0] if errors else "-"
+    status = "PASS" if report.passed else "FAIL"
+    return (
+        f"{status} {case_id} {provider} n={report.repeats} "
+        f"jaccard={jaccard} coverage={coverage_text} error={error}"
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Validate tailor-eval case YAML and name identities."
+        description="Validate tailor-eval case YAML, or run opt-in live repeats."
+    )
+    parser.add_argument("--live", action="store_true", help="Call the selected provider N times.")
+    parser.add_argument(
+        "--provider",
+        default=None,
+        help="Tailoring provider for --live. Defaults to TAILOR_PROVIDER or openai.",
+    )
+    parser.add_argument("--model", default=None, help="Override the selected provider's model.")
+    parser.add_argument(
+        "--repeats",
+        type=int,
+        default=DEFAULT_LIVE_REPEATS,
+        help=f"Live repeats (default {DEFAULT_LIVE_REPEATS}, min {MIN_LIVE_REPEATS}, max {MAX_LIVE_REPEATS}).",
     )
     parser.add_argument("--cases", default=DEFAULT_CASES_DIR)
     parser.add_argument(
@@ -1128,12 +1433,49 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Override profile_dir on every loaded case.",
     )
+    parser.add_argument(
+        "--output",
+        default=DEFAULT_OUTPUT_DIR,
+        help="Directory for live JSON reports.",
+    )
     args = parser.parse_args(argv)
     cases_dir = Path(args.cases)
     if not cases_dir.is_dir():
         print(f"missing --cases directory: {cases_dir}", file=sys.stderr)
         return 2
+
+    ai_provider = None
+    provider_name: str | None = None
+    if args.live:
+        if not MIN_LIVE_REPEATS <= args.repeats <= MAX_LIVE_REPEATS:
+            print(
+                f"--repeats must be between {MIN_LIVE_REPEATS} and {MAX_LIVE_REPEATS}",
+                file=sys.stderr,
+            )
+            return 2
+        _load_env()
+        provider_name = _resolve_provider_name(args.provider)
+        if provider_name not in _KNOWN_PROVIDERS:
+            print(f"unknown --provider: {provider_name}", file=sys.stderr)
+            return 2
+        key_name = _PROVIDER_KEY[provider_name]
+        if not os.environ.get(key_name, "").strip():
+            print(
+                f"{key_name} is required for --live with provider={provider_name}",
+                file=sys.stderr,
+            )
+            return 2
+        try:
+            ai_provider = build_provider(provider_name, args.model)
+        except ValueError as exc:
+            print(exc, file=sys.stderr)
+            return 2
+        except RuntimeError as exc:
+            print(exc, file=sys.stderr)
+            return 2
+
     paths = sorted(cases_dir.glob("*.yaml"))
+    live_failed = False
     for path in paths:
         try:
             case = load_case(path)
@@ -1151,17 +1493,38 @@ def main(argv: list[str] | None = None) -> int:
         except ValueError as exc:
             print(f"{case.id}: {exc}", file=sys.stderr)
             return 1
-        print(f"OK {case.id} ({resolved} names resolved)")
+        if not args.live:
+            print(f"OK {case.id} ({resolved} names resolved)")
+            continue
+        assert provider_name is not None
+        report_path = _report_path(Path(args.output), case.id, provider_name)
+        report = evaluate_case(
+            case,
+            source=source,
+            live=True,
+            provider=provider_name,
+            repeats=args.repeats,
+            ai_provider=ai_provider,
+            model=args.model,
+            report_path=report_path,
+        )
+        print(_live_line(report, case.id, provider_name))
+        if not report.passed:
+            live_failed = True
+    if args.live:
+        return 1 if live_failed else 0
     return 0
 
 
 __all__ = [
     "ASSEMBLER_VERSION",
     "BIBLE_SCAN_TEMPLATE",
+    "DEFAULT_LIVE_REPEATS",
     "EvalReport",
     "ExtractedBible",
     "ExtractedPublic",
     "GoldenCase",
+    "JACCARD_PASS",
     "PUBLIC_SCAN_TEMPLATES",
     "PublicFields",
     "QUALITY_STOPLIST",
@@ -1176,12 +1539,14 @@ __all__ = [
     "load_case",
     "load_live_fragments",
     "main",
+    "mean_pairwise_jaccard",
     "public_fields",
     "quality_tokens",
     "role_match",
     "scan_bible",
     "scan_rendered",
     "score_quality",
+    "write_eval_report",
 ]
 
 

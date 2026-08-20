@@ -1,18 +1,28 @@
+import json
+import os
+import shutil
+import tempfile
 import unittest
 from io import StringIO
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
-from src.ai import HighlightSelection, TailoringPlan, assemble_profile
+from src.ai import HighlightSelection, TailorTransportError, TailoringPlan, assemble_profile
 from src.generator import Jinja2Generator
 from src.loader import YamlDataLoader
 from src.tailor_eval import (
+    JACCARD_PASS,
+    classify_jd,
     evaluate_case,
     index_by_name,
     load_case,
     load_live_fragments,
     main,
+    mean_pairwise_jaccard,
+    quality_tokens,
+    role_match,
     scan_rendered,
+    score_quality,
 )
 
 
@@ -59,6 +69,45 @@ def render_real_templates(tailored):
 
 def fail_findings(report):
     return [finding for rec in report.records for finding in rec.findings if finding.severity == "fail"]
+
+
+def mock_provider(result, usage=None, elapsed=0.01, model="mock-model"):
+    ai = MagicMock()
+    if isinstance(result, BaseException):
+        ai.tailor_profile.side_effect = result
+    elif isinstance(result, list):
+        ai.tailor_profile.side_effect = result
+    else:
+        ai.tailor_profile.return_value = result
+    ai.last_usage = usage
+    ai.last_elapsed_s = elapsed
+    ai.model_name = model
+    return ai
+
+
+def excluded_employer_plan(source):
+    plan = good_plan(source)
+    legacy = index_by_name(source["work"], "Legacy Retail Analytics")
+    return TailoringPlan(
+        work=list(plan.work) + [legacy],
+        projects=list(plan.projects),
+        work_highlights=list(plan.work_highlights),
+        skills=list(plan.skills),
+        certificates=list(plan.certificates),
+    )
+
+
+def travel_plan(source, extra_work=(), extra_projects=()):
+    trip = index_by_name(source["work"], "TripNorth Analytics")
+    work = [trip, *[index_by_name(source["work"], name) for name in extra_work]]
+    projects = [index_by_name(source["projects"], name) for name in extra_projects]
+    return TailoringPlan(
+        work=work,
+        projects=projects,
+        work_highlights=[
+            HighlightSelection(item_index=trip, highlight_indices=[0, 1, 2]),
+        ],
+    )
 
 
 class TailorEvalTest(unittest.TestCase):
@@ -203,6 +252,285 @@ class TailorEvalTest(unittest.TestCase):
         self.assertEqual(fail_findings(report), [])
         self.assertTrue(report.passed)
         self.assertEqual(report.records[0].quality["role_match"], 1.0)
+
+    def test_quality_tokens_drops_short_and_stoplist(self):
+        tokens = quality_tokens("This team will work with Agents and NLP from 2026")
+        self.assertEqual(tokens, {"agents", "2026"})
+
+    def test_recency_is_one_when_n_work_leq_1(self):
+        one = {"work": [{"name": "Only Co", "highlights": []}], "projects": [], "basics": {}}
+        none = {"work": [], "projects": [], "basics": {}}
+        self.assertEqual(score_quality(one, one, "engineer role")["recency"], 1.0)
+        self.assertEqual(score_quality(none, none, "engineer role")["recency"], 1.0)
+
+    def test_role_match_case_folded_first_match_wins_leadership_on_case_1_jd(self):
+        case = load_named_case("agent_eval_platform")
+        self.assertEqual(classify_jd(case.jd), "leadership")
+        self.assertEqual(
+            classify_jd("Leadership of a small ML team. Senior engineer."),
+            "leadership",
+        )
+        self.assertEqual(classify_jd("senior engineer to implement production"), "ic")
+        source = load_synthetic()
+        tailored = assemble_profile(source, good_plan(source))
+        # Contoso matches lead/team; Northwind does not.
+        self.assertEqual(role_match(source, tailored, case.jd), 0.5)
+
+    def test_mean_pairwise_jaccard(self):
+        north_harbor = {"Northwind Robotics", "Harbor Coach"}
+        north_contoso = {"Northwind Robotics", "Contoso Financial"}
+        self.assertIsNone(mean_pairwise_jaccard([]))
+        self.assertIsNone(mean_pairwise_jaccard([north_harbor]))
+        self.assertAlmostEqual(
+            mean_pairwise_jaccard([north_harbor, north_contoso, north_harbor]),
+            5 / 9,
+        )
+
+    def test_live_unexpected_400_is_plan_error(self):
+        class StatusError(Exception):
+            def __init__(self, status_code: int) -> None:
+                super().__init__(f"status {status_code}")
+                self.status_code = status_code
+
+        source = load_synthetic()
+        case = load_named_case("agent_eval_platform")
+        ai = MagicMock()
+        ai.tailor_profile.side_effect = StatusError(400)
+        ai.last_usage = None
+        ai.last_elapsed_s = 0.01
+        ai.model_name = "mock-model"
+        with tempfile.TemporaryDirectory() as tmp:
+            report_path = Path(tmp) / "agent-eval-platform-xai-test.json"
+            report = evaluate_case(
+                case,
+                source=source,
+                live=True,
+                provider="xai",
+                repeats=3,
+                ai_provider=ai,
+                report_path=report_path,
+            )
+            payload = json.loads(report_path.read_text(encoding="utf-8"))
+        self.assertEqual(len(report.records), 3)
+        self.assertTrue(all(rec.error_class == "plan" for rec in report.records))
+        self.assertIsNone(report.jaccard)
+        self.assertFalse(report.passed)
+        self.assertFalse(report.offline)
+        self.assertEqual(ai.tailor_profile.call_count, 3)
+        self.assertEqual(payload["records"][0]["error_class"], "plan")
+        self.assertFalse(payload["passed"])
+
+    def test_live_transport_error_is_not_config(self):
+        source = load_synthetic()
+        case = load_named_case("agent_eval_platform")
+        report = evaluate_case(
+            case,
+            source=source,
+            live=True,
+            provider="xai",
+            repeats=3,
+            ai_provider=mock_provider(TailorTransportError("timeout"), elapsed=1.2),
+        )
+        self.assertTrue(all(rec.error_class == "transport" for rec in report.records))
+        self.assertIsNone(report.jaccard)
+        self.assertFalse(report.passed)
+
+    def test_live_value_error_is_plan(self):
+        source = load_synthetic()
+        report = evaluate_case(
+            load_named_case("agent_eval_platform"),
+            source=source,
+            live=True,
+            provider="xai",
+            repeats=3,
+            ai_provider=mock_provider(ValueError("invalid TailoringPlan")),
+        )
+        self.assertTrue(all(rec.error_class == "plan" for rec in report.records))
+        self.assertFalse(report.passed)
+
+    def test_live_runtime_error_is_config(self):
+        source = load_synthetic()
+        report = evaluate_case(
+            load_named_case("agent_eval_platform"),
+            source=source,
+            live=True,
+            provider="openai",
+            repeats=3,
+            ai_provider=mock_provider(RuntimeError("missing extra")),
+        )
+        self.assertTrue(all(rec.error_class == "config" for rec in report.records))
+        self.assertFalse(report.passed)
+
+    def test_live_identity_fail_findings_fail_even_with_jaccard_one(self):
+        source = load_synthetic()
+        tailored = assemble_profile(source, excluded_employer_plan(source))
+        report = evaluate_case(
+            load_named_case("agent_eval_platform"),
+            source=source,
+            live=True,
+            provider="xai",
+            repeats=3,
+            ai_provider=mock_provider(tailored),
+        )
+        self.assertTrue(all(rec.error_class is None for rec in report.records))
+        self.assertEqual(report.jaccard, 1.0)
+        self.assertIn("identity_gate", {finding.code for finding in fail_findings(report)})
+        self.assertFalse(report.passed)
+
+    def test_live_low_jaccard_fails_with_valid_assemblies(self):
+        source = load_synthetic()
+        narrow = assemble_profile(source, travel_plan(source))
+        wide = assemble_profile(
+            source,
+            travel_plan(
+                source,
+                extra_work=("Northwind Robotics", "Contoso Financial"),
+                extra_projects=("Harbor Coach",),
+            ),
+        )
+        report = evaluate_case(
+            load_named_case("travel_search_ic"),
+            source=source,
+            live=True,
+            provider="xai",
+            repeats=3,
+            ai_provider=mock_provider([narrow, wide, narrow]),
+        )
+        self.assertTrue(all(rec.error_class is None for rec in report.records))
+        self.assertEqual(fail_findings(report), [])
+        self.assertIsNotNone(report.jaccard)
+        self.assertLess(report.jaccard, JACCARD_PASS)
+        self.assertFalse(report.passed)
+
+    def test_live_stable_repeats_pass(self):
+        source = load_synthetic()
+        case = load_named_case("agent_eval_platform")
+        tailored = assemble_profile(source, good_plan(source))
+        ai = MagicMock()
+        ai.tailor_profile.return_value = tailored
+        ai.last_usage = {
+            "prompt_tokens": 10,
+            "completion_tokens": 5,
+            "reasoning_tokens": 2,
+            "total_tokens": 17,
+        }
+        ai.last_elapsed_s = 0.05
+        ai.model_name = "mock-model"
+        report = evaluate_case(
+            case,
+            source=source,
+            live=True,
+            provider="xai",
+            repeats=3,
+            ai_provider=ai,
+        )
+        self.assertTrue(report.passed)
+        self.assertEqual(report.jaccard, 1.0)
+        self.assertEqual(report.repeats, 3)
+        self.assertFalse(report.offline)
+        self.assertEqual(report.records[0].usage["reasoning_tokens"], 2)
+        self.assertEqual(report.records[0].elapsed_s, 0.05)
+        self.assertIsNone(report.records[0].error_class)
+        self.assertEqual(fail_findings(report), [])
+
+    def test_live_missing_xai_key_exits_2(self):
+        with patch("src.tailor_eval._load_env"):
+            with patch.dict(os.environ, {"XAI_API_KEY": ""}, clear=False):
+                with patch("sys.stderr", StringIO()):
+                    self.assertEqual(main(["--live", "--provider", "xai", "--repeats", "3"]), 2)
+
+    def test_live_repeats_out_of_range_exits_2(self):
+        with patch("sys.stderr", StringIO()):
+            self.assertEqual(main(["--live", "--repeats", "2"]), 2)
+            self.assertEqual(main(["--live", "--repeats", "10"]), 2)
+
+    def test_live_unknown_provider_exits_2(self):
+        with patch("sys.stderr", StringIO()):
+            self.assertEqual(main(["--live", "--provider", "nope", "--repeats", "3"]), 2)
+
+    def test_live_main_writes_report_json(self):
+        source = load_synthetic()
+        tailored = assemble_profile(source, good_plan(source))
+        fake = MagicMock()
+        fake.tailor_profile.return_value = tailored
+        fake.last_usage = {
+            "prompt_tokens": 3,
+            "completion_tokens": 1,
+            "reasoning_tokens": 4,
+            "total_tokens": 8,
+        }
+        fake.last_elapsed_s = 0.02
+        fake.model_name = "grok-4.6"
+        with tempfile.TemporaryDirectory() as tmp:
+            cases = Path(tmp) / "cases"
+            cases.mkdir()
+            shutil.copy(
+                CASES_DIR / "agent_eval_platform.yaml",
+                cases / "agent_eval_platform.yaml",
+            )
+            out = Path(tmp) / "reports"
+            with patch("src.tailor_eval._load_env"):
+                with patch.dict(os.environ, {"XAI_API_KEY": "sk-test"}, clear=False):
+                    with patch("src.tailor_eval.build_provider", return_value=fake):
+                        with patch("sys.stdout", StringIO()) as stdout:
+                            code = main(
+                                [
+                                    "--live",
+                                    "--provider",
+                                    "xai",
+                                    "--repeats",
+                                    "3",
+                                    "--cases",
+                                    str(cases),
+                                    "--output",
+                                    str(out),
+                                ]
+                            )
+            files = list(out.glob("agent-eval-platform-xai-*.json"))
+            self.assertEqual(code, 0)
+            self.assertEqual(len(files), 1)
+            payload = json.loads(files[0].read_text(encoding="utf-8"))
+            self.assertTrue(payload["passed"])
+            self.assertEqual(payload["repeats"], 3)
+            self.assertIn("PASS agent-eval-platform xai", stdout.getvalue())
+            self.assertEqual(fake.tailor_profile.call_count, 3)
+
+    def test_live_main_failing_case_exits_1_and_writes_json(self):
+        source = load_synthetic()
+        tailored = assemble_profile(source, excluded_employer_plan(source))
+        fake = mock_provider(tailored)
+        with tempfile.TemporaryDirectory() as tmp:
+            cases = Path(tmp) / "cases"
+            cases.mkdir()
+            shutil.copy(
+                CASES_DIR / "agent_eval_platform.yaml",
+                cases / "agent_eval_platform.yaml",
+            )
+            out = Path(tmp) / "reports"
+            with patch("src.tailor_eval._load_env"):
+                with patch.dict(os.environ, {"XAI_API_KEY": "sk-test"}, clear=False):
+                    with patch("src.tailor_eval.build_provider", return_value=fake):
+                        with patch("sys.stdout", StringIO()) as stdout:
+                            code = main(
+                                [
+                                    "--live",
+                                    "--provider",
+                                    "xai",
+                                    "--repeats",
+                                    "3",
+                                    "--cases",
+                                    str(cases),
+                                    "--output",
+                                    str(out),
+                                ]
+                            )
+            files = list(out.glob("agent-eval-platform-xai-*.json"))
+            self.assertEqual(code, 1)
+            self.assertEqual(len(files), 1)
+            payload = json.loads(files[0].read_text(encoding="utf-8"))
+            self.assertFalse(payload["passed"])
+            self.assertEqual(payload["jaccard"], 1.0)
+            self.assertIn("FAIL agent-eval-platform xai", stdout.getvalue())
 
 
 if __name__ == "__main__":
