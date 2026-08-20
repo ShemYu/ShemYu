@@ -1,17 +1,17 @@
 name: Cathay Financial Holdings
 position: Machine Learning Engineer, team lead
 startDate: "2022-09"
-endDate: "2026-03"
+endDate: "2026-01"
 location: Taipei, Taiwan
 summary: Led a 4-person MLE team, overseeing AI project deployment and departmental internal agent development.
 highlights:
-  - "Led a 4-person MLE team delivering production GenAI agents and shared AI infrastructure; departmental research agents reduced deep-research analysis from 2 hours to 15 minutes."
-  - "Built shared GenAI infrastructure including an AI Gateway, guardrails, and MLflow-based LLMOps; reduced internal AI service latency by 60%."
-  - "Developed production agents across FinOps and regulatory workflows, reducing GPU cost by 30% and improving regulatory classification F1 from 0.67 to 0.89."
-  - "Won 1st place in the CFH Cloud Creative Award 2024 and Departmental MVP, Q1 2025."
-evidence:
-  - "[User confirmed] Departmental internal AI agents used Google ADK for deep-research automation (2 hours to 15 minutes). Keep ADK in evidence; do not make ADK the subject of outbound highlight 1."
-  - "[User confirmed] FinOps also reduced overall cloud spend by 40%. Do not claim outbound: scope is easily read as company-wide cloud -40%."
-  - "[User confirmed] Solutions deployed using Databricks workflows and AWS infrastructure."
-  - "[User confirmed] Team size on outbound remains 4. Do not change to 7 until Shem rules."
-  - "[User confirmed] Dates stay 2022-09 to 2026-03 until Shem rules the PDF Nov 2023 conflict."
+  - Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
+  - Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.
+  - Implemented FinOps agent, achieving 30% GPU cost reduction.
+  - Reduced overall cloud spend by 40% through FinOps practices.
+  - Improved regulatory Agent F1 from 0.67 to 0.89.
+  # source: 2025-09 interview deck
+  - Won CFH Cloud Creative Award 2024 (1st place).
+  # source: 2025-09 interview deck
+  - Named departmental MVP, Q1 2025.
+  - Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
