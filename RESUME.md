@@ -5,7 +5,7 @@
 
 
 ## Summary
-Applied AI engineer and team lead with 6 years of experience building ML/AI systems, agent products, and shared GenAI platforms. Currently develops multimodal coaching agents at Cookpad, focusing on context engineering, personalization, automated evaluation, and reliability. Previously led a 4-person MLE team delivering production GenAI agents and shared LLM infrastructure across AWS and Databricks, with earlier travel-domain work in itinerary search.
+Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.
 
 
 
@@ -39,21 +39,13 @@ Led a 4-person MLE team, overseeing AI project deployment and departmental inter
 
 
 
-- Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
+- Led a 4-person MLE team delivering production GenAI agents and shared AI infrastructure; departmental research agents reduced deep-research analysis from 2 hours to 15 minutes.
 
-- Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.
+- Built shared GenAI infrastructure including an AI Gateway, guardrails, and MLflow-based LLMOps; reduced internal AI service latency by 60%.
 
-- Implemented FinOps agent, achieving 30% GPU cost reduction.
+- Developed production agents across FinOps and regulatory workflows, reducing GPU cost by 30% and improving regulatory classification F1 from 0.67 to 0.89.
 
-- Reduced overall cloud spend by 40% through FinOps practices.
-
-- Improved regulatory Agent F1 from 0.67 to 0.89.
-
-- Won CFH Cloud Creative Award 2024 (1st place).
-
-- Named departmental MVP, Q1 2025.
-
-- Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
+- Won 1st place in the CFH Cloud Creative Award 2024 and Departmental MVP, Q1 2025.
 
 
 
