@@ -1,10 +1,11 @@
-"""OpenAI Agents SDK integration for deterministic profile tailoring."""
+"""OpenAI Agents and xAI Chat Completions integration for profile tailoring."""
 
 from __future__ import annotations
 
 import copy
 import json
 import os
+import time
 from collections.abc import Mapping
 from typing import Any, Optional
 
@@ -25,9 +26,17 @@ try:  # Keep importing this module harmless when the optional extra is absent.
 except ModuleNotFoundError:  # pragma: no cover - core-only installs.
     load_dotenv = None  # type: ignore[assignment]
 
+try:  # Used by the xAI Chat Completions path; same optional extra as Agents.
+    from openai import OpenAI
+except ModuleNotFoundError:  # pragma: no cover - core-only installs.
+    OpenAI = None  # type: ignore[assignment,misc]
+
 
 DEFAULT_MODEL = "gpt-5.6-luna"
 DEFAULT_PROVIDER = "openai"
+DEFAULT_XAI_MODEL = "grok-4.6"
+XAI_BASE_URL = "https://api.x.ai/v1"
+XAI_TIMEOUT_S = 180.0
 PROMPT_INSTRUCTIONS = (
     "Select relevant source profile entries for the supplied job description. "
     "Return only zero-based indices in TailoringPlan; never write, rewrite, "
@@ -94,6 +103,10 @@ class TailoringPlan(BaseModel):
             if len(item_indices) != len(set(item_indices)):
                 raise ValueError(f"{field_name} contains duplicate item indices")
         return self
+
+
+class TailorTransportError(RuntimeError):
+    """Timeout, HTTP 429/5xx, or connection failure. Not a schema miss."""
 
 
 def _validated_profile(profile: Any) -> dict[str, Any]:
@@ -223,6 +236,124 @@ def _profile_for_prompt(profile: dict[str, Any]) -> str:
     )
 
 
+def _tailor_user_prompt(source: dict[str, Any], job_description: str) -> str:
+    return (
+        "JOB DESCRIPTION\n---\n"
+        f"{job_description.strip()}\n---\n"
+        "SOURCE PROFILE (use indices only; do not reproduce or edit content)\n"
+        f"{_profile_for_prompt(source)}\n---\n"
+        "Return a TailoringPlan; the local assembler copies all non-selectable source "
+        "fields unchanged."
+    )
+
+
+def _int_field(obj: Any, *names: str) -> int | None:
+    if obj is None:
+        return None
+    for name in names:
+        value = obj.get(name) if isinstance(obj, Mapping) else getattr(obj, name, None)
+        if isinstance(value, int) and not isinstance(value, bool):
+            return value
+    return None
+
+
+def _usage_dict(usage: Any) -> dict[str, int] | None:
+    if usage is None:
+        return None
+    details = (
+        usage.get("completion_tokens_details")
+        if isinstance(usage, Mapping)
+        else getattr(usage, "completion_tokens_details", None)
+    )
+    result: dict[str, int] = {}
+    prompt = _int_field(usage, "prompt_tokens", "input_tokens")
+    completion = _int_field(usage, "completion_tokens", "output_tokens")
+    total = _int_field(usage, "total_tokens")
+    reasoning = _int_field(details, "reasoning_tokens")
+    if reasoning is None:
+        reasoning = _int_field(usage, "reasoning_tokens")
+    if prompt is not None:
+        result["prompt_tokens"] = prompt
+    if completion is not None:
+        result["completion_tokens"] = completion
+    if total is not None:
+        result["total_tokens"] = total
+    if reasoning is not None:
+        result["reasoning_tokens"] = reasoning
+    return result or None
+
+
+def _run_usage_dict(run_result: Any) -> dict[str, int] | None:
+    usage = getattr(run_result, "usage", None)
+    if usage is None:
+        wrapper = getattr(run_result, "context_wrapper", None)
+        usage = getattr(wrapper, "usage", None)
+    return _usage_dict(usage)
+
+
+def _status_code(exc: BaseException) -> int | None:
+    value = getattr(exc, "status_code", None)
+    return value if isinstance(value, int) else None
+
+
+def _openai_error_types() -> tuple[type, type, type, type] | None:
+    try:
+        from openai import (
+            APIConnectionError,
+            APIStatusError,
+            APITimeoutError,
+            RateLimitError,
+        )
+    except ImportError:  # pragma: no cover - core-only installs.
+        return None
+    return APITimeoutError, APIConnectionError, RateLimitError, APIStatusError
+
+
+def _is_transport_error(exc: BaseException) -> bool:
+    types = _openai_error_types()
+    if types is None:
+        return False
+    timeout_error, connection_error, rate_limit_error, status_error = types
+    if isinstance(exc, (timeout_error, connection_error, rate_limit_error)):
+        return True
+    if isinstance(exc, status_error):
+        status = _status_code(exc)
+        return status is not None and (status == 429 or status >= 500)
+    return False
+
+
+def _is_schema_error(exc: BaseException) -> bool:
+    types = _openai_error_types()
+    if types is None:
+        return False
+    status_error = types[3]
+    if not isinstance(exc, status_error):
+        return False
+    status = _status_code(exc)
+    return status is not None and 400 <= status < 500 and status != 429
+
+
+def _plan_from_xai_message(message: Any) -> TailoringPlan:
+    raw = getattr(message, "parsed", None)
+    if raw is None and getattr(message, "content", None):
+        try:
+            raw = TailoringPlan.model_validate_json(message.content)
+        except Exception as exc:
+            raise ValueError("xAI returned an invalid TailoringPlan") from exc
+    if raw is None:
+        raise ValueError("xAI returned an invalid TailoringPlan")
+    try:
+        return raw if isinstance(raw, TailoringPlan) else TailoringPlan.model_validate(raw)
+    except Exception as exc:
+        raise ValueError("xAI returned an invalid TailoringPlan") from exc
+
+
+def _source_summary(profile: dict[str, Any]) -> Optional[str]:
+    basics = profile.get("basics", {}) if isinstance(profile, Mapping) else {}
+    summary = basics.get("summary") if isinstance(basics, Mapping) else None
+    return summary if isinstance(summary, str) else None
+
+
 def build_provider(
     name: str | None = None,
     model_name: str | None = None,
@@ -230,6 +361,8 @@ def build_provider(
     if load_dotenv is not None:
         load_dotenv(override=False)
     provider = (name or os.environ.get("TAILOR_PROVIDER") or DEFAULT_PROVIDER).strip().lower()
+    if provider == "xai":
+        return XAIChatProvider(model_name)
     if provider == "openai":
         return OpenAIAgentProvider(model_name)
     raise ValueError(f"Unknown tailoring provider: {provider}")
@@ -259,13 +392,13 @@ class OpenAIAgentProvider(AIProvider):
         # Resume/JD contents are sensitive personal data. The model request is
         # required for tailoring, but duplicate storage in SDK traces is not.
         self.run_config = RunConfig(tracing_disabled=True)
+        self.last_usage: dict[str, int] | None = None
+        self.last_elapsed_s: float | None = None
 
     def generate_highlight(self, profile: dict[str, Any]) -> Optional[str]:
         """Return the validated source summary; never generate new facts."""
 
-        basics = profile.get("basics", {}) if isinstance(profile, Mapping) else {}
-        summary = basics.get("summary") if isinstance(basics, Mapping) else None
-        return summary if isinstance(summary, str) else None
+        return _source_summary(profile)
 
     def tailor_profile(
         self, profile: dict[str, Any], job_description: str
@@ -281,40 +414,121 @@ class OpenAIAgentProvider(AIProvider):
         if not source["work"]:
             raise ValueError("profile.work must contain at least one entry")
 
-        prompt = (
-            "JOB DESCRIPTION\n---\n"
-            f"{job_description.strip()}\n---\n"
-            "SOURCE PROFILE (use indices only; do not reproduce or edit content)\n"
-            f"{_profile_for_prompt(source)}\n---\n"
-            "Return a TailoringPlan; the local assembler copies all non-selectable source "
-            "fields unchanged."
-        )
-        run_result = Runner.run_sync(
-            self.agent,
-            prompt,
-            max_turns=1,
-            run_config=self.run_config,
-        )
-        raw_plan = getattr(run_result, "final_output", run_result)
+        self.last_usage = None
+        started = time.perf_counter()
         try:
-            plan = (
-                raw_plan
-                if isinstance(raw_plan, TailoringPlan)
-                else TailoringPlan.model_validate(raw_plan)
+            run_result = Runner.run_sync(
+                self.agent,
+                _tailor_user_prompt(source, job_description),
+                max_turns=1,
+                run_config=self.run_config,
             )
-        except Exception as exc:
-            raise ValueError("Agent returned an invalid TailoringPlan") from exc
-        return assemble_profile(source, plan)
+            raw_plan = getattr(run_result, "final_output", run_result)
+            try:
+                plan = (
+                    raw_plan
+                    if isinstance(raw_plan, TailoringPlan)
+                    else TailoringPlan.model_validate(raw_plan)
+                )
+            except Exception as exc:
+                raise ValueError("Agent returned an invalid TailoringPlan") from exc
+            tailored = assemble_profile(source, plan)
+            self.last_usage = _run_usage_dict(run_result)
+            return tailored
+        finally:
+            self.last_elapsed_s = time.perf_counter() - started
+
+
+class XAIChatProvider(AIProvider):
+    """OpenAI-compatible Chat Completions parse() against api.x.ai."""
+
+    def __init__(self, model_name: Optional[str] = None):
+        if load_dotenv is not None:
+            load_dotenv(override=False)
+
+        self.model_name = model_name or os.environ.get("XAI_MODEL") or DEFAULT_XAI_MODEL
+        if OpenAI is None:
+            raise RuntimeError(
+                "xAI tailoring is unavailable; install the 'tailoring' extra"
+            )
+        key = os.environ.get("XAI_API_KEY", "").strip()
+        if not key:
+            raise RuntimeError(
+                "XAI_API_KEY is required to tailor a resume with provider=xai"
+            )
+        self._client = OpenAI(
+            api_key=key,
+            base_url=XAI_BASE_URL,
+            timeout=XAI_TIMEOUT_S,
+        )
+        self.last_usage: dict[str, int] | None = None
+        self.last_elapsed_s: float | None = None
+
+    def generate_highlight(self, profile: dict[str, Any]) -> Optional[str]:
+        """Return the validated source summary; never generate new facts."""
+
+        return _source_summary(profile)
+
+    def tailor_profile(
+        self, profile: dict[str, Any], job_description: str
+    ) -> dict[str, Any]:
+        """Select and assemble source facts for ``job_description``."""
+
+        if not isinstance(job_description, str) or not job_description.strip():
+            raise ValueError("job_description must not be empty")
+
+        source = _validated_profile(profile)
+        if not source["work"]:
+            raise ValueError("profile.work must contain at least one entry")
+
+        self.last_usage = None
+        started = time.perf_counter()
+        try:
+            try:
+                completion = self._client.beta.chat.completions.parse(
+                    model=self.model_name,
+                    temperature=0,
+                    extra_body={"reasoning_effort": "low"},
+                    messages=[
+                        {"role": "system", "content": PROMPT_INSTRUCTIONS},
+                        {
+                            "role": "user",
+                            "content": _tailor_user_prompt(source, job_description),
+                        },
+                    ],
+                    response_format=TailoringPlan,
+                )
+            except Exception as exc:
+                if _is_schema_error(exc):
+                    raise ValueError("xAI returned an invalid TailoringPlan") from exc
+                if _is_transport_error(exc):
+                    raise TailorTransportError(f"xAI request failed: {exc}") from exc
+                raise
+            try:
+                message = completion.choices[0].message
+            except (AttributeError, IndexError, TypeError) as exc:
+                raise ValueError("xAI returned an invalid TailoringPlan") from exc
+            plan = _plan_from_xai_message(message)
+            tailored = assemble_profile(source, plan)
+            self.last_usage = _usage_dict(getattr(completion, "usage", None))
+            return tailored
+        finally:
+            self.last_elapsed_s = time.perf_counter() - started
 
 
 __all__ = [
     "DEFAULT_MODEL",
     "DEFAULT_PROVIDER",
+    "DEFAULT_XAI_MODEL",
     "PROMPT_INSTRUCTIONS",
+    "XAI_BASE_URL",
+    "XAI_TIMEOUT_S",
     "HighlightSelection",
     "TailoringPlan",
+    "TailorTransportError",
     "assemble_profile",
     "build_provider",
     "public_selectable_profile",
     "OpenAIAgentProvider",
+    "XAIChatProvider",
 ]

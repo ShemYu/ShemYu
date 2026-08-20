@@ -56,6 +56,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.6-luna
+          TAILOR_PROVIDER: openai
           OUTPUT_NAME: ${{ inputs.output_name }}
         run: |
           uv run --locked --extra tailoring python -m src.main /tmp/job-description.txt --output-name "$OUTPUT_NAME"

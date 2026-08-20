@@ -66,9 +66,12 @@ TAILOR_PROVIDER=openai
 OPENAI_API_KEY=your-key-here
 # Optional; defaults to gpt-5.6-luna
 OPENAI_MODEL=gpt-5.6-luna
+XAI_API_KEY=your-xai-key-here
+# Optional; defaults to grok-4.6
+XAI_MODEL=grok-4.6
 ```
 
-`build_provider()` selects the backend from `--provider`, then `TAILOR_PROVIDER`, then `openai`. OpenAI is the default. `--provider` and `--model` are only valid with a job-description file; `--model` overrides `OPENAI_MODEL`.
+`build_provider()` selects the backend from `--provider`, then `TAILOR_PROVIDER`, then `openai`. OpenAI is the default. `--provider` and `--model` are only valid with a job-description file; `--model` overrides `OPENAI_MODEL` or `XAI_MODEL` for the selected provider.
 
 Save a job description as `target_jd.txt` (an ignored local file), then run:
 
@@ -81,6 +84,12 @@ To label the ignored output files for a particular role, or to pin provider and 
 ```bash
 uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name cookpad_ai
 uv run --locked --extra tailoring python -m src.main target_jd.txt --provider openai --model gpt-5.6-luna
+```
+
+To tailor with xAI (`grok-4.6`) instead of OpenAI, pass `--provider xai`. The CLI default stays OpenAI.
+
+```bash
+uv run --locked --extra tailoring python -m src.main target_jd.txt --provider xai --output-name cookpad_ai
 ```
 
 This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The provider returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts. Work and project `evidence` is stripped from the model prompt, so internal eval notes are not sent; the assembler still copies them for the Bible output.

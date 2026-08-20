@@ -12,6 +12,7 @@ dependencies = [
 
 [project.optional-dependencies]
 tailoring = [
+    "openai>=2.53.0",
     "openai-agents>=0.19.4",
     "python-dotenv>=1.2.2",
 ]

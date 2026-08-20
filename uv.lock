@@ -1044,6 +1044,7 @@ dependencies = [
 
 [package.optional-dependencies]
 tailoring = [
+    { name = "openai" },
     { name = "openai-agents" },
     { name = "python-dotenv" },
 ]
@@ -1051,6 +1052,7 @@ tailoring = [
 [package.metadata]
 requires-dist = [
     { name = "jinja2", specifier = ">=3.1.6" },
+    { name = "openai", marker = "extra == 'tailoring'", specifier = ">=2.53.0" },
     { name = "openai-agents", marker = "extra == 'tailoring'", specifier = ">=0.19.4" },
     { name = "pydantic", specifier = ">=2.12.4" },
     { name = "python-dotenv", marker = "extra == 'tailoring'", specifier = ">=1.2.2" },
