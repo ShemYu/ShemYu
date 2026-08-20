@@ -115,11 +115,20 @@ Each case is repeated N times (default 5, min 3, max 9). Public and Bible templa
 
 A live case passes when every repeat produces a valid plan and assemble, there are zero fail findings (identity, forbidden tokens, and scanners), and mean pairwise Jaccard on selected work and project names is at least 0.60. Preferred-set recall, keyword coverage, recency, and role match are reported, not gated. Reasoning-token usage and wall time are recorded as data, not pass/fail targets.
 
+Committed synthetic cases under `tests/tailor_eval/cases/` are the default `--cases` directory. They pin a fake profile so publication edits do not break the live path.
+
 ```bash
 uv run --locked --extra tailoring python -m src.tailor_eval --live --provider xai
 uv run --locked --extra tailoring python -m src.tailor_eval --live \
     --provider xai --repeats 5 \
     --cases tests/tailor_eval/cases
+```
+
+To run local live eval against real JDs and live `data/`, put case YAML in `career_evidence/private/tailor_eval/cases/` (already gitignored with `career_evidence/private/`; see [`career_evidence/README.md`](career_evidence/README.md)) and pass `--profile-dir data`. `--profile-dir` overrides each case's `profile_dir`. Create the directory locally first; a missing `--cases` path exits 2. Do not commit private cases, real JDs, or tailored output.
+
+Open Question 3: a JD may drop the current role (Cookpad) unless that private case sets `must_include_work: ["Cookpad"]`. Recency is reported only.
+
+```bash
 uv run --locked --extra tailoring python -m src.tailor_eval --live \
     --provider xai --profile-dir data \
     --cases career_evidence/private/tailor_eval/cases

@@ -9,11 +9,20 @@ The goal is to preserve enough detail to tailor a resume for different job descr
 | Layer | Location | Purpose |
 |---|---|---|
 | Detailed private master | `career_evidence/private/<company>.md` | Full product context, workstream history, metrics, denominators, versions, sources, boundaries, and interview gaps. Ignored by Git. |
+| Private tailor-eval cases | `career_evidence/private/tailor_eval/cases/` | Real job descriptions and selection constraints scored against live `data/`. Ignored by Git with the rest of `private/`. |
 | Publication data | `data/work/<company>.yaml` | Verified and disclosure-safe summary/highlights that generated resumes may publish. |
 | Canonical outputs | `README.md`, `RESUME.md`, `output/resume*.html` | Generated artifacts. Never edit these to introduce a new career fact. |
 | Tailored outputs | `output/tailored/` | Job-specific selections from publication data. They may shorten or reorder facts, never strengthen them. |
 
 The current Cookpad master is `career_evidence/private/cookpad.md`. Its Obsidian copy is a research mirror; the repo-local file is the working source of truth.
+
+## Private tailor-eval cases
+
+Keep real job descriptions and their `must_*` / `preferred_*` constraints in `career_evidence/private/tailor_eval/cases/`. The parent `career_evidence/private/` directory is already in `.gitignore`; do not commit those files.
+
+They are optional local fixtures for live tailor eval against publication YAML in `data/`. Copy a committed synthetic case from `tests/tailor_eval/cases/` as a template, then replace the JD and names with live `data/` work and project names. `--profile-dir data` on `python -m src.tailor_eval --live` overrides each case's `profile_dir`. See [USAGE.md](../USAGE.md) for the command.
+
+**Open Question 3 (current role).** A tailored selection may drop the current role (Cookpad) when a JD matches an older role better. Recency is reported only; it is not a pass/fail gate. If Cookpad must appear, set `must_include_work: ["Cookpad"]` on that private case.
 
 ## Evidence states
 
