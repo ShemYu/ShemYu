@@ -25,6 +25,16 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Fail if OPENAI_API_KEY is empty
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [[ -z "$OPENAI_API_KEY" ]]; then
+            echo "Repository secret OPENAI_API_KEY is empty."
+            echo "Add it under Settings → Secrets and variables → Actions, then re-run."
+            exit 1
+          fi
+
       - name: Install uv and Python
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
