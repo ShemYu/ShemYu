@@ -1,0 +1,9 @@
+name: Contoso Financial
+position: Staff Platform Engineer
+startDate: "2023-01"
+endDate: "2026-01"
+summary: Led a small ML team delivering production GenAI gateways.
+highlights:
+  - "Built production GenAI gateways for internal document workflows."
+  - "Led a four-person ML team shipping versioned model endpoints."
+  - "Operated shared LLM infrastructure across cloud accounts."

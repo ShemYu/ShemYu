@@ -72,6 +72,15 @@ class YamlDataLoaderTest(unittest.TestCase):
 
         self.assertIn('empty.yaml', str(raised.exception))
 
+    def test_live_work_and_project_names_are_unique(self):
+        profile = YamlDataLoader("data").load()
+        work_names = [item["name"] for item in profile["work"]]
+        project_names = [item["name"] for item in profile["projects"]]
+        self.assertEqual(work_names, list(dict.fromkeys(work_names)))
+        self.assertEqual(project_names, list(dict.fromkeys(project_names)))
+        self.assertTrue(work_names)
+        self.assertTrue(project_names)
+
 
 if __name__ == '__main__':
     unittest.main()

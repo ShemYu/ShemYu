@@ -12,6 +12,7 @@ from src.ai import (
     TailoringPlan,
     assemble_profile,
 )
+from src.generator import for_public_resume
 from src.schema import profile_dict
 
 
@@ -112,6 +113,29 @@ class TailoringPlanTest(unittest.TestCase):
         self.assertEqual(
             tailored["work"][0]["highlights"], ["First fact", "Second fact", "Third fact"]
         )
+
+    def test_highlight_selection_on_unselected_item_fails(self):
+        with self.assertRaises(ValueError):
+            assemble_profile(
+                _profile(),
+                TailoringPlan(
+                    work=[0],
+                    work_highlights=[HighlightSelection(item_index=1, highlight_indices=[0])],
+                ),
+            )
+
+    def test_empty_work_cannot_validate(self):
+        with self.assertRaises(ValidationError):
+            TailoringPlan(work=[])
+
+    def test_assembled_items_retain_evidence_until_public_resume(self):
+        profile = _profile()
+        profile["work"][0]["evidence"] = ["internal metric 67.6%"]
+        tailored = assemble_profile(profile, TailoringPlan(work=[0]))
+        self.assertEqual(tailored["work"][0]["evidence"], ["internal metric 67.6%"])
+        public = for_public_resume(tailored)
+        self.assertNotIn("evidence", public["work"][0])
+        self.assertEqual(public["work"][0]["highlights"], tailored["work"][0]["highlights"])
 
 
 class OpenAIAgentProviderTest(unittest.TestCase):
