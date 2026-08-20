@@ -9,7 +9,7 @@ import time
 from collections.abc import Mapping
 from typing import Any, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, ValidationError, model_validator
 
 from src.interfaces import AIProvider
 from src.schema import profile_dict
@@ -260,16 +260,20 @@ def _int_field(obj: Any, *names: str) -> int | None:
 def _usage_dict(usage: Any) -> dict[str, int] | None:
     if usage is None:
         return None
-    details = (
-        usage.get("completion_tokens_details")
-        if isinstance(usage, Mapping)
-        else getattr(usage, "completion_tokens_details", None)
-    )
     result: dict[str, int] = {}
     prompt = _int_field(usage, "prompt_tokens", "input_tokens")
     completion = _int_field(usage, "completion_tokens", "output_tokens")
     total = _int_field(usage, "total_tokens")
-    reasoning = _int_field(details, "reasoning_tokens")
+    reasoning = None
+    for details_name in ("completion_tokens_details", "output_tokens_details"):
+        details = (
+            usage.get(details_name)
+            if isinstance(usage, Mapping)
+            else getattr(usage, details_name, None)
+        )
+        reasoning = _int_field(details, "reasoning_tokens")
+        if reasoning is not None:
+            break
     if reasoning is None:
         reasoning = _int_field(usage, "reasoning_tokens")
     if prompt is not None:
@@ -331,6 +335,16 @@ def _is_schema_error(exc: BaseException) -> bool:
         return False
     status = _status_code(exc)
     return status is not None and 400 <= status < 500 and status != 429
+
+
+def _is_invalid_plan_error(exc: BaseException) -> bool:
+    if _is_schema_error(exc) or isinstance(exc, ValidationError):
+        return True
+    try:
+        from openai import ContentFilterFinishReasonError, LengthFinishReasonError
+    except ImportError:  # pragma: no cover - core-only installs.
+        return False
+    return isinstance(exc, (LengthFinishReasonError, ContentFilterFinishReasonError))
 
 
 def _plan_from_xai_message(message: Any) -> TailoringPlan:
@@ -499,7 +513,7 @@ class XAIChatProvider(AIProvider):
                     response_format=TailoringPlan,
                 )
             except Exception as exc:
-                if _is_schema_error(exc):
+                if _is_invalid_plan_error(exc):
                     raise ValueError("xAI returned an invalid TailoringPlan") from exc
                 if _is_transport_error(exc):
                     raise TailorTransportError(f"xAI request failed: {exc}") from exc

@@ -259,7 +259,12 @@ class OpenAIAgentProviderTest(unittest.TestCase):
         self.assertGreaterEqual(provider.last_elapsed_s, 0)
 
     def test_last_usage_from_runner_result(self):
-        usage = SimpleNamespace(input_tokens=10, output_tokens=4, total_tokens=14)
+        usage = SimpleNamespace(
+            input_tokens=10,
+            output_tokens=4,
+            total_tokens=14,
+            output_tokens_details=SimpleNamespace(reasoning_tokens=2),
+        )
         provider = self._provider(TailoringPlan(work=[0]))
         self.runner_mock.return_value = SimpleNamespace(
             final_output=TailoringPlan(work=[0]),
@@ -272,6 +277,7 @@ class OpenAIAgentProviderTest(unittest.TestCase):
                 "prompt_tokens": 10,
                 "completion_tokens": 4,
                 "total_tokens": 14,
+                "reasoning_tokens": 2,
             },
         )
 
@@ -361,6 +367,18 @@ def _xai_connection_error():
     return APIConnectionError(
         request=httpx.Request("POST", "https://api.x.ai/v1/chat/completions")
     )
+
+
+def _xai_length_error():
+    from openai import LengthFinishReasonError
+
+    return LengthFinishReasonError(completion=MagicMock())
+
+
+def _xai_content_filter_error():
+    from openai import ContentFilterFinishReasonError
+
+    return ContentFilterFinishReasonError()
 
 
 class XAIChatProviderTest(unittest.TestCase):
@@ -496,6 +514,23 @@ class XAIChatProviderTest(unittest.TestCase):
 
     def test_schema_4xx_is_invalid_plan(self):
         provider = self._provider(parse_error=_xai_status_error(400))
+        with self.assertRaisesRegex(ValueError, "xAI returned an invalid TailoringPlan"):
+            provider.tailor_profile(_profile(), "ML platform engineer")
+
+    def test_length_finish_reason_is_invalid_plan(self):
+        provider = self._provider(parse_error=_xai_length_error())
+        with self.assertRaisesRegex(ValueError, "xAI returned an invalid TailoringPlan"):
+            provider.tailor_profile(_profile(), "ML platform engineer")
+
+    def test_content_filter_finish_reason_is_invalid_plan(self):
+        provider = self._provider(parse_error=_xai_content_filter_error())
+        with self.assertRaisesRegex(ValueError, "xAI returned an invalid TailoringPlan"):
+            provider.tailor_profile(_profile(), "ML platform engineer")
+
+    def test_pydantic_validation_error_is_invalid_plan(self):
+        provider = self._provider(
+            parse_error=ValidationError.from_exception_data("TailoringPlan", [])
+        )
         with self.assertRaisesRegex(ValueError, "xAI returned an invalid TailoringPlan"):
             provider.tailor_profile(_profile(), "ML platform engineer")
 
