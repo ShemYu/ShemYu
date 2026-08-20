@@ -62,10 +62,13 @@ cp .env.example .env
 ```
 
 ```dotenv
+TAILOR_PROVIDER=openai
 OPENAI_API_KEY=your-key-here
 # Optional; defaults to gpt-5.6-luna
 OPENAI_MODEL=gpt-5.6-luna
 ```
+
+`build_provider()` selects the backend from `--provider`, then `TAILOR_PROVIDER`, then `openai`. OpenAI is the default. `--provider` and `--model` are only valid with a job-description file; `--model` overrides `OPENAI_MODEL`.
 
 Save a job description as `target_jd.txt` (an ignored local file), then run:
 
@@ -73,13 +76,14 @@ Save a job description as `target_jd.txt` (an ignored local file), then run:
 uv run --locked --extra tailoring python -m src.main target_jd.txt
 ```
 
-To label the ignored output files for a particular role:
+To label the ignored output files for a particular role, or to pin provider and model:
 
 ```bash
 uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name cookpad_ai
+uv run --locked --extra tailoring python -m src.main target_jd.txt --provider openai --model gpt-5.6-luna
 ```
 
-This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
+This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The provider returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts. Work and project `evidence` is stripped from the model prompt, so internal eval notes are not sent; the assembler still copies them for the Bible output.
 
 For GitHub Actions, create a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. This workflow is read-only, does not commit job-specific resumes, and is the only workflow that receives the secret. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
 

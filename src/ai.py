@@ -27,6 +27,16 @@ except ModuleNotFoundError:  # pragma: no cover - core-only installs.
 
 
 DEFAULT_MODEL = "gpt-5.6-luna"
+DEFAULT_PROVIDER = "openai"
+PROMPT_INSTRUCTIONS = (
+    "Select relevant source profile entries for the supplied job description. "
+    "Return only zero-based indices in TailoringPlan; never write, rewrite, "
+    "summarize, or invent profile content. Basics and every education entry "
+    "are always retained by the local assembler. Select at most four work "
+    "entries, three projects, and three bullets per selected item. "
+    "Prefer the most relevant, already-published highlights. "
+    "Do not use or mention any field that is not present in the source JSON."
+)
 _INDEX_FIELDS = ("work", "projects", "skills", "certificates", "publications")
 
 
@@ -192,13 +202,37 @@ def assemble_profile(
     return _validated_profile(result)
 
 
+def public_selectable_profile(profile: dict[str, Any]) -> dict[str, Any]:
+    """Indexable source sections with internal evidence removed."""
+
+    pub = {section: copy.deepcopy(profile[section]) for section in _INDEX_FIELDS}
+    for section in ("work", "projects"):
+        for item in pub[section]:
+            item.pop("evidence", None)
+    return pub
+
+
 def _profile_for_prompt(profile: dict[str, Any]) -> str:
     """Serialize only the source sections the agent can select."""
 
-    selectable_profile = {
-        section: copy.deepcopy(profile[section]) for section in _INDEX_FIELDS
-    }
-    return json.dumps(selectable_profile, ensure_ascii=False, default=str, sort_keys=True)
+    return json.dumps(
+        public_selectable_profile(profile),
+        ensure_ascii=False,
+        default=str,
+        sort_keys=True,
+    )
+
+
+def build_provider(
+    name: str | None = None,
+    model_name: str | None = None,
+) -> AIProvider:
+    if load_dotenv is not None:
+        load_dotenv(override=False)
+    provider = (name or os.environ.get("TAILOR_PROVIDER") or DEFAULT_PROVIDER).strip().lower()
+    if provider == "openai":
+        return OpenAIAgentProvider(model_name)
+    raise ValueError(f"Unknown tailoring provider: {provider}")
 
 
 class OpenAIAgentProvider(AIProvider):
@@ -220,13 +254,7 @@ class OpenAIAgentProvider(AIProvider):
             name="Resume tailoring specialist",
             model=self.model_name,
             output_type=TailoringPlan,
-            instructions=(
-                "Select relevant source profile entries for the supplied job description. "
-                "Return only zero-based indices in TailoringPlan; never write, rewrite, "
-                "summarize, or invent profile content. Basics and every education entry "
-                "are always retained by the local assembler. Select at most four work "
-                "entries, three projects, and three bullets per selected item."
-            ),
+            instructions=PROMPT_INSTRUCTIONS,
         )
         # Resume/JD contents are sensitive personal data. The model request is
         # required for tailoring, but duplicate storage in SDK traces is not.
@@ -281,8 +309,12 @@ class OpenAIAgentProvider(AIProvider):
 
 __all__ = [
     "DEFAULT_MODEL",
+    "DEFAULT_PROVIDER",
+    "PROMPT_INSTRUCTIONS",
     "HighlightSelection",
     "TailoringPlan",
     "assemble_profile",
+    "build_provider",
+    "public_selectable_profile",
     "OpenAIAgentProvider",
 ]
