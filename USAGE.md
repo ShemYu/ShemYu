@@ -111,9 +111,9 @@ uv run --locked python -m src.tailor_eval
 
 `python -m src.tailor_eval --live` is opt-in. It is not pull-request CI and requires the selected provider's API key (`XAI_API_KEY` for `--provider xai`, `OPENAI_API_KEY` for OpenAI).
 
-Each case is repeated N times (default 5, min 3, max 9). Public and Bible templates render in a temporary directory, not canonical files. A JSON report is written under `output/tailor_eval/{case_id}-{provider}-{timestamp}.json`.
+Each case is repeated N times (default 5, min 3, max 9). Public and Bible templates render in memory, not to canonical files. A JSON report is written under `output/tailor_eval/{case_id}-{provider}-{timestamp}.json`.
 
-A live case passes when every repeat produces a valid plan and assemble, scanners have no fail findings, and mean pairwise Jaccard on selected work and project names is at least 0.60. Preferred-set recall, keyword coverage, recency, and role match are reported, not gated. Reasoning-token usage and wall time are recorded as data, not pass/fail targets.
+A live case passes when every repeat produces a valid plan and assemble, there are zero fail findings (identity, forbidden tokens, and scanners), and mean pairwise Jaccard on selected work and project names is at least 0.60. Preferred-set recall, keyword coverage, recency, and role match are reported, not gated. Reasoning-token usage and wall time are recorded as data, not pass/fail targets.
 
 ```bash
 uv run --locked --extra tailoring python -m src.tailor_eval --live --provider xai

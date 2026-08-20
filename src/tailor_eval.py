@@ -9,7 +9,6 @@ import json
 import os
 import re
 import sys
-import tempfile
 import time
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -1044,6 +1043,8 @@ def _section_indices(
 def _plan_from_tailored(
     source: dict[str, Any], tailored: dict[str, Any]
 ) -> dict[str, Any] | None:
+    """Name-index reconstruction for the report; highlight selections are omitted."""
+
     payload = {
         "work": _section_indices(list(source.get("work") or []), list(tailored.get("work") or [])),
         "projects": _section_indices(
@@ -1067,14 +1068,10 @@ def _plan_from_tailored(
 
 def _render_public_and_bible(tailored: dict[str, Any]) -> dict[str, str]:
     gen = Jinja2Generator(str(_TEMPLATES_DIR))
-    rendered: dict[str, str] = {}
-    with tempfile.TemporaryDirectory(prefix="tailor_eval_") as tmp:
-        tmp_path = Path(tmp)
-        for template in (*PUBLIC_SCAN_TEMPLATES, BIBLE_SCAN_TEMPLATE):
-            text = gen.render(tailored, template)
-            (tmp_path / template.removesuffix(".j2")).write_text(text, encoding="utf-8")
-            rendered[template] = text
-    return rendered
+    return {
+        template: gen.render(tailored, template)
+        for template in (*PUBLIC_SCAN_TEMPLATES, BIBLE_SCAN_TEMPLATE)
+    }
 
 
 def _score_artifacts(
