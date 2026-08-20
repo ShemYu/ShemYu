@@ -81,7 +81,7 @@ uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name
 
 This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
 
-For GitHub Actions, create a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. This workflow is read-only, does not commit job-specific resumes, and is the only workflow that receives the secret. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
+For GitHub Actions, add a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. The workflow fails immediately if that secret is empty. It is read-only and does not commit job-specific resumes. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
 
 ## Check tailoring faithfulness (offline)
 
