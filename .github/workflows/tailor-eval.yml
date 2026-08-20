@@ -1,0 +1,76 @@
+name: Live tailor eval
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: Tailoring provider
+        type: choice
+        options:
+          - xai
+          - openai
+        default: xai
+      repeats:
+        description: Live repeats per case
+        type: string
+        default: "5"
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.3"
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Sync locked tailoring dependencies
+        run: uv sync --locked --extra tailoring
+
+      - name: Fail if the chosen provider secret is empty
+        env:
+          PROVIDER: ${{ inputs.provider }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [[ "$PROVIDER" == "openai" ]]; then
+            test -n "$OPENAI_API_KEY"
+          else
+            test -n "$XAI_API_KEY"
+          fi
+
+      - name: Run offline tailoring tests
+        run: >-
+          uv run --locked --extra tailoring python -m unittest
+          tests.test_tailor_eval tests.test_ai -v
+
+      - name: Run live tailor eval
+        env:
+          PROVIDER: ${{ inputs.provider }}
+          REPEATS: ${{ inputs.repeats }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -e
+          uv run --locked --extra tailoring python -m src.tailor_eval --live \
+            --provider "$PROVIDER" --repeats "$REPEATS" \
+            --cases tests/tailor_eval/cases
+
+      - name: Upload tailor eval reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: tailor-eval
+          path: output/tailor_eval/*.json
+          if-no-files-found: error
+          retention-days: 7
