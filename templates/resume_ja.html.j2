@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>職務経歴書 - {{ basics.name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --page-width: 210mm;
+            --page-height: 297mm;
+            --text: #111;
+            --muted: #444;
+            --rule: #222;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #e9e9e9;
+            color: var(--text);
+            font-family: "Noto Sans JP", "Noto Sans CJK JP", "Source Han Sans JP", "Source Han Sans", sans-serif;
+            font-size: 10pt;
+            line-height: 1.45;
+        }
+
+        .resume {
+            width: var(--page-width);
+            min-height: var(--page-height);
+            margin: 12px auto;
+            padding: 12mm 14mm 12mm;
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.16);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .doc-title {
+            margin: 0;
+            text-align: center;
+            font-size: 16pt;
+            letter-spacing: 0.35em;
+            font-weight: 700;
+        }
+
+        .doc-date {
+            margin-top: 1.2mm;
+            text-align: right;
+            color: var(--muted);
+            font-size: 9pt;
+        }
+
+        .header {
+            margin-top: 3mm;
+            padding-bottom: 2.5mm;
+            border-bottom: 0.8pt solid var(--rule);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 16pt;
+            line-height: 1.2;
+            letter-spacing: 0.04em;
+        }
+
+        .headline {
+            margin-top: 1mm;
+            font-size: 10pt;
+            font-weight: 700;
+        }
+
+        .axis {
+            margin-top: 1mm;
+            color: var(--muted);
+            font-size: 9pt;
+        }
+
+        .contact {
+            margin-top: 1.6mm;
+            color: var(--muted);
+            font-size: 8.6pt;
+        }
+
+        .contact span + span::before {
+            content: " ｜ ";
+            color: #777;
+        }
+
+        section {
+            margin-top: 4mm;
+        }
+
+        h2 {
+            margin: 0 0 1.8mm;
+            padding: 0 0 0.8mm 1.5mm;
+            border-left: 3.2pt solid var(--rule);
+            border-bottom: 0.6pt solid var(--rule);
+            font-size: 11pt;
+            line-height: 1.2;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .summary {
+            color: #222;
+        }
+
+        .skill-row {
+            margin-bottom: 0.8mm;
+            font-size: 9.2pt;
+        }
+
+        .skill-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-name {
+            font-weight: 700;
+        }
+
+        .entry {
+            margin-bottom: 3.4mm;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 6mm;
+        }
+
+        .entry-company {
+            font-size: 10.4pt;
+            font-weight: 700;
+        }
+
+        .entry-date {
+            flex: 0 0 auto;
+            color: var(--muted);
+            font-size: 9pt;
+            white-space: nowrap;
+        }
+
+        .entry-role {
+            margin-top: 0.4mm;
+            font-size: 9.5pt;
+            font-weight: 700;
+        }
+
+        .entry-location {
+            color: #555;
+            font-weight: 400;
+        }
+
+        .entry-summary {
+            margin-top: 1mm;
+            color: #222;
+            font-size: 9.4pt;
+        }
+
+        ul {
+            margin: 1.1mm 0 0;
+            padding-left: 4.8mm;
+        }
+
+        li {
+            margin-bottom: 0.8mm;
+            padding-left: 0.4mm;
+        }
+
+        li:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-row,
+        .certificate-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 6mm;
+            margin-bottom: 1.2mm;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .education-row:last-child,
+        .certificate-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-main,
+        .certificate-main {
+            font-weight: 700;
+        }
+
+        .education-detail {
+            color: #333;
+            font-weight: 400;
+        }
+
+        .education-highlights {
+            margin: 0.6mm 0 1.4mm;
+            padding-left: 4.8mm;
+            color: #333;
+            font-size: 9pt;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 8mm 10mm;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            .resume {
+                width: auto;
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="resume">
+        <p class="doc-title">職務経歴書</p>
+        {% if generated_on %}
+        <p class="doc-date">{{ generated_on }} 現在</p>
+        {% endif %}
+
+        <header class="header">
+            <h1>{{ basics.name }}</h1>
+            {% if basics.label %}
+            <div class="headline">{{ basics.label }}</div>
+            {% endif %}
+            {% if selection_meta and (selection_meta.application_id or selection_meta.axis) %}
+            <div class="axis">
+                {% if selection_meta.axis %}{{ selection_meta.axis }}{% endif %}
+                {% if selection_meta.application_id %}（LY {{ selection_meta.application_id }}）{% endif %}
+            </div>
+            {% endif %}
+            <div class="contact">
+                {% if basics.email %}<span><a href="mailto:{{ basics.email }}">{{ basics.email }}</a></span>{% endif %}
+                {% if basics.phone %}<span>{{ basics.phone }}</span>{% endif %}
+                {% if basics.location.city %}<span>{{ basics.location.city }}{% if basics.location.region %}、{{ basics.location.region }}{% endif %}</span>{% endif %}
+                {% if basics.url %}<span><a href="{{ basics.url }}">{{ basics.url | replace('https://', '') | replace('http://', '') }}</a></span>{% endif %}
+                {% for profile in basics.profiles if profile.network == 'LinkedIn' %}
+                <span><a href="{{ profile.url }}">LinkedIn</a></span>
+                {% endfor %}
+            </div>
+        </header>
+
+        {% if basics.summary %}
+        <section>
+            <h2>職務要約</h2>
+            <p class="summary">{{ basics.summary }}</p>
+        </section>
+        {% endif %}
+
+        {% if skills %}
+        <section>
+            <h2>活かせる経験・スキル</h2>
+            {% for skill in skills if skill.name not in ['語学', 'Language', 'リーダーシップ / コミュニケーション', 'Leadership & Communication'] %}
+            <p class="skill-row"><span class="skill-name">{{ skill.name }}：</span> {{ skill.keywords[:7] | join('、') }}</p>
+            {% endfor %}
+            {% for skill in skills if skill.name in ['語学', 'Language'] %}
+            <p class="skill-row"><span class="skill-name">語学：</span> {{ skill.keywords | join('、') }}</p>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if work %}
+        <section>
+            <h2>職務経歴</h2>
+            {% for w in work %}
+            <article class="entry">
+                <div class="entry-header">
+                    <div class="entry-company">{{ w.name }}</div>
+                    <div class="entry-date">{{ w.startDate | format_date_ja }} 〜 {{ w.endDate | default('Present', true) | format_date_ja }}</div>
+                </div>
+                <div class="entry-role">
+                    {{ w.position }}
+                    {% if w.location %}<span class="entry-location">（{{ w.location }}）</span>{% endif %}
+                </div>
+                {% if w.summary %}
+                <p class="entry-summary">{{ w.summary }}</p>
+                {% endif %}
+                {% if w.highlights %}
+                <ul>
+                    {% for highlight in w.highlights %}
+                    <li>{{ highlight }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if education %}
+        <section>
+            <h2>学歴</h2>
+            {% for edu in education %}
+            <div class="education-row">
+                <div>
+                    <span class="education-main">{{ edu.institution }}</span>
+                    <span class="education-detail">　{{ edu.studyType }}（{{ edu.area }}）{% if edu.score %}　GPA {{ edu.score }}{% endif %}</span>
+                </div>
+                <div class="entry-date">{{ edu.startDate | format_date_ja }} 〜 {{ edu.endDate | format_date_ja }}</div>
+            </div>
+            {% if edu.highlights %}
+            <ul class="education-highlights">
+                {% for highlight in edu.highlights %}
+                <li>{{ highlight }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if certificates %}
+        <section>
+            <h2>資格</h2>
+            {% for cert in certificates %}
+            <div class="certificate-row">
+                <div><span class="certificate-main">{{ cert.name }}</span>{% if cert.issuer %}、{{ cert.issuer }}{% endif %}</div>
+                {% if cert.date %}<div class="entry-date">{{ cert.date | format_date_ja }}</div>{% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

@@ -53,6 +53,24 @@ Commit the YAML changes and all four canonical files together. The main GitHub A
 
 The normal generation path is deterministic and does not load an AI provider or require an API key. Invalid fields, malformed dates, unknown schema fields, and unsafe URL schemes fail with a source-aware validation error.
 
+## Japanese 職務経歴書 (LINE Yahoo / LY)
+
+Two deterministic Japanese resumes are generated from the same `data/` YAML. A locale file maps existing English strings; a selection preset only reorders and subsets source highlights. Neither path invents metrics, dates, titles, or language levels.
+
+```bash
+uv run --locked python -m src.main --locale ja --select ly_agent --pdf
+uv run --locked python -m src.main --locale ja --select ly_platform --pdf
+```
+
+Or run `scripts/generate_ly_jp.sh`. Outputs:
+
+- `output/ShemYu_Resume_LY_Agent_JP.html` / `.pdf` — Agent / GenAI (LY ly00493)
+- `output/ShemYu_Resume_LY_Platform_JP.html` / `.pdf` — AI / ML Platform (LY ly00161)
+
+`--pdf` needs a CJK font. On Debian/Ubuntu install `fonts-noto-cjk` (Noto Sans CJK JP). Chrome/Chromium is used when present; otherwise `uv sync --locked --extra pdf` (WeasyPrint). Do not generate these PDFs with Helvetica-only fonts.
+
+Unmapped YAML prose is left in English and printed to stderr. Language skills stay exactly `data/skills/language.yaml` (Chinese Native, English Limited Working). Japanese proficiency is not added.
+
 ## Tailor a resume to a job description
 
 Copy the environment template and place your own key in the ignored `.env` file:

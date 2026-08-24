@@ -105,6 +105,48 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             parse_args(["--output-name", "custom"])
 
+    def test_cli_allows_locale_select_and_pdf(self):
+        args = parse_args(["--locale", "ja", "--select", "ly_agent", "--pdf"])
+        self.assertEqual(args.locale, "ja")
+        self.assertEqual(args.select, "ly_agent")
+        self.assertTrue(args.pdf)
+
+    @patch("src.i18n.translate_profile")
+    @patch("src.select.apply_selection")
+    @patch("src.select.load_selection")
+    @patch("src.main.Jinja2Generator")
+    @patch("src.main.YamlDataLoader")
+    def test_locale_select_renders_ja_html_without_ai(
+        self, loader_class, generator_class, load_selection, apply_selection, translate_profile
+    ):
+        profile = {"basics": {"name": "Shem Yu"}}
+        loader_class.return_value.load.return_value = profile
+        load_selection.return_value = {
+            "meta": {"output_name": "ShemYu_Resume_LY_Agent_JP", "application_id": "ly00493"}
+        }
+        apply_selection.return_value = {"basics": {"name": "Selected"}}
+        translate_profile.return_value = ({"basics": {"name": "余顯漁（Shem Yu）"}}, [])
+
+        with tempfile.TemporaryDirectory() as project_dir:
+            os.makedirs(os.path.join(project_dir, "data"))
+            previous_dir = os.getcwd()
+            try:
+                os.chdir(project_dir)
+                main(locale="ja", select="ly_agent")
+            finally:
+                os.chdir(previous_dir)
+
+        load_selection.assert_called_once_with("ly_agent")
+        generator_class.return_value.generate_batch.assert_called_once()
+        rendered_profile, outputs = generator_class.return_value.generate_batch.call_args[0]
+        self.assertEqual(
+            outputs,
+            (("resume_ja.html.j2", "output/ShemYu_Resume_LY_Agent_JP.html"),),
+        )
+        self.assertEqual(rendered_profile["basics"]["name"], "余顯漁（Shem Yu）")
+        self.assertIn("generated_on", rendered_profile)
+        self.assertEqual(rendered_profile["selection_meta"]["application_id"], "ly00493")
+
 
 if __name__ == "__main__":
     unittest.main()

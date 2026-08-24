@@ -15,6 +15,9 @@ tailoring = [
     "openai-agents>=0.19.4",
     "python-dotenv>=1.2.2",
 ]
+pdf = [
+    "weasyprint>=63.0",
+]
 
 [tool.setuptools]
 package-dir = {"" = "."}

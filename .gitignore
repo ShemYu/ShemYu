@@ -159,6 +159,10 @@ target_jd.txt
 output/*
 !output/resume.html
 !output/resume_bible.html
+!output/ShemYu_Resume_LY_Agent_JP.html
+!output/ShemYu_Resume_LY_Agent_JP.pdf
+!output/ShemYu_Resume_LY_Platform_JP.html
+!output/ShemYu_Resume_LY_Platform_JP.pdf
 
 # Detailed career evidence may contain internal project context.
 career_evidence/private/

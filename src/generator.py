@@ -21,6 +21,7 @@ PUBLIC_RESUME_TEMPLATES = frozenset(
         "resume.html.j2",
         "resume.md.j2",
         "readme.md.j2",
+        "resume_ja.html.j2",
     }
 )
 
@@ -63,6 +64,27 @@ def format_date(value: Any) -> str:
     return text
 
 
+def format_date_ja(value: Any) -> str:
+    """Format dates for a Japanese 職務経歴書 (2026年2月 / 現在)."""
+    if value is None or value == "":
+        return ""
+
+    text = str(value)
+    if text.lower() == "present":
+        return "現在"
+
+    for date_format in ("%Y-%m-%d", "%Y-%m", "%Y"):
+        try:
+            parsed = datetime.strptime(text, date_format)
+        except ValueError:
+            continue
+        if date_format == "%Y":
+            return f"{parsed.year}年"
+        return f"{parsed.year}年{parsed.month}月"
+
+    return text
+
+
 def _autoescape_template(template_name: str | None) -> bool:
     """Enable escaping only for the HTML Jinja templates."""
 
@@ -99,6 +121,7 @@ class Jinja2Generator(ContentGenerator):
             autoescape=_autoescape_template,
         )
         self.env.filters["format_date"] = format_date
+        self.env.filters["format_date_ja"] = format_date_ja
 
     @staticmethod
     def _normalize_outputs(
@@ -277,4 +300,10 @@ class Jinja2Generator(ContentGenerator):
         self.generate_batch(context, [(template_name, output_path)])
 
 
-__all__ = ["Jinja2Generator", "PUBLIC_RESUME_TEMPLATES", "for_public_resume", "format_date"]
+__all__ = [
+    "Jinja2Generator",
+    "PUBLIC_RESUME_TEMPLATES",
+    "for_public_resume",
+    "format_date",
+    "format_date_ja",
+]

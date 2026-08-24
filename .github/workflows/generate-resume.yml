@@ -7,6 +7,8 @@ on:
       - "src/**"
       - "templates/**"
       - "tests/**"
+      - "locales/**"
+      - "scripts/generate_ly_jp.sh"
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/**"
@@ -18,6 +20,8 @@ on:
       - "src/**"
       - "templates/**"
       - "tests/**"
+      - "locales/**"
+      - "scripts/generate_ly_jp.sh"
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/**"
@@ -53,7 +57,8 @@ jobs:
         run: >-
           uv run --locked python -m unittest -v
           tests.test_generator tests.test_loader tests.test_main tests.test_schema
-          tests.test_tailor_eval
+          tests.test_tailor_eval tests.test_i18n tests.test_select
+          tests.test_ja_resume
 
       - name: Verify package build
         run: uv build
@@ -78,6 +83,26 @@ jobs:
 
       - name: Generate canonical artifacts
         run: uv run --locked python -m src.main
+
+      - name: Install CJK fonts for Japanese PDFs
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+
+      - name: Generate Japanese LY resumes
+        run: |
+          uv run --locked --extra pdf python -m src.main --locale ja --select ly_agent --pdf
+          uv run --locked --extra pdf python -m src.main --locale ja --select ly_platform --pdf
+
+      - name: Upload Japanese LY resume HTML and PDF
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ly-jp-resumes
+          path: |
+            output/ShemYu_Resume_LY_Agent_JP.html
+            output/ShemYu_Resume_LY_Agent_JP.pdf
+            output/ShemYu_Resume_LY_Platform_JP.html
+            output/ShemYu_Resume_LY_Platform_JP.pdf
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Upload generated artifacts
         if: github.event_name != 'pull_request'

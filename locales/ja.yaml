@@ -1,0 +1,82 @@
+# Exact-string Japanese mappings for YAML values under data/.
+# Keys must match source strings character-for-character.
+# Unmapped translatable prose is left in English and reported at generate time.
+# Do not add language levels, metrics, titles, or dates that are not in data/.
+
+strings:
+  # Name (locked outbound presentation; source YAML name is "Shem Yu")
+  "Shem Yu": "余顯漁（Shem Yu）"
+
+  "Senior AI Engineer @ Cookpad | GenAI, AI Agents & MLOps | Tokyo": "シニアAIエンジニア @ Cookpad｜GenAI、AIエージェント、MLOps｜東京"
+
+  "Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.": "本番環境のエージェント、RAG基盤、共有GenAIインフラの構築に6年従事してきたApplied AIエンジニア。現在はCookpadにて、エージェント評価・推論アーキテクチャ・信頼性を軸にマルチモーダルなコーチングエージェントを開発。以前は金融サービス領域で、本番GenAIシステムを届けるMLEチームをリード。"
+
+  "Taipei": "台北"
+  "Taiwan": "台湾"
+  "Tokyo, Japan": "東京、日本"
+  "Taipei, Taiwan": "台北、台湾"
+
+  "Senior AI Engineer": "シニアAIエンジニア"
+  "Machine Learning Engineer, team lead": "機械学習エンジニア、チームリード"
+  "Senior AI Platform Engineer": "シニアAIプラットフォームエンジニア"
+  "Data Scientist": "データサイエンティスト"
+  "Research assistant": "リサーチアシスタント"
+  "Intern": "インターン"
+
+  "Cookpad": "Cookpad（クックパッド）"
+  "Building AI that makes everyday life more joyful.": "日常をより楽しくするAIを構築。"
+  "Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised expert-grounded coverage from 40% to 95%.": "料理動画と学習者の音声を踏まえて再説明・絞り込み・先へ進むかを判断するマルチモーダル・コーチングエージェントを構築。エキスパート根拠のカバレッジを40%から95%へ向上。"
+  "Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.": "カバレッジ、真実性、一貫性、ターンごとの品質を対象に、バージョン管理された能力ベースのエージェント評価と自動スコアリングを設計。"
+  "Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages.": "観察、ギャップ推論、コーチング判断を分離した段階的マルチモーダル推論パイプラインを設計し、デバッグ容易性を高め、エージェント各段階への障害伝播を抑制。"
+
+  "Led a 4-person MLE team, overseeing AI project deployment and departmental internal agent development.": "4名のMLEチームをリードし、AIプロジェクトのデプロイと部門内エージェント開発を統括。"
+  "Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.": "Google ADKで部門内AIエージェントを開発し、ディープリサーチ業務を自動化。分析時間を2時間から15分へ短縮。"
+  "Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.": "GenAIインフラ（AI Gateway、Guardrails、MLflow）を設計・構築し、社内AIサービスのレイテンシを60%改善。"
+  "Implemented FinOps agent, achieving 30% GPU cost reduction.": "FinOpsエージェントを実装し、GPUコストを30%削減。"
+  "Reduced overall cloud spend by 40% through FinOps practices.": "FinOpsの実践により、クラウド支出を全体で40%削減。"
+  "Improved regulatory Agent F1 from 0.67 to 0.89.": "規制対応エージェントのF1を0.67から0.89へ改善。"
+  "Won CFH Cloud Creative Award 2024 (1st place).": "CFH Cloud Creative Award 2024（1位）を受賞。"
+  "Named departmental MVP, Q1 2025.": "2025年第1四半期、部門MVPに選出。"
+  "Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.": "DatabricksワークフローとAWSインフラでソリューションをデプロイし、スケーラブルでセキュアな運用を確保。"
+
+  "Support cross-team AI solution integration, enabling seamless transition to unified platforms across new and legacy projects.": "新旧プロジェクトを横断し、統一プラットフォームへの移行を可能にする、チーム横断のAIソリューション統合を支援。"
+  "Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.": "標準MLプロジェクトテンプレート（AI Cloud Platformテンプレート：FastAPI、CI/CD、Kubernetes）を整備。デプロイ期間を2週間から3日へ短縮し、30以上のプロジェクトで採用。"
+  "Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.": "NLP向けPythonライブラリ（UAP Common Library）を実装。社内採用率70%、コードカバレッジ90%以上で、AI開発者の生産性と信頼性を向上。"
+  "Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.": "SphinxとCIによるドキュメントパイプライン自動化を主導し、オンボーディング効率とプラットフォームの使いやすさを向上。"
+
+  "Assist in maintaining ETL pipelines and data collection, ensuring stable analytics during dynamic business environments.": "ETLパイプラインとデータ収集の維持を支援し、変動する事業環境でも安定した分析を確保。"
+  "Analyze customer order data using statistical modeling (FP-Growth, K-means, 4 clusters) to support marketing and segmentation strategies.": "統計モデリング（FP-Growth、K-means、4クラスタ）で顧客注文データを分析し、マーケティングとセグメンテーションを支援。"
+  "Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.": "CKIP NLPと頻出パターンマイニングで旅行行程から特徴パターンを抽出し最適化。検索関連性とユーザー体験を改善。"
+
+  "Assist teaching as a Teaching Assistant for Database Theory, supporting curriculum delivery and mentoring undergraduate students.": "データベース理論のティーチングアシスタントとして授業運営を支援し、学部生を指導。"
+  "Lead student research teams in multiple industry-university collaboration projects, coordinating with external partners and delivering actionable data science solutions.": "複数の産学連携プロジェクトで学生研究チームを率い、学外パートナーと連携して実行可能なデータサイエンス成果を提供。"
+
+  "Facilitate communication and project delivery between university and III teams, ensuring alignment on deliverables and expectations.": "大学とIIIチーム間のコミュニケーションとプロジェクト推進を支援し、成果物と期待のすり合わせを行う。"
+  "Develop full-stack web applications from end to end for social data analysis, supporting the transformation of raw posts into interactive word clouds and buzzword visualizations.": "ソーシャルデータ分析向けのフルスタックWebアプリケーションを端から端まで開発し、投稿をインタラクティブなワードクラウドとバズワード可視化へ変換。"
+  "Analyze and extract insights from social media data, applying NLP and visualization tools to generate actionable reports for industry partners.": "ソーシャルメディアデータから知見を抽出し、NLPと可視化で産業パートナー向けの実行可能なレポートを作成。"
+
+  "Master": "修士"
+  "Bachelor": "学士"
+  "Computer Science & Information Engineering": "コンピュータサイエンス・情報工学"
+  "Ming Chuan University": "銘傳大学"
+  "Graduate thesis: Yu, H. Y. and Lee, Y. S. 'The Portfolio Analysis of the Key Fans for FB fan pages,' 2019.": "修士論文：Yu, H. Y. and Lee, Y. S. “The Portfolio Analysis of the Key Fans for FB fan pages,” 2019."
+  "Presented the research results twice on behalf of the laboratory and won the third prize once": "研究室を代表して研究成果を2回発表し、うち1回は3位入賞。"
+
+  "Programming & ML Frameworks": "プログラミング / MLフレームワーク"
+  "Generative AI & NLP": "生成AI / NLP"
+  "MLOps & Deployment": "MLOps / デプロイ"
+  "Data Engineering": "データエンジニアリング"
+  "Cloud & Infra": "クラウド / インフラ"
+  "Language": "語学"
+  "Leadership & Communication": "リーダーシップ / コミュニケーション"
+  "Chinese (Native)": "中国語（母語）"
+  "English (Limited Working)": "英語（限定的な実務）"
+  "Team Leadership": "チームリーダーシップ"
+  "Project Management": "プロジェクトマネジメント"
+  "Cross-Team Collaboration": "クロスチーム協働"
+  "Python (expert)": "Python（エキスパート）"
+  "R (basic)": "R（基礎）"
+  "C/C++ (familiar)": "C/C++（使用経験あり）"
+
+  "Best practices for AI Agent project architecture.": "AIエージェント・プロジェクトアーキテクチャのベストプラクティス。"
+  "First experience with Podman containerization technology.": "コンテナ技術Podmanの初体験。"

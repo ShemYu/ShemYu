@@ -1,0 +1,31 @@
+# Deterministic selection for LY Agent / GenAI (ly00493).
+# Indices refer to highlights[] in data/work/*.yaml. No new facts.
+meta:
+  application_id: ly00493
+  axis: Agent / GenAI
+  output_name: ShemYu_Resume_LY_Agent_JP
+
+work:
+  - name: Cookpad
+    highlight_indices: [0, 1, 2]
+  - name: Cathay Financial Holdings
+    highlight_indices: [0, 4, 2]
+  - name: Wisers Information Limited
+    highlight_indices: [1]
+  - name: TripSaaS
+    highlight_indices: [1]
+
+skills:
+  - Generative AI & NLP
+  - Programming & ML Frameworks
+  - MLOps & Deployment
+  - Cloud & Infra
+  - Data Engineering
+  - Language
+
+education: all
+certificates_exclude_substrings:
+  - Cloud Quest
+include_publications: false
+include_projects: false
+skill_keyword_limit: 7

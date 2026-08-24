@@ -1,0 +1,32 @@
+# Deterministic selection for LY AI/ML Platform (ly00161).
+# Indices refer to highlights[] in data/work/*.yaml. No new facts.
+# LiteLLM is not in data/; do not add a LiteLLM serving claim.
+meta:
+  application_id: ly00161
+  axis: AI / ML Platform
+  output_name: ShemYu_Resume_LY_Platform_JP
+
+work:
+  - name: Cookpad
+    highlight_indices: [2, 1]
+  - name: Cathay Financial Holdings
+    highlight_indices: [1, 3, 2, 7]
+  - name: Wisers Information Limited
+    highlight_indices: [0, 1, 2]
+  - name: TripSaaS
+    highlight_indices: [0]
+
+skills:
+  - Cloud & Infra
+  - MLOps & Deployment
+  - Programming & ML Frameworks
+  - Generative AI & NLP
+  - Data Engineering
+  - Language
+
+education: all
+certificates_exclude_substrings:
+  - Cloud Quest
+include_publications: false
+include_projects: false
+skill_keyword_limit: 7
