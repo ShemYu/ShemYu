@@ -36,7 +36,7 @@ class HighlightSelection(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     item_index: StrictInt
-    highlight_indices: list[StrictInt] = Field(default_factory=list, max_length=3)
+    highlight_indices: list[StrictInt] = Field(default_factory=list, max_length=4)
 
     @model_validator(mode="after")
     def validate_indices(self) -> "HighlightSelection":
@@ -204,18 +204,31 @@ def _profile_for_prompt(profile: dict[str, Any]) -> str:
 class OpenAIAgentProvider(AIProvider):
     """Single specialist Agent that selects source profile indices."""
 
-    def __init__(self, model_name: Optional[str] = None):
+    def __init__(self, model_name: Optional[str] = None, language: str = "en"):
         # Read local development configuration only when this opt-in provider
         # is instantiated.  Deterministic generation never imports this module.
         if load_dotenv is not None:
             load_dotenv(override=False)
 
+        from src.i18n import normalize_language
+
+        self.language = normalize_language(language)
         self.model_name = model_name or os.environ.get("OPENAI_MODEL") or DEFAULT_MODEL
         if Agent is None or RunConfig is None or Runner is None:
             raise RuntimeError(
                 "OpenAI tailoring is unavailable; install the 'tailoring' extra"
             )
 
+        shape = (
+            "Select the same compact one-page shape as the English concise resume: "
+            "prefer the three newest roles; typically at most three highlights per "
+            "role (a 3/4/2 split is acceptable when the second role has four "
+            "high-signal bullets); drop awards, MVP titles, redundant cost bullets, "
+            "generic deploy bullets, documentation-only bullets, and older extra roles. "
+            if self.language == "ja"
+            else "Select at most four work entries, three projects, and three bullets "
+            "per selected item. "
+        )
         self.agent = Agent(
             name="Resume tailoring specialist",
             model=self.model_name,
@@ -224,8 +237,8 @@ class OpenAIAgentProvider(AIProvider):
                 "Select relevant source profile entries for the supplied job description. "
                 "Return only zero-based indices in TailoringPlan; never write, rewrite, "
                 "summarize, or invent profile content. Basics and every education entry "
-                "are always retained by the local assembler. Select at most four work "
-                "entries, three projects, and three bullets per selected item."
+                "are always retained by the local assembler. "
+                + shape
             ),
         )
         # Resume/JD contents are sensitive personal data. The model request is

@@ -11,6 +11,8 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel
 
+from src.i18n import HIGHLIGHT_CAPS, as_of_label, format_date as format_date_localized
+from src.i18n import normalize_language, ui_labels
 from src.interfaces import ContentGenerator
 from src.schema import validate_url
 
@@ -92,13 +94,28 @@ def _validate_context_urls(value: Any, path: tuple[str, ...] = ()) -> None:
 class Jinja2Generator(ContentGenerator):
     """Render Jinja templates with strict variables and atomic file writes."""
 
-    def __init__(self, template_dir: str):
+    def __init__(self, template_dir: str, language: str = "en"):
+        self.language = normalize_language(language)
         self.env = Environment(
             loader=FileSystemLoader(template_dir),
             undefined=StrictUndefined,
             autoescape=_autoescape_template,
         )
-        self.env.filters["format_date"] = format_date
+        self.env.filters["format_date"] = self._format_date
+
+    def _format_date(self, value: Any) -> str:
+        return format_date_localized(value, self.language)
+
+    def _render_context(self, context: Mapping[str, Any]) -> dict[str, Any]:
+        """Copy the profile and add language-only keys used by templates."""
+
+        payload = dict(context)
+        payload["language"] = self.language
+        payload["ui"] = ui_labels(self.language)
+        payload["as_of"] = as_of_label(self.language)
+        payload["highlight_caps"] = list(HIGHLIGHT_CAPS[self.language])
+        payload["education_limit"] = 2 if self.language == "ja" else 1
+        return payload
 
     @staticmethod
     def _normalize_outputs(
@@ -141,7 +158,7 @@ class Jinja2Generator(ContentGenerator):
         if template_name in PUBLIC_RESUME_TEMPLATES:
             context = for_public_resume(context)
         template = self.env.get_template(template_name)
-        output = template.render(**context)
+        output = template.render(**self._render_context(context))
         # Match the historical single-file API's whitespace normalization.
         return "\n".join(line.rstrip() for line in output.splitlines())
 

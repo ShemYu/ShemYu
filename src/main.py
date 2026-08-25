@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Sequence
 
 from src.generator import Jinja2Generator
+from src.i18n import DEFAULT_LANGUAGE, localize_profile, normalize_language
 from src.loader import YamlDataLoader
 
 
@@ -33,9 +34,14 @@ def _tailored_outputs(output_name: str) -> Sequence[tuple[str, str]]:
     )
 
 
-def main(target_jd: str | None = None, output_name: str = DEFAULT_TAILORED_NAME) -> None:
+def main(
+    target_jd: str | None = None,
+    output_name: str = DEFAULT_TAILORED_NAME,
+    language: str = DEFAULT_LANGUAGE,
+) -> None:
     data_dir = "data"
     template_dir = "templates"
+    language = normalize_language(language)
 
     if not os.path.isdir(data_dir):
         raise FileNotFoundError(f"{data_dir} directory not found.")
@@ -47,14 +53,24 @@ def main(target_jd: str | None = None, output_name: str = DEFAULT_TAILORED_NAME)
 
     if target_jd:
         jd_text = Path(target_jd).read_text(encoding="utf-8")
-        print(f"Tailoring resume for JD: {target_jd}")
+        print(f"Tailoring resume for JD: {target_jd} (language={language})")
 
         # Keep the deterministic generation path independent from the AI stack.
         from src.ai import OpenAIAgentProvider
 
-        profile = OpenAIAgentProvider().tailor_profile(profile, jd_text)
+        profile = OpenAIAgentProvider(language=language).tailor_profile(profile, jd_text)
 
-    Jinja2Generator(template_dir).generate_batch(profile, outputs)
+    if language != "en":
+        profile = localize_profile(profile, language)
+    Jinja2Generator(template_dir, language=language).generate_batch(profile, outputs)
+
+    if language == "ja":
+        html_path = next(path for template, path in outputs if template == "resume.html.j2")
+        pdf_path = str(Path(html_path).with_suffix(".pdf"))
+        from src.pdf import render_and_assert_one_page
+
+        pages = render_and_assert_one_page(html_path, pdf_path)
+        print(f"One-page check passed: {pdf_path} ({pages} page)")
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -71,6 +87,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_TAILORED_NAME,
         help="Safe basename for tailored files under output/.",
     )
+    parser.add_argument(
+        "--language",
+        default=DEFAULT_LANGUAGE,
+        choices=("en", "ja"),
+        help="Render language. ja emits a one-page 職務経歴書 from the same concise template.",
+    )
     args = parser.parse_args(argv)
     if not args.target_jd and args.output_name != DEFAULT_TAILORED_NAME:
         parser.error("--output-name requires a target_jd file")
@@ -80,7 +102,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 if __name__ == "__main__":
     try:
         cli_args = parse_args()
-        main(cli_args.target_jd, cli_args.output_name)
+        main(cli_args.target_jd, cli_args.output_name, cli_args.language)
     except Exception as error:
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)

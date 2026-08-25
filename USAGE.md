@@ -79,7 +79,15 @@ To label the ignored output files for a particular role:
 uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name cookpad_ai
 ```
 
-This writes `output/tailored/cookpad_ai.md`, `output/tailored/cookpad_ai.html`, and `output/tailored/cookpad_ai_bible.html`. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
+To emit a one-page Japanese 職務経歴書 from the same concise tailor harness (`resume.html.j2`, not a second template pipeline):
+
+```bash
+uv run --locked --extra tailoring python -m src.main target_jd.txt --language ja --output-name ly_platform_jp
+```
+
+`--language` defaults to `en`. The agent still returns only source indices; Japanese section labels and a faithful translation of the selected English strings are applied locally after assemble. Language lines come only from `data/skills/language.yaml` (中国語（母語） / 英語（限定的な実務）). The header may show `余顯漁（Shem Yu）` as a documented display alias; the Chinese characters are not stored in `basics.yaml`. After HTML is written, the job renders a PDF and fails if the page count is not exactly 1.
+
+English tailored files are written as `output/tailored/<name>.md`, `.html`, and `_bible.html`. `--language ja` uses those same paths and also writes a sibling `.pdf` after the one-page check. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
 
 For GitHub Actions, add a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. The workflow fails immediately if that secret is empty. It is read-only and does not commit job-specific resumes. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
 
@@ -93,6 +101,8 @@ Pull-request CI is `unittest` only. The core job runs `tests.test_tailor_eval` w
 uv run --locked python -m unittest tests.test_tailor_eval -v
 uv run --locked python -m src.tailor_eval
 ```
+
+The tailor-eval suite includes an offline `--language ja` check: a hand-written plan is assembled, localized, and rendered through `resume.html.j2`. It asserts Japanese headings, unchanged source numbers, no invented Japanese fluency or LiteLLM, and documents the one-page PDF gate (`assert_one_page`). That path does not call the OpenAI API.
 
 ## Add structured data
 

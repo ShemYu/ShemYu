@@ -5,7 +5,9 @@ from unittest.mock import patch
 
 from src.ai import HighlightSelection, TailoringPlan, assemble_profile
 from src.generator import Jinja2Generator
+from src.i18n import JA_DISPLAY_NAME_ALIAS, localize_profile
 from src.loader import YamlDataLoader
+from src.pdf import PdfRenderError, assert_one_page, count_pdf_pages
 from src.tailor_eval import (
     evaluate_case,
     index_by_name,
@@ -48,13 +50,86 @@ def good_plan(source):
     )
 
 
-def render_real_templates(tailored):
-    gen = Jinja2Generator(str(TEMPLATES_DIR))
+def render_real_templates(tailored, language="en"):
+    gen = Jinja2Generator(str(TEMPLATES_DIR), language=language)
     return {
         "resume.md.j2": gen.render(tailored, "resume.md.j2"),
         "resume.html.j2": gen.render(tailored, "resume.html.j2"),
         "resume_bible.html.j2": gen.render(tailored, "resume_bible.html.j2"),
     }
+
+
+def highlight_index(item, fragment):
+    matches = [i for i, text in enumerate(item["highlights"]) if fragment in text]
+    if len(matches) != 1:
+        raise ValueError(f"highlight {fragment!r} matched {len(matches)} items")
+    return matches[0]
+
+
+def live_platform_plan(source):
+    """Hand-written one-page plan matching the Platform / ly00161 quality bar."""
+
+    cookpad = index_by_name(source["work"], "Cookpad")
+    cathay = index_by_name(source["work"], "Cathay Financial Holdings")
+    wisers = index_by_name(source["work"], "Wisers Information Limited")
+    cookpad_item = source["work"][cookpad]
+    cathay_item = source["work"][cathay]
+    wisers_item = source["work"][wisers]
+    return TailoringPlan(
+        work=[cookpad, cathay, wisers],
+        projects=[],
+        skills=[
+            index_by_name(source["skills"], "Cloud & Infra"),
+            index_by_name(source["skills"], "MLOps & Deployment"),
+            index_by_name(source["skills"], "Programming & ML Frameworks"),
+            index_by_name(source["skills"], "Generative AI & NLP"),
+            index_by_name(source["skills"], "Data Engineering"),
+            index_by_name(source["skills"], "Language"),
+        ],
+        certificates=[
+            index_by_name(source["certificates"], "AWS Certified Machine Learning - Specialty"),
+            index_by_name(source["certificates"], "AWS Certified Cloud Practitioner"),
+        ],
+        work_highlights=[
+            HighlightSelection(
+                item_index=cookpad,
+                highlight_indices=[
+                    highlight_index(cookpad_item, "40% to 95%"),
+                    highlight_index(cookpad_item, "staged multimodal"),
+                    highlight_index(cookpad_item, "versioned, capability-based"),
+                ],
+            ),
+            HighlightSelection(
+                item_index=cathay,
+                highlight_indices=[
+                    highlight_index(cathay_item, "AI Gateway"),
+                    highlight_index(cathay_item, "cloud spend by 40%"),
+                    highlight_index(cathay_item, "2 hours to 15 minutes"),
+                    highlight_index(cathay_item, "0.67 to 0.89"),
+                ],
+            ),
+            HighlightSelection(
+                item_index=wisers,
+                highlight_indices=[
+                    highlight_index(wisers_item, "2 weeks to 3 days"),
+                    highlight_index(wisers_item, "70% internal adoption"),
+                ],
+            ),
+        ],
+    )
+
+
+def _pdf_with_page_count(pages: int) -> bytes:
+    kids = " ".join(f"{index + 3} 0 R" for index in range(pages))
+    objects = [
+        "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj",
+        f"2 0 obj << /Type /Pages /Kids [{kids}] /Count {pages} >> endobj",
+    ]
+    for index in range(pages):
+        objects.append(
+            f"{index + 3} 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >> endobj"
+        )
+    return ("\n".join(["%PDF-1.1", *objects, "trailer << /Root 1 0 R >>", "%%EOF"]) + "\n").encode()
 
 
 def fail_findings(report):
@@ -203,6 +278,78 @@ class TailorEvalTest(unittest.TestCase):
         self.assertEqual(fail_findings(report), [])
         self.assertTrue(report.passed)
         self.assertEqual(report.records[0].quality["role_match"], 1.0)
+
+
+class JapaneseConciseHarnessTest(unittest.TestCase):
+    """Offline --language ja path: assemble, localize, same concise template."""
+
+    def test_handwritten_plan_language_ja_renders_headings_and_source_numbers(self):
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        plan = live_platform_plan(source)
+        tailored = assemble_profile(source, plan)
+        localized = localize_profile(tailored, "ja")
+        html = Jinja2Generator(str(TEMPLATES_DIR), language="ja").render(
+            localized, "resume.html.j2"
+        )
+
+        for heading in ("職務経歴書", "職務要約", "活かせる経験・スキル", "職務経歴", "学歴", "資格"):
+            self.assertIn(heading, html)
+        self.assertIn(JA_DISPLAY_NAME_ALIAS, html)
+        self.assertIn("中国語（母語）", html)
+        self.assertIn("英語（限定的な実務）", html)
+        self.assertIn("40%", html)
+        self.assertIn("95%", html)
+        self.assertIn("60%", html)
+        self.assertIn("40%", html)
+        self.assertIn("0.67", html)
+        self.assertIn("0.89", html)
+        self.assertIn("30+", html)
+        self.assertIn("70%", html)
+        self.assertIn("90%", html)
+        self.assertIn("エージェント", html)
+        self.assertIn("パイプライン", html)
+        self.assertIn("評価", html)
+        self.assertIn("AI Gateway", html)
+        self.assertIn("FinOps", html)
+        self.assertIn("社内エージェント", html)
+        self.assertIn("規制エージェント", html)
+        self.assertIn("テンプレート", html)
+        self.assertIn("ライブラリ", html)
+        self.assertNotIn("Fluent", html)
+        self.assertNotIn("LiteLLM", html)
+        self.assertNotIn("ビジネス日本語", html)
+        self.assertNotIn("TripSaaS", html)
+        self.assertNotIn("67.6", html)
+        self.assertNotIn("Sphinx", html)
+        self.assertNotRegex(html, r"日本語.{0,12}(Fluent|N1)")
+
+    def test_language_ja_keeps_english_numbers_from_source_highlights(self):
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        tailored = assemble_profile(source, live_platform_plan(source))
+        html = Jinja2Generator(str(TEMPLATES_DIR), language="ja").render(
+            localize_profile(tailored, "ja"), "resume.html.j2"
+        )
+        english = " ".join(
+            highlight
+            for item in tailored["work"]
+            for highlight in item["highlights"]
+        )
+        self.assertIn("2 hours to 15 minutes", english)
+        self.assertIn("2週間から3日", html)
+        self.assertIn("15分", html)
+
+    def test_one_page_pdf_gate_is_documented_and_fails_when_not_one_page(self):
+        """After PDF render, the job must fail unless page count == 1.
+
+        CI does not require Chrome. This test documents the gate used by
+        ``src.main`` when ``--language ja`` renders a PDF: ``assert_one_page``
+        accepts a one-page PDF and raises on any other count.
+        """
+
+        self.assertEqual(count_pdf_pages(_pdf_with_page_count(1)), 1)
+        self.assertEqual(assert_one_page(_pdf_with_page_count(1)), 1)
+        with self.assertRaisesRegex(PdfRenderError, "exactly 1 page"):
+            assert_one_page(_pdf_with_page_count(2))
 
 
 if __name__ == "__main__":
