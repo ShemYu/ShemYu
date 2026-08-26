@@ -114,6 +114,18 @@ class TailoringPlanTest(unittest.TestCase):
             tailored["work"][0]["highlights"], ["First fact", "Second fact", "Third fact"]
         )
 
+    def test_plan_may_select_four_highlights_for_second_role_shape(self):
+        profile = _profile()
+        profile["work"][0]["highlights"] = ["A", "B", "C", "D"]
+        tailored = assemble_profile(
+            profile,
+            TailoringPlan(
+                work=[0],
+                work_highlights=[HighlightSelection(item_index=0, highlight_indices=[0, 1, 2, 3])],
+            ),
+        )
+        self.assertEqual(tailored["work"][0]["highlights"], ["A", "B", "C", "D"])
+
     def test_highlight_selection_on_unselected_item_fails(self):
         with self.assertRaises(ValueError):
             assemble_profile(
@@ -216,6 +228,16 @@ class OpenAIAgentProviderTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 provider.tailor_profile(empty_profile, "ML platform engineer")
             run_sync.assert_not_called()
+
+    def test_japanese_language_keeps_index_only_instructions_and_concise_shape(self):
+        provider = self._provider()
+        ja_provider = OpenAIAgentProvider(language="ja")
+        self.assertIn("Return only zero-based indices", ja_provider.agent.instructions)
+        self.assertIn("never write, rewrite", ja_provider.agent.instructions)
+        self.assertIn("three newest roles", ja_provider.agent.instructions)
+        self.assertIn("3/4/2", ja_provider.agent.instructions)
+        self.assertNotIn("日本語", ja_provider.agent.instructions)
+        self.assertIn("three bullets per selected item", provider.agent.instructions)
 
 
 if __name__ == "__main__":
