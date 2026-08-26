@@ -396,7 +396,33 @@
 
                     <li>[User confirmed] Flaky RCA, not outbound: 73 flaky misses; 64% originated as incomplete candidate hypotheses. Knowledge coverage swing +/-8.5 pp to +/-3.2 pp (62% reduction). Misses were also traced to merge and extraction losses.</li>
 
-                    <li>[Do not claim outbound] 67.6% to 83.0%, 15-case / 103-unit, 56-case / 9 min, 73 flaky misses, 64%, +/-8.5 to +/-3.2, 62% swing, Moment team name, 20 users, chef-grounded as an internal label if it would leak.</li>
+                    <li>[User confirmed 2026-08-26] Name lock: the system is Guideline grounder. Do not write Guideline grounding or Galactic Rounder (those were typos).</li>
+
+                    <li>[User confirmed 2026-08-26] Guideline grounder v1: Shem only. No collaboration. Staged ground-then-assess path (Detect → Plan → Select → Observe → Correct). Source: moment-coach-ai spec 20260424_feat_guideline-grounding-action.md (#299). Do not write latency (~2–4s) as a win.</li>
+
+                    <li>[User confirmed 2026-08-26] Guideline grounder v2: ObservationAgent loop (skill-routed observation). Collaboration with Sonan. Sonan tried to make it more detailed and it took longer. Owner says v2 may not have shipped to production; record as attempted / possibly not online. Do not claim v2 is in production. Do not invent Sonan&#39;s title or what he owned beyond this. Source: 20260608_feat_guideline-grounding-v2-observation-agent.md.</li>
+
+                    <li>[User confirmed 2026-08-26] Guideline grounder design (v1, plus the v2 attempt with Sonan) later influenced the final v5 investigator. Influence only. Do not write that Shem or Sonan implemented, shipped, or owned v5 investigator. Do not write that v2 shipped. Do not write that v5 investigator is the same system as Guideline grounder. Do not invent extra causality.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, architecture: video embeddings + semantic search + Visual Explorer (multi-turn frame locator, structured LocatedFrame; internal tool). Shem PRs in the #213/#217/#220/#222/#202/#239 cluster.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, architecture: Gemini Embedding 2 migration to 3072-d with model-scoped cache. Do not claim a retrieval-accuracy lift (none sourced).</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, architecture: same-dish / multi-video selection — when a cook is split across videos, observe each, select same-dish footage, merge for generation v3 (Shem #606).</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, architecture: observed cooking audit — extra video-fact audit stage beyond the public four (facts → ingredient defs → ingredient state → issues). Shem 15b56449 (#666). Evidence only until the production contract is read; no metric.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, eval design: canonical hash-locked 15-case make eval pipeline + viewer. Do not publish the README example 77/103 (74.8%) — run-varying / unpublished.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, eval design: Assessment v5 + frozen-input LLM-as-judge suite + failure taxonomy. Do not publish +0.79 / 71.4% / 50% misleading.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, eval design: delivery / FP metric versions v1_legacy_pool → v2_polarity_claim → v3_canonical_claim. Do not put v3 latest 23/61 or 27/48 on the one-pager.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, eval design: later stricter ruler — parent DR units decomposed into VU / DU / LVO children (109-contract family). This is why 2026-08-18 dish 19/61 is a different metric, not a regression of 53/56. Do not write 40.4% / 31.1% as product quality.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, eval design: human-equivalence / human-standard gate is a conformance suite, not a production accuracy claim.</li>
+
+                    <li>[Do not claim outbound] 67.6% to 83.0%, 15-case / 103-unit, 56-case / 9 min, 73 flaky misses, 64%, +/-8.5 to +/-3.2, 62% swing, Moment team name, 20 users, chef-grounded as an internal label if it would leak, Line S, learner names, hallucination 46%→21%, Galactic Rounder, Guideline grounding (wrong name), Guideline grounder v2 in production, Shem or Sonan implemented/shipped/owned v5 investigator, v5 investigator is the same system as Guideline grounder, latency (~2–4s) as a win, retrieval-accuracy lift from Gemini Embedding 2, README 77/103 (74.8%), +0.79 / 71.4% / 50% misleading, 40.4% / 31.1% as product quality, v3 latest 23/61 or 27/48 on the one-pager.</li>
 
                 </ul>
 
