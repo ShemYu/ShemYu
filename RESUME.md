@@ -21,11 +21,11 @@ Building AI that makes everyday life more joyful.
 
 
 
-- Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised expert-grounded coverage from 40% to 95%.
+- Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.
+- Coverage 40% → 95% on a versioned eval set; isolate failures to observation / ingredient-state / issue-detection.
 
-- Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages.
+- Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 
 
 
@@ -34,7 +34,7 @@ Building AI that makes everyday life more joyful.
 _2022-09 - 2026-01_
 
 
-Led a 4-person MLE team, overseeing AI project deployment and departmental internal agent development.
+Led 4 full-time reports (7 including contractors), overseeing AI project deployment and departmental internal agent development.
 
 
 
@@ -47,7 +47,13 @@ Led a 4-person MLE team, overseeing AI project deployment and departmental inter
 
 - Reduced overall cloud spend by 40% through FinOps practices.
 
-- Improved regulatory Agent F1 from 0.67 to 0.89.
+- With a data scientist, mapped the client's regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.
+
+- Decoupled the DS-built PoC into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates' finest grain is one day.
+
+- Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.
+
+- Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.
 
 - Won CFH Cloud Creative Award 2024 (1st place).
 
