@@ -12,7 +12,7 @@ Treat the canonical YAML as the publication layer, not as a place to invent or i
 - Do not join incompatible cohorts, single runs, multi-run unions, evaluator versions, or release states into one improvement curve.
 - Do not translate an internal benchmark or production deployment into customer adoption, live-traffic impact, or an online A/B result without matching evidence.
 - Leave unknown impact numbers out of public YAML until the user can substantiate them; never estimate a resume metric merely to complete a bullet.
-- Tailoring may select, shorten, and reorder source facts for a job description. It must not strengthen causality, change scope, or add facts absent from the canonical data.
+- Tailoring may select roles and compose at most three resume-standard sentences per selected role from that role's publishable facts. It must not strengthen causality, change scope, or add facts absent from the canonical data. See [`RESUME_STANDARD.md`](RESUME_STANDARD.md).
 
 The full or Bible output may remain detailed. Concise and job-specific outputs are downstream selections from the same evidence, not separate versions of truth.
 
@@ -47,7 +47,7 @@ The command updates these files only after every template renders successfully:
 - `output/resume.html`: concise A4 HTML resume
 - `output/resume_bible.html`: full HTML resume
 
-The concise HTML includes the three newest roles, up to three highlights per role, and up to seven keywords per technical skill group. Use the Bible HTML or Markdown resume when you need the complete source-backed history.
+The concise HTML includes the three newest roles, up to three highlights per role, and up to seven keywords per technical skill group. This no-JD path is **template clip**: it does not call a model and does not compose new sentences. Use the Bible HTML or Markdown resume when you need the complete source-backed history.
 
 Commit the YAML changes and all four canonical files together. The main GitHub Actions workflow validates pull requests without write access. After a push to `main`, it regenerates them as a drift backstop in a read-only job; only a separate commit job can write a missing correction.
 
@@ -85,20 +85,42 @@ To emit a one-page Japanese 職務経歴書 from the same concise tailor harness
 uv run --locked --extra tailoring python -m src.main target_jd.txt --language ja --output-name ly_platform_jp
 ```
 
-`--language` defaults to `en`. The agent still returns only source indices; Japanese section labels and a faithful translation of the selected English strings are applied locally after assemble. Language lines come only from `data/skills/language.yaml` (中国語（母語） / 英語（限定的な実務）). The header may show `余顯漁（Shem Yu）` as a documented display alias; the Chinese characters are not stored in `basics.yaml`. After HTML is written, the job renders a PDF and fails if the page count is not exactly 1.
+`--language` defaults to `en`. The agent selects roles / projects / skills / certs / pubs by index and **composes** at most three grounded bullets per selected work or project role. Compose in the target language (`en` or `ja`), then `src/i18n.py` translates remaining assembled strings (section labels, titles, mapped public highlights). Language lines come only from `data/skills/language.yaml` (中国語（母語） / 英語（限定的な実務）). The header may show `余顯漁（Shem Yu）` as a documented display alias; the Chinese characters are not stored in `basics.yaml`. After HTML is written, the job renders a PDF and **fails if the page count is not exactly 1**.
 
-English tailored files are written as `output/tailored/<name>.md`, `.html`, and `_bible.html`. `--language ja` uses those same paths and also writes a sibling `.pdf` after the one-page check. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts. The OpenAI agent returns only a structured selection of source indices; the local assembler copies the selected facts and bullet points from the validated profile. It cannot rewrite or add career facts.
+A local grounding checker hard-fails the run if a composed bullet invents a number, product/layer name (Unity Catalog, Delta, Spark / TB / QPS), F1→adoption causality, or a do-not-claim internal metric (Cookpad 67.6→83, flaky, 20 users).
+
+English tailored files are written as `output/tailored/<name>.md`, `.html`, and `_bible.html`. `--language ja` uses those same paths and also writes a sibling `.pdf` after the one-page check. Keeping tailored files in their own ignored directory prevents a job-specific basename from overwriting canonical artifacts.
+
+## Review composed sentences locally
+
+Cloud / CI does not need `OPENAI_API_KEY`. Grounding and tailor-eval compose cases are offline.
+
+To review **sentence taste** with your own key:
+
+```bash
+uv run --locked --extra tailoring python -m src.main target_jd.txt --output-name review_en
+uv run --locked --extra tailoring python -m src.main target_jd.txt --language ja --output-name review_ja
+```
+
+Optional live-model smoke (skipped when the key is missing; do not add this to CI):
+
+```bash
+# Requires OPENAI_API_KEY in .env
+uv run --locked --extra tailoring python -m src.main target_jd.txt --language en --output-name live_smoke
+```
+
+Iterate `RESUME_STANDARD.md` and re-run. Do not edit `data/` to invent experience.
 
 For GitHub Actions, add a repository Actions secret named `OPENAI_API_KEY`, then run **Tailor Resume with OpenAI** manually and download its artifact. The workflow fails immediately if that secret is empty. It is read-only and does not commit job-specific resumes. The job description is a plain workflow input, so use the local command instead when a job description is confidential.
 
 ## Check tailoring faithfulness (offline)
 
-Pull-request CI is `unittest` only. The core job runs `tests.test_tailor_eval` with no API keys and no `tailoring` extra. Those tests assemble a hand-written plan, render the real templates, and scan public MD/HTML for source-faithful strings.
+Pull-request CI is `unittest` only. The core job runs `tests.test_tailor_eval` with no API keys and no `tailoring` extra. Those tests assemble a hand-written pick or compose plan, render the real templates, and scan public MD/HTML for grounded / source-faithful strings.
 
 `python -m src.tailor_eval` is validate-only: it loads case YAML and resolves `must_*` / `preferred_*` names. It does not assemble, render, or call a provider.
 
 ```bash
-uv run --locked python -m unittest tests.test_tailor_eval -v
+uv run --locked python -m unittest tests.test_tailor_eval tests.test_grounding -v
 uv run --locked python -m src.tailor_eval
 ```
 

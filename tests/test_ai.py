@@ -7,12 +7,15 @@ from unittest.mock import patch
 from pydantic import ValidationError
 
 from src.ai import (
+    GroundedTailoringPlan,
     HighlightSelection,
     OpenAIAgentProvider,
+    RoleBullets,
     TailoringPlan,
     assemble_profile,
 )
 from src.generator import for_public_resume
+from src.grounding import GroundingErrorList
 from src.schema import profile_dict
 
 
@@ -170,10 +173,11 @@ class OpenAIAgentProviderTest(unittest.TestCase):
 
     def test_mock_runner_uses_structured_plan_and_model_default(self):
         provider = self._provider(
-            TailoringPlan(
+            GroundedTailoringPlan(
                 work=[0],
                 projects=[0],
-                work_highlights=[HighlightSelection(item_index=0, highlight_indices=[0])],
+                work_bullets=[RoleBullets(item_index=0, bullets=["First fact"])],
+                project_bullets=[RoleBullets(item_index=0, bullets=["Project fact"])],
             )
         )
         result = provider.tailor_profile(_profile(), "ML platform engineer")
@@ -186,7 +190,13 @@ class OpenAIAgentProviderTest(unittest.TestCase):
 
     def test_runner_prompt_contains_only_selectable_profile_sections(self):
         provider = self._provider(
-            TailoringPlan(work=[0], projects=[0], skills=[0])
+            GroundedTailoringPlan(
+                work=[0],
+                projects=[0],
+                skills=[0],
+                work_bullets=[RoleBullets(item_index=0, bullets=["First fact"])],
+                project_bullets=[RoleBullets(item_index=0, bullets=["Project fact"])],
+            )
         )
         run_sync = self.runner_mock
 
@@ -198,6 +208,8 @@ class OpenAIAgentProviderTest(unittest.TestCase):
         self.assertIn("Python", prompt)
         self.assertIn("Source Certificate", prompt)
         self.assertIn("Source Publication", prompt)
+        self.assertIn("evidence_publishable", prompt)
+        self.assertIn("evidence_constraints", prompt)
         self.assertNotIn("source@example.com", prompt)
         self.assertNotIn("+886 900 000 000", prompt)
         self.assertNotIn("Source University", prompt)
@@ -229,15 +241,32 @@ class OpenAIAgentProviderTest(unittest.TestCase):
                 provider.tailor_profile(empty_profile, "ML platform engineer")
             run_sync.assert_not_called()
 
-    def test_japanese_language_keeps_index_only_instructions_and_concise_shape(self):
+    def test_japanese_language_composes_then_keeps_standard_and_shape(self):
         provider = self._provider()
         ja_provider = OpenAIAgentProvider(language="ja")
-        self.assertIn("Return only zero-based indices", ja_provider.agent.instructions)
-        self.assertIn("never write, rewrite", ja_provider.agent.instructions)
+        self.assertIn("compose at most three", ja_provider.agent.instructions)
+        self.assertIn("Do not invent", ja_provider.agent.instructions)
+        self.assertIn("Write each composed bullet in Japanese", ja_provider.agent.instructions)
         self.assertIn("three newest roles", ja_provider.agent.instructions)
-        self.assertIn("3/4/2", ja_provider.agent.instructions)
-        self.assertNotIn("日本語", ja_provider.agent.instructions)
-        self.assertIn("three bullets per selected item", provider.agent.instructions)
+        self.assertIn("Unity Catalog", ja_provider.agent.instructions)
+        self.assertNotIn("日本語 Fluent", ja_provider.agent.instructions)
+        self.assertIn("Write each composed bullet in English", provider.agent.instructions)
+        self.assertIn("RESUME STANDARD", provider.agent.instructions)
+
+    def test_invented_composed_bullet_hard_fails_after_runner(self):
+        provider = self._provider(
+            GroundedTailoringPlan(
+                work=[0],
+                work_bullets=[
+                    RoleBullets(
+                        item_index=0,
+                        bullets=["Scaled First Company search with Spark to 8 TB at 400 QPS."],
+                    )
+                ],
+            )
+        )
+        with self.assertRaises(GroundingErrorList):
+            provider.tailor_profile(_profile(), "ML platform engineer")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,30 @@
+id: cathay-compose-regulatory
+profile_dir: data
+jd: |
+  Productionize a regulatory RAG / compliance agent on Databricks.
+  We care about measured F1, retry reliability, and production readiness.
+  A discovery workshop write-up is less important than the production system.
+must_include_work:
+  - Cathay Financial Holdings
+must_exclude_work:
+  - Institute for Information Industry, III
+must_include_projects: []
+must_exclude_projects: []
+must_include_composed_fragments:
+  - "0.67"
+  - "0.89"
+  - "3 retries"
+  - "Databricks"
+must_exclude_composed_fragments:
+  - "Unity Catalog"
+  - "Spark"
+  - "led to adoption"
+  - "67.6"
+forbidden_tokens:
+  - "67.6%"
+  - "Unity Catalog"
+  - "led to adoption"
+  - "Moment team"
+preferred_work:
+  - Cathay Financial Holdings
+min_keyword_coverage: 0.10

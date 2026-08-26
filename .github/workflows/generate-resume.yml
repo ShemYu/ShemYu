@@ -53,7 +53,7 @@ jobs:
         run: >-
           uv run --locked python -m unittest -v
           tests.test_generator tests.test_loader tests.test_main tests.test_schema
-          tests.test_tailor_eval
+          tests.test_tailor_eval tests.test_grounding
 
       - name: Verify package build
         run: uv build
