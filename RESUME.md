@@ -23,7 +23,7 @@ Building AI that makes everyday life more joyful.
 
 - Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Coverage 40% → 95% on a versioned eval set; isolate failures to observation / ingredient-state / issue-detection.
+- Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.
 
 - Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 
