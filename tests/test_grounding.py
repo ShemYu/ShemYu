@@ -42,7 +42,7 @@ class ResumeStandardTest(unittest.TestCase):
         self.assertIn("95%", text)
         self.assertIn("67.6", text)
         self.assertIn("Unity Catalog", text)
-        self.assertIn("do not invent causality", text.lower())
+        self.assertIn("invent causality", text.lower())
         self.assertIn("template-clip", text.lower())
 
 

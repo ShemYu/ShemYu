@@ -249,7 +249,7 @@ class OpenAIAgentProviderTest(unittest.TestCase):
         self.assertIn("Write each composed bullet in Japanese", ja_provider.agent.instructions)
         self.assertIn("three newest roles", ja_provider.agent.instructions)
         self.assertIn("Unity Catalog", ja_provider.agent.instructions)
-        self.assertNotIn("日本語 Fluent", ja_provider.agent.instructions)
+        self.assertIn("Do not add 日本語 Fluent", ja_provider.agent.instructions)
         self.assertIn("Write each composed bullet in English", provider.agent.instructions)
         self.assertIn("RESUME STANDARD", provider.agent.instructions)
 
