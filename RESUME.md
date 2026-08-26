@@ -34,7 +34,7 @@ Building AI that makes everyday life more joyful.
 _2022-09 - 2026-01_
 
 
-Led a 4-person MLE team, overseeing AI project deployment and departmental internal agent development.
+Led 4 full-time reports (7 including contractors), overseeing AI project deployment and departmental internal agent development.
 
 
 
@@ -47,7 +47,11 @@ Led a 4-person MLE team, overseeing AI project deployment and departmental inter
 
 - Reduced overall cloud spend by 40% through FinOps practices.
 
-- Improved regulatory Agent F1 from 0.67 to 0.89.
+- With a data scientist, mapped the client's regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.
+
+- Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.
+
+- Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.
 
 - Won CFH Cloud Creative Award 2024 (1st place).
 

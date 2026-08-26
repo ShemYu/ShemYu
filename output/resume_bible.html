@@ -410,7 +410,11 @@
 
                     <li>Reduced overall cloud spend by 40% through FinOps practices.</li>
 
-                    <li>Improved regulatory Agent F1 from 0.67 to 0.89.</li>
+                    <li>With a data scientist, mapped the client&#39;s regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.</li>
+
+                    <li>Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.</li>
+
+                    <li>Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.</li>
 
                     <li>Won CFH Cloud Creative Award 2024 (1st place).</li>
 
@@ -420,6 +424,37 @@
 
                 </ul>
 
+
+                <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
+                <ul>
+
+                    <li>[User confirmed 2026-08-26] Team size ruling: 4 full-time reports, 7 including contractors. Summary and outbound use 4 full-time (7 including contractors).</li>
+
+                    <li>[Do not claim outbound] coordinated 10 cross-functional contributors — user does not know where 10 came from.</li>
+
+                    <li>[User confirmed 2026-08-26] Discovery team was DS + Shem (MLE). They went to the client, mapped the workflow, ran a workshop so the BU could show how they do regulatory comparison, and chose that as the pilot.</li>
+
+                    <li>[User confirmed 2026-08-26] Outbound may say legal and/or compliance participated in that workshop.</li>
+
+                    <li>[User confirmed 2026-08-26] DS built the PoC. Shem did production readiness: rewrite as a Databricks deployment workflow, and store related data on the Databricks data layer per internal access rules. Do not write that Shem built the PoC.</li>
+
+                    <li>[Do not invent] Shem forgot the data-layer name. Do not write Unity Catalog, Delta, or a table name.</li>
+
+                    <li>[User confirmed 2026-08-26] Cathay regulatory Agent F1 0.67 to 0.89 and RKB adopted by 2 of 5 subsidiaries describe the same regulatory system. Outbound may merge into one sentence. Do not invent extra causality (e.g. F1 caused adoption).</li>
+
+                    <li>[User confirmed 2026-08-26] Regulatory-pipeline reliability (not Cookpad): per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day. This is the public/simplified wording.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only: many retries came from Bedrock quota.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only: early peak — external/Taiwan regulation updates (end of a legislative session) triggered the analysis flow; high parallelism hit Bedrock quota.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only: observed failure rate peaked at 15%; the system digested that peak. This is an observed peak, not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: consultant advice to collect usage before asking AWS/client for a quota increase.</li>
+
+                    <li>[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS.</li>
+
+                </ul>
 
             </div>
 
