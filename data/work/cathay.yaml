@@ -10,6 +10,7 @@ highlights:
   - Implemented FinOps agent, achieving 30% GPU cost reduction.
   - Reduced overall cloud spend by 40% through FinOps practices.
   - "With a data scientist, mapped the client's regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules."
+  - "Decoupled the DS-built PoC into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates' finest grain is one day."
   - "Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries."
   - "Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day."
   # source: 2025-09 interview deck
@@ -23,6 +24,8 @@ evidence:
   - "[User confirmed 2026-08-26] Discovery team was DS + Shem (MLE). They went to the client, mapped the workflow, ran a workshop so the BU could show how they do regulatory comparison, and chose that as the pilot."
   - "[User confirmed 2026-08-26] Outbound may say legal and/or compliance participated in that workshop."
   - "[User confirmed 2026-08-26] DS built the PoC. Shem did production readiness: rewrite as a Databricks deployment workflow, and store related data on the Databricks data layer per internal access rules. Do not write that Shem built the PoC."
+  - "[User confirmed 2026-08-26] Shem decoupled the PoC workflow into external-regulation processing, internal-regulation processing, and comparison (外規 / 內規 / 比對). All three are daily-triggered because regulation updates' finest grain is one day. Public. Shem decoupled / productionized; DS built the PoC."
+  - "[User confirmed 2026-08-26] Evidence only, not outbound: problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate (e.g. 80% in retrieval) on public highlights. Do not write isolate-failures-to-retrieval-vs-generation as a highlight."
   - "[Do not invent] Shem forgot the data-layer name. Do not write Unity Catalog, Delta, or a table name."
   - "[User confirmed 2026-08-26] Cathay regulatory Agent F1 0.67 to 0.89 and RKB adopted by 2 of 5 subsidiaries describe the same regulatory system. Outbound may merge into one sentence. Do not invent extra causality (e.g. F1 caused adoption)."
   - "[User confirmed 2026-08-26] Regulatory-pipeline reliability (not Cookpad): per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day. This is the public/simplified wording."
@@ -30,4 +33,4 @@ evidence:
   - "[User confirmed 2026-08-26] Evidence only: early peak — external/Taiwan regulation updates (end of a legislative session) triggered the analysis flow; high parallelism hit Bedrock quota."
   - "[User confirmed 2026-08-26] Evidence only: observed failure rate peaked at 15%; the system digested that peak. This is an observed peak, not a configured stop-the-batch-if-over-X% threshold, gate, or SLO."
   - "[User confirmed 2026-08-26] Evidence only, not outbound: consultant advice to collect usage before asking AWS/client for a quota increase."
-  - "[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS."
+  - "[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS. Auto-labeling / 4-stage / retrieval miss-rate on public highlights."

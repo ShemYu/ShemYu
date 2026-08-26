@@ -412,6 +412,8 @@
 
                     <li>With a data scientist, mapped the client&#39;s regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.</li>
 
+                    <li>Decoupled the DS-built PoC into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates&#39; finest grain is one day.</li>
+
                     <li>Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.</li>
 
                     <li>Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.</li>
@@ -438,6 +440,10 @@
 
                     <li>[User confirmed 2026-08-26] DS built the PoC. Shem did production readiness: rewrite as a Databricks deployment workflow, and store related data on the Databricks data layer per internal access rules. Do not write that Shem built the PoC.</li>
 
+                    <li>[User confirmed 2026-08-26] Shem decoupled the PoC workflow into external-regulation processing, internal-regulation processing, and comparison (外規 / 內規 / 比對). All three are daily-triggered because regulation updates&#39; finest grain is one day. Public. Shem decoupled / productionized; DS built the PoC.</li>
+
+                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate (e.g. 80% in retrieval) on public highlights. Do not write isolate-failures-to-retrieval-vs-generation as a highlight.</li>
+
                     <li>[Do not invent] Shem forgot the data-layer name. Do not write Unity Catalog, Delta, or a table name.</li>
 
                     <li>[User confirmed 2026-08-26] Cathay regulatory Agent F1 0.67 to 0.89 and RKB adopted by 2 of 5 subsidiaries describe the same regulatory system. Outbound may merge into one sentence. Do not invent extra causality (e.g. F1 caused adoption).</li>
@@ -452,7 +458,7 @@
 
                     <li>[User confirmed 2026-08-26] Evidence only, not outbound: consultant advice to collect usage before asking AWS/client for a quota increase.</li>
 
-                    <li>[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS.</li>
+                    <li>[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS. Auto-labeling / 4-stage / retrieval miss-rate on public highlights.</li>
 
                 </ul>
 
