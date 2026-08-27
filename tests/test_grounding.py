@@ -15,6 +15,7 @@ from src.grounding import (
     GroundingErrorList,
     check_profile,
     check_role_bullets,
+    extract_groundable_terms,
     extract_proper_nouns,
     is_constraint_evidence,
 )
@@ -32,6 +33,11 @@ def live_profile():
 def live_work(name: str):
     profile = live_profile()
     return profile["work"][index_by_name(profile["work"], name)]
+
+
+def live_project(name: str):
+    profile = live_profile()
+    return profile["projects"][index_by_name(profile["projects"], name)]
 
 
 class ResumeStandardTest(unittest.TestCase):
@@ -94,6 +100,14 @@ class ProperNounExtractionTest(unittest.TestCase):
         self.assertIn("TypeScript", names)
         self.assertIn("LiteLLM", names)
 
+    def test_product_name_ending_in_ing_is_still_extracted(self):
+        self.assertIn("Spring", extract_proper_nouns("Built Spring."))
+        self.assertNotIn("Built", extract_proper_nouns("Built Spring."))
+
+    def test_generic_tech_is_groundable_but_not_a_proper_name(self):
+        self.assertNotIn("RAG", extract_proper_nouns("Built a RAG pipeline."))
+        self.assertEqual(extract_groundable_terms("Built a RAG pipeline."), ["RAG"])
+
 
 class LiveRoleGroundingTest(unittest.TestCase):
     def test_designed_genai_and_productionized_yaml_facts_are_not_ungrounded_names(self):
@@ -125,6 +139,68 @@ class LiveRoleGroundingTest(unittest.TestCase):
                 for item in name_errors
             ),
             name_errors,
+        )
+
+    def test_unbacked_spring_fails_ungrounded_name(self):
+        cathay = live_work("Cathay Financial Holdings")
+        errors = check_role_bullets(cathay, ["Built Spring."])
+        self.assertTrue(
+            any(
+                item.code == "ungrounded_name" and "Spring" in item.message
+                for item in errors
+            ),
+            errors,
+        )
+
+    def test_unbacked_generic_tech_still_fails_grounding(self):
+        cathay = live_work("Cathay Financial Holdings")
+        rag_errors = check_role_bullets(
+            cathay, ["Built a RAG pipeline serving production traffic."]
+        )
+        self.assertTrue(
+            any(
+                item.code == "ungrounded_tech" and "RAG" in item.message
+                for item in rag_errors
+            ),
+            rag_errors,
+        )
+        llm_errors = check_role_bullets(cathay, ["Built an LLM evaluation harness."])
+        self.assertTrue(
+            any(
+                item.code == "ungrounded_tech" and "LLM" in item.message
+                for item in llm_errors
+            ),
+            llm_errors,
+        )
+        rkb = live_project("Regulatory Knowledge Base (RKB)")
+        gpu_errors = check_role_bullets(rkb, ["Built a GPU inference pool."])
+        self.assertTrue(
+            any(
+                item.code == "ungrounded_tech" and "GPU" in item.message
+                for item in gpu_errors
+            ),
+            gpu_errors,
+        )
+
+    def test_yaml_backed_generic_tech_still_passes(self):
+        cathay = live_work("Cathay Financial Holdings")
+        self.assertEqual(
+            check_role_bullets(
+                cathay,
+                [
+                    "Designed GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.",
+                    "Implemented FinOps agent, achieving 30% GPU cost reduction.",
+                ],
+            ),
+            [],
+        )
+        rkb = live_project("Regulatory Knowledge Base (RKB)")
+        rag_errors = check_role_bullets(
+            rkb, ["Designed ingestion pipelines using enterprise-grade RAG pipelines."]
+        )
+        self.assertEqual(
+            [item.code for item in rag_errors if item.code == "ungrounded_tech"],
+            [],
         )
 
     def test_cathay_grounded_f1_and_retry_pass(self):

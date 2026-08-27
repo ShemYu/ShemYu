@@ -35,102 +35,167 @@ _PROPER_SPAN = re.compile(
 )
 _ACRONYM = re.compile(r"\b[A-Z]{2,}[A-Z0-9]*\b|\bF1\b")
 _SPAN_TOKEN = re.compile(r"[A-Za-z0-9]+")
-# Designed, Productionized, Shipped — not Spark, TypeScript, LiteLLM.
-_VERB_LIKE = re.compile(r"^[A-Z][a-z]+(?:ized|ised|ed|ing)$")
+_TECH_TOKEN = re.compile(r"\b[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*\b")
 
-# Sentence-initial verbs, irregular resume verbs, and generic English that
-# are not product / people / system names. Verb-like -ed/-ing/-ized tokens
-# are also skipped even when they are not listed here.
+# Explicit resume-verb / function-word allowlist only. Do not infer verbs
+# from -ed/-ing/-ized suffixes: Spring, Booking, Engineering, Monitoring,
+# and Processing must stay extractable product names.
 _NAME_STOP = frozenset(
     {
         "A",
+        "Accelerated",
+        "Achieved",
         "After",
         "All",
         "An",
+        "Analyzed",
         "And",
         "Applied",
         "Architected",
         "Assisted",
+        "Authored",
+        "Automated",
         "Began",
+        "Benchmarked",
         "Built",
         "Capability",
         "Chose",
+        "Collaborated",
+        "Compiled",
+        "Completed",
+        "Conducted",
+        "Configured",
+        "Contributed",
         "Coordinated",
         "Coverage",
         "Created",
         "Decoupled",
+        "Defined",
         "Delivered",
+        "Deployed",
         "Designed",
         "Developed",
+        "Diagnosed",
         "Did",
+        "Directed",
         "Do",
+        "Documented",
         "Drove",
+        "Enabled",
+        "Enhanced",
+        "Established",
+        "Evaluated",
+        "Executed",
+        "Expanded",
+        "Explored",
         "Extracted",
         "Facilitated",
         "For",
         "Found",
         "From",
         "Gave",
+        "Generated",
         "Grew",
+        "Guided",
+        "Hardened",
         "Held",
+        "Hired",
         "I",
+        "Identified",
         "Implemented",
         "Improved",
         "In",
+        "Initiated",
+        "Instrumented",
         "Integrated",
         "Internal",
+        "Introduced",
         "Isolated",
         "Iterated",
         "Kept",
+        "Launched",
         "Led",
+        "Leveraged",
         "Made",
         "Maintained",
+        "Managed",
         "Mapped",
         "Max",
+        "Measured",
+        "Mentored",
         "Met",
+        "Migrated",
+        "Modernized",
+        "Monitored",
         "My",
         "Named",
         "Not",
         "Operated",
+        "Optimized",
         "Or",
+        "Orchestrated",
+        "Organized",
         "Our",
+        "Overhauled",
         "Owned",
+        "Partnered",
         "Per",
+        "Piloted",
+        "Planned",
+        "Presented",
         "Previous",
         "Prior",
         "Productionized",
+        "Promoted",
+        "Prototyped",
         "Public",
+        "Published",
         "Put",
         "Raised",
         "Ran",
+        "Rebuilt",
+        "Recommended",
         "Reduced",
+        "Refactored",
         "Regulatory",
+        "Replaced",
+        "Resolved",
+        "Reviewed",
+        "Rewrote",
         "Role",
         "Same",
+        "Scaled",
         "Selected",
         "Set",
         "Shipped",
         "Sold",
         "Solutions",
         "Spoke",
+        "Standardized",
         "Stored",
+        "Streamlined",
         "Supported",
         "Taught",
         "The",
         "This",
         "That",
         "Took",
+        "Transformed",
+        "Tuned",
+        "Upgraded",
         "Using",
         "User",
+        "Validated",
         "With",
         "Won",
         "Wrote",
     }
 )
 
-# Generic tech terms: not treated as proper names. Product layers (Spark,
-# TypeScript, LiteLLM, Unity Catalog) stay names and still hard-fail.
-_GENERIC_TECH = frozenset(
+# Generic tech is not a product entity for proper-name extraction, but it
+# is still inventory: a bullet may use a term only when that role's
+# publishable source already contains it.
+_GROUNDED_TECH_TERMS = frozenset(
     {
         "ai",
         "api",
@@ -144,6 +209,7 @@ _GENERIC_TECH = frozenset(
         "rag",
     }
 )
+_GENERIC_TECH = _GROUNDED_TECH_TERMS
 
 # Product / metric names that models commonly invent for this profile.
 INVENTED_PRODUCTS = (
@@ -251,14 +317,46 @@ def extract_numbers(text: str) -> list[str]:
     return _NUMBER.findall(text or "")
 
 
+def _tech_key(token: str) -> str:
+    return token.lower().replace("-", "")
+
+
 def _is_skipped_name_token(token: str) -> bool:
-    """Return True for ordinary English / generic tech, not a proper name."""
+    """Return True for allowlisted verbs / function words / generic tech."""
 
     if not token or token in _NAME_STOP:
         return True
-    if token.lower().replace("-", "") in _GENERIC_TECH:
-        return True
-    return bool(_VERB_LIKE.fullmatch(token))
+    return _tech_key(token) in _GENERIC_TECH
+
+
+def extract_groundable_terms(text: str) -> list[str]:
+    """Return generic tech terms that must be in the role's publishable source.
+
+    Classification (not a proper name) is separate from grounding. ``GenAI``
+    is not extracted as a product name, but a role that never mentions it
+    still fails ``ungrounded_tech``.
+    """
+
+    found: list[str] = []
+    seen: set[str] = set()
+    for match in _TECH_TOKEN.finditer(text or ""):
+        raw = match.group(0)
+        key = _tech_key(raw)
+        if key not in _GROUNDED_TECH_TERMS or key in seen:
+            continue
+        seen.add(key)
+        found.append(raw)
+    return found
+
+
+def _contains_tech_term(haystack: str, term: str) -> bool:
+    key = _tech_key(term)
+    if not key:
+        return False
+    for match in _TECH_TOKEN.finditer(haystack or ""):
+        if _tech_key(match.group(0)) == key:
+            return True
+    return False
 
 
 def _names_from_span(span: str) -> list[str]:
@@ -383,6 +481,17 @@ def check_bullet(bullet: str, source: RoleSource) -> list[GroundingError]:
                 )
             )
 
+    for term in extract_groundable_terms(text):
+        if not _contains_tech_term(source.publishable, term):
+            errors.append(
+                GroundingError(
+                    code="ungrounded_tech",
+                    message=f"tech term {term!r} is not in the role's publishable source",
+                    role=source.name,
+                    bullet=text,
+                )
+            )
+
     for token in _unpublished_in_bullet(text):
         errors.append(
             GroundingError(
@@ -497,6 +606,7 @@ __all__ = [
     "check_bullet",
     "check_profile",
     "check_role_bullets",
+    "extract_groundable_terms",
     "extract_numbers",
     "extract_proper_nouns",
     "is_constraint_evidence",
