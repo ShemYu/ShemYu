@@ -27,11 +27,28 @@ PUBLIC_RESUME_TEMPLATES = frozenset(
 )
 
 
+def _public_focus(focus: Mapping[str, Any]) -> dict[str, Any]:
+    """Keep public claims only; drop constraint lists from outbound pages."""
+
+    public = dict(focus)
+    public.pop("do_not_claim", None)
+    claims = []
+    for claim in public.get("claims") or []:
+        if claim.get("layer") != "public":
+            continue
+        claim = dict(claim)
+        claim.pop("do_not_claim", None)
+        claims.append(claim)
+    public["claims"] = claims
+    return public
+
+
 def for_public_resume(profile: Mapping[str, Any] | BaseModel) -> dict[str, Any]:
     """Return a profile copy with internal evidence stripped.
 
-    ``highlights`` are the public layer. ``evidence`` stays in YAML / the
-    bible template and must not reach one-page outbound resumes.
+    ``highlights`` and ``layer: public`` claims are the public layer.
+    ``evidence``, archive/bible claims, and ``do_not_claim`` stay in YAML /
+    the bible template and must not reach one-page outbound resumes.
     """
 
     if isinstance(profile, BaseModel):
@@ -43,6 +60,8 @@ def for_public_resume(profile: Mapping[str, Any] | BaseModel) -> dict[str, Any]:
         for item in data.get(section) or []:
             item = dict(item)
             item.pop("evidence", None)
+            if item.get("foci"):
+                item["foci"] = [_public_focus(focus) for focus in item["foci"]]
             items.append(item)
         data[section] = items
     return data
@@ -279,6 +298,24 @@ class Jinja2Generator(ContentGenerator):
         """Render and atomically commit a group of template outputs."""
 
         rendered = self.render_batch(context, outputs)
+        self._atomic_commit(rendered)
+        for output_path in rendered:
+            print(f"Successfully generated {output_path}")
+
+    def generate_many(
+        self,
+        jobs: Sequence[tuple[Mapping[str, Any] | BaseModel, str, str]],
+    ) -> None:
+        """Render jobs that each have their own context, then commit atomically."""
+
+        rendered: dict[str, str] = {}
+        seen: set[str] = set()
+        for context, template_name, output_path in jobs:
+            destination = os.path.abspath(os.fspath(output_path))
+            if destination in seen:
+                raise ValueError(f"Duplicate batch output path: {output_path}")
+            seen.add(destination)
+            rendered[destination] = self.render(context, template_name)
         self._atomic_commit(rendered)
         for output_path in rendered:
             print(f"Successfully generated {output_path}")

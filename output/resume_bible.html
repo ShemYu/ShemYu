@@ -328,7 +328,6 @@
         <section style="margin-bottom: 5mm;">
              <p style="font-style: italic; color: #444; border-left: 2px solid #ddd; padding-left: 10px;">
                 Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.
-
             </p>
         </section>
 
@@ -360,25 +359,19 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>[A. Product] Video-understanding and cooking-coaching agent that uses cooking video and learner voice to identify where the learner is stuck. The public architecture is observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
+                    <li>Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics and must not be compared with the 56-item result. Knowledge coverage remained an optimization target.</li>
 
-                    <li>[B. Fixed-rubric result] Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json.</li>
+                    <li>Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs but was not verified as the shipped architecture.</li>
 
-                    <li>[B. Metric boundary] The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics and must not be compared with the 56-item result. Knowledge coverage remained an optimization target.</li>
+                    <li>Defined the upstream observation problem and designed and implemented a staged Detect → Plan → Select → Observe → Correct pipeline so downstream causal diagnosis could be evaluated independently. A legacy 14-case manual review found dish-specific signals in 13 cases but correct diagnoses in only 2, isolating unresolved primary-cause selection in Assessment. This is stage-diagnostic evidence, not visual accuracy or uplift. Sources: PR #299 and cooking_experiment_analysis/report/20250423/.</li>
 
-                    <li>[B. Additional internal results] Candidate coverage improved from 67.6% to 83.0% on a separate 15-case, 103-unit benchmark. Evaluation work also included a sub-9-minute 56-case run, RCA across 73 flaky misses, and reduced Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp. Keep these separate from the public 56-item dish metric.</li>
+                    <li>Designed the v2 ObservationAgent and mentored Sonan through its implementation; the iteration was not verified as production. Source: PR #461 / 741fa4a3. Unrelated to PR #606.</li>
 
-                    <li>[C.1 Architecture research] Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs but was not verified as the shipped architecture.</li>
+                    <li>Built Video Explorer, video embeddings, reusable similarity-search infrastructure, semantic video retrieval, and a multi-turn frame locator. Migrated Gemini Embedding 2 to 3072 dimensions with model-scoped caching. No retrieval-quality uplift is sourced. Sources: PRs #202/#213/#217/#220/#222/#239.</li>
 
-                    <li>[C.3 Guideline Grounder v1] Defined the upstream observation problem and designed and implemented a staged Detect → Plan → Select → Observe → Correct pipeline so downstream causal diagnosis could be evaluated independently. A legacy 14-case manual review found dish-specific signals in 13 cases but correct diagnoses in only 2, isolating unresolved primary-cause selection in Assessment. This is stage-diagnostic evidence, not visual accuracy or uplift. Sources: PR #299 and cooking_experiment_analysis/report/20250423/.</li>
+                    <li>Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.</li>
 
-                    <li>[C.4 ObservationAgent] Designed the v2 ObservationAgent and mentored Sonan through its implementation; the iteration was not verified as production. Source: PR #461 / 741fa4a3.</li>
-
-                    <li>[C.5 Video infrastructure] Built Video Explorer, video embeddings, reusable similarity-search infrastructure, semantic video retrieval, and a multi-turn frame locator. Migrated Gemini Embedding 2 to 3072 dimensions with model-scoped caching. No retrieval-quality uplift is sourced. Sources: PRs #202/#213/#217/#220/#222/#239.</li>
-
-                    <li>[C.6 Evaluation architecture] Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.</li>
-
-                    <li>[D. Git-history inventory] `career_evidence/moment_coach_ai_git_history.md` maps 33 main-branch contributions from 2026-02-27 through 2026-08-19 to resume-relevant facts and evidence boundaries.</li>
+                    <li>career_evidence/moment_coach_ai_git_history.md maps 33 main-branch contributions from 2026-02-27 through 2026-08-19 to resume-relevant facts and evidence boundaries. A commit proves contribution, not sole ownership, production deployment, or business impact.</li>
 
                 </ul>
 
@@ -410,11 +403,11 @@
 
                     <li>Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.</li>
 
+                    <li>Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.</li>
+
                     <li>Won CFH Cloud Creative Award 2024 (1st place).</li>
 
                     <li>Named departmental MVP, Q1 2025.</li>
-
-                    <li>Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.</li>
 
                 </ul>
 
@@ -422,35 +415,11 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>[User confirmed 2026-08-26] Team size ruling: 4 full-time reports, 7 including contractors. Summary and outbound use 4 full-time (7 including contractors).</li>
+                    <li>First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.</li>
 
-                    <li>[Do not claim outbound] coordinated 10 cross-functional contributors — user does not know where 10 came from.</li>
+                    <li>Problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate on public highlights.</li>
 
-                    <li>[User confirmed 2026-08-26] Discovery team was DS + Shem (MLE). They went to the client, mapped the workflow, ran a workshop so the BU could show how they do regulatory comparison, and chose that as the pilot.</li>
-
-                    <li>[User confirmed 2026-08-26] Outbound may say legal and/or compliance participated in that workshop.</li>
-
-                    <li>[User confirmed 2026-08-26] DS built the PoC. Shem did production readiness: rewrite as a Databricks deployment workflow, and store related data on the Databricks data layer per internal access rules. Do not write that Shem built the PoC.</li>
-
-                    <li>[User confirmed 2026-08-26] Shem decoupled the PoC workflow into external-regulation processing, internal-regulation processing, and comparison (外規 / 內規 / 比對). All three are daily-triggered because regulation updates&#39; finest grain is one day. Public. Shem decoupled / productionized; DS built the PoC.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate (e.g. 80% in retrieval) on public highlights. Do not write isolate-failures-to-retrieval-vs-generation as a highlight.</li>
-
-                    <li>[Do not invent] Shem forgot the data-layer name. Do not write Unity Catalog, Delta, or a table name.</li>
-
-                    <li>[User confirmed 2026-08-26] Cathay regulatory Agent F1 0.67 to 0.89 and RKB adopted by 2 of 5 subsidiaries describe the same regulatory system. Outbound may merge into one sentence. Do not invent extra causality (e.g. F1 caused adoption).</li>
-
-                    <li>[User confirmed 2026-08-26] Regulatory-pipeline reliability (not Cookpad): per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day. This is the public/simplified wording.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: many retries came from Bedrock quota.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: early peak — external/Taiwan regulation updates (end of a legislative session) triggered the analysis flow; high parallelism hit Bedrock quota.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: observed failure rate peaked at 15%; the system digested that peak. This is an observed peak, not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: consultant advice to collect usage before asking AWS/client for a quota increase.</li>
-
-                    <li>[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS. Auto-labeling / 4-stage / retrieval miss-rate on public highlights.</li>
+                    <li>Many retries came from Bedrock quota. Early peak — external/Taiwan regulation updates at the end of a legislative session — high parallelism hit Bedrock quota. Observed failure rate peaked at 15%; the system digested that peak. Not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
 
                 </ul>
 
@@ -499,7 +468,7 @@
             <div class="job-entry">
                 <div class="entry-header">
                     <div>
-                        <h3>Research assistant</h3> <span style="font-size:9pt;">@ Ming Chuan University - data science Lab.</span>
+                        <h3>Research assistant</h3> <span style="font-size:9pt;">@ Ming Chuan University</span>
                     </div>
                     <div class="date">2017-06-01 – 2019-06-01</div>
                 </div>
@@ -543,6 +512,30 @@
             <div class="project-entry">
                 <div class="entry-header">
                     <div>
+                        <h3>Video-understanding coaching agent</h3>
+
+                    </div>
+
+                    <div class="date">2026-02 – Present</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
+
+                    <li>Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.</li>
+
+                    <li>Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
                         <h3>DOGI Multi-Agent Productivity Suite</h3>
 
                     </div>
@@ -553,6 +546,8 @@
 
                 <ul>
 
+                    <li>Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.</li>
+
                     <li>Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.</li>
 
                     <li>Implemented multi-agent delegation patterns for enterprise workflows.</li>
@@ -560,8 +555,6 @@
                     <li>Developed meeting scheduling agent integrating calendar and internal APIs.</li>
 
                     <li>Designed session persistence and storage strategy using Redis/Postgres.</li>
-
-                    <li>Delivered FinOps agent for AWS cost insights and early anomaly detection.</li>
 
                 </ul>
 
@@ -597,6 +590,28 @@
             <div class="project-entry">
                 <div class="entry-header">
                     <div>
+                        <h3>FinOps</h3>
+
+                    </div>
+
+                    <div class="date">2025-01 – 2025-12</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Implemented FinOps agent, achieving 30% GPU cost reduction.</li>
+
+                    <li>Reduced overall cloud spend by 40% through FinOps practices.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
                         <h3>Regulatory Knowledge Base (RKB)</h3>
 
                     </div>
@@ -615,7 +630,75 @@
 
                     <li>Integrated with internal Gen-AI platform for unified access and governance.</li>
 
-                    <li>Adopted by 2 of 5 subsidiaries.</li>
+                    <li>Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>AI Cloud Platform and UAP Common Library</h3>
+
+                    </div>
+
+                    <div class="date">2020-11 – 2022-05</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.</li>
+
+                    <li>Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.</li>
+
+                    <li>Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Travel order analytics and itinerary features</h3>
+
+                    </div>
+
+                    <div class="date">2019-12 – 2020-11</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Analyze customer order data using statistical modeling (FP-Growth, K-means, 4 clusters) to support marketing and segmentation strategies.</li>
+
+                    <li>Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Social data analysis applications</h3>
+
+                    </div>
+
+                    <div class="date">2017-05 – 2017-11</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Develop full-stack web applications from end to end for social data analysis, supporting the transformation of raw posts into interactive word clouds and buzzword visualizations.</li>
+
+                    <li>Analyze and extract insights from social media data, applying NLP and visualization tools to generate actionable reports for industry partners.</li>
 
                 </ul>
 

@@ -9,7 +9,6 @@ Applied AI engineer with 6 years building production agents, RAG platforms, and 
 
 
 
-
 ## Experience
 
 ### Senior AI Engineer at Cookpad
@@ -55,11 +54,11 @@ Led 4 full-time reports (7 including contractors), overseeing AI project deploym
 
 - Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.
 
+- Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
+
 - Won CFH Cloud Creative Award 2024 (1st place).
 
 - Named departmental MVP, Q1 2025.
-
-- Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
 
 
 
@@ -98,7 +97,7 @@ Assist in maintaining ETL pipelines and data collection, ensuring stable analyti
 
 
 
-### Research assistant at Ming Chuan University - data science Lab.
+### Research assistant at Ming Chuan University
 _2017-06-01 - 2019-06-01_
 
 
@@ -197,17 +196,42 @@ _2012-06 - 2016-06_
 
 ## Projects
 
+### Video-understanding coaching agent
+
+_2026-02 - Present_
+
+
+
+Infer where a learner is stuck from cooking video and voice, then coach the next step.
+
+
+
+
+- Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
+
+- Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.
+
+- Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
+
+
+
+
+**Keywords**: multimodal agents, capability-based evals, video understanding
+
+
+
 ### DOGI Multi-Agent Productivity Suite
 
 _2025-01 - 2025-12_
 
 
 
-A suite of internal productivity tools powered by multi-agent workflows, including meeting scheduling, summarization, and FinOps automation.
+Internal productivity tools powered by multi-agent workflows, including meeting scheduling, summarization, and FinOps automation.
 
 
 
 
+- Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
 
 - Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.
 
@@ -216,8 +240,6 @@ A suite of internal productivity tools powered by multi-agent workflows, includi
 - Developed meeting scheduling agent integrating calendar and internal APIs.
 
 - Designed session persistence and storage strategy using Redis/Postgres.
-
-- Delivered FinOps agent for AWS cost insights and early anomaly detection.
 
 
 
@@ -232,8 +254,7 @@ _2024-11 - 2025-06_
 
 
 
-An internal Gen-AI platform providing model hub, guardrails, retrieval systems, evaluation tools, and multi-product orchestration for enterprise AI use cases.
-
+Internal Gen-AI platform providing model hub, guardrails, retrieval systems, evaluation tools, and multi-product orchestration.
 
 
 
@@ -253,14 +274,35 @@ An internal Gen-AI platform providing model hub, guardrails, retrieval systems, 
 
 
 
+### FinOps
+
+_2025-01 - 2025-12_
+
+
+
+GPU and cloud spend control for internal AI services.
+
+
+
+
+- Implemented FinOps agent, achieving 30% GPU cost reduction.
+
+- Reduced overall cloud spend by 40% through FinOps practices.
+
+
+
+
+**Keywords**: FinOps, AWS
+
+
+
 ### Regulatory Knowledge Base (RKB)
 
 _2024-10 - 2025-09_
 
 
 
-A knowledge base system enabling semantic search, retrieval, and Q&A on regulatory and legal documents using enterprise-grade RAG pipelines.
-
+Semantic search, retrieval, and comparison on regulatory and legal documents using enterprise RAG pipelines.
 
 
 
@@ -273,11 +315,79 @@ A knowledge base system enabling semantic search, retrieval, and Q&A on regulato
 
 - Integrated with internal Gen-AI platform for unified access and governance.
 
-- Adopted by 2 of 5 subsidiaries.
+- Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.
 
 
 
 
 **Keywords**: RAG, Vector DB, Databricks, Data Pipeline, Embeddings
+
+
+
+### AI Cloud Platform and UAP Common Library
+
+_2020-11 - 2022-05_
+
+
+
+Standardize ML project delivery and shared NLP libraries across new and legacy teams.
+
+
+
+
+- Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.
+
+- Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.
+
+- Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.
+
+
+
+
+**Keywords**: FastAPI, CI/CD, Kubernetes, Sphinx
+
+
+
+### Travel order analytics and itinerary features
+
+_2019-12 - 2020-11_
+
+
+
+Keep analytics stable and extract marketing and search features from order and itinerary data.
+
+
+
+
+- Analyze customer order data using statistical modeling (FP-Growth, K-means, 4 clusters) to support marketing and segmentation strategies.
+
+- Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.
+
+
+
+
+**Keywords**: FP-Growth, K-means, CKIP NLP, ETL
+
+
+
+### Social data analysis applications
+
+_2017-05 - 2017-11_
+
+
+
+Turn raw social posts into interactive visualizations and partner reports.
+
+
+
+
+- Develop full-stack web applications from end to end for social data analysis, supporting the transformation of raw posts into interactive word clouds and buzzword visualizations.
+
+- Analyze and extract insights from social media data, applying NLP and visualization tools to generate actionable reports for industry partners.
+
+
+
+
+**Keywords**: NLP, full-stack web
 
 

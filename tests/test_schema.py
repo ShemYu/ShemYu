@@ -3,7 +3,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from src.schema import Basics, Education, Profile, Project, Work
+from src.schema import Basics, Claim, Education, Focus, Metric, Profile, Project, Work, validate_slug
 
 
 class ProfileSchemaTest(unittest.TestCase):
@@ -94,6 +94,99 @@ class ProfileSchemaTest(unittest.TestCase):
         )
         self.assertEqual(work.highlights, ["Public coverage 40% to 95%."])
         self.assertEqual(work.evidence, ["15-case internal benchmark"])
+
+    def test_metric_accepts_from_and_to_yaml_aliases(self):
+        metric = Metric.model_validate(
+            {
+                "name": "f1",
+                "display": "0.67 → 0.89",
+                "from": "0.67",
+                "to": "0.89",
+            }
+        )
+        self.assertEqual(metric.from_value, "0.67")
+        self.assertEqual(metric.to_value, "0.89")
+        dumped = metric.model_dump(mode="json")
+        self.assertEqual(dumped["from_value"], "0.67")
+        self.assertNotIn("from", dumped)
+
+    def test_foci_reject_authored_highlights_and_evidence(self):
+        payload = {
+            "name": "Cookpad",
+            "position": "Engineer",
+            "startDate": "2026-02",
+            "foci": [
+                {
+                    "id": "cookpad-vu",
+                    "name": "Video understanding",
+                    "claims": [
+                        {
+                            "id": "cookpad-vu-coverage",
+                            "layer": "public",
+                            "text": "Raised dish coverage from 50% to 95%.",
+                        }
+                    ],
+                }
+            ],
+            "highlights": ["duplicate authored highlight"],
+        }
+        with self.assertRaises(ValidationError):
+            Work.model_validate(payload)
+        payload.pop("highlights")
+        payload["evidence"] = ["archive line"]
+        with self.assertRaises(ValidationError):
+            Work.model_validate(payload)
+
+    def test_slug_strips_obsidian_wikilinks(self):
+        self.assertEqual(validate_slug("[[cookpad-vu]]"), "cookpad-vu")
+        self.assertEqual(
+            validate_slug("[[cookpad-vu|Video understanding]]"), "cookpad-vu"
+        )
+
+    def test_focus_and_claim_ids_must_be_slugs_and_unique(self):
+        with self.assertRaises(ValidationError):
+            Focus.model_validate({"id": "Cookpad VU", "name": "Video understanding"})
+        with self.assertRaises(ValidationError):
+            Claim.model_validate(
+                {"id": "Not_a_slug", "layer": "public", "text": "A claim."}
+            )
+        with self.assertRaises(ValidationError):
+            Profile.model_validate(
+                {
+                    "basics": {"name": "Test"},
+                    "work": [
+                        {
+                            "name": "Company",
+                            "position": "Engineer",
+                            "startDate": "2024",
+                            "foci": [
+                                {
+                                    "id": "same-id",
+                                    "name": "One",
+                                    "claims": [
+                                        {
+                                            "id": "claim-a",
+                                            "layer": "public",
+                                            "text": "First.",
+                                        }
+                                    ],
+                                },
+                                {
+                                    "id": "same-id",
+                                    "name": "Two",
+                                    "claims": [
+                                        {
+                                            "id": "claim-b",
+                                            "layer": "public",
+                                            "text": "Second.",
+                                        }
+                                    ],
+                                },
+                            ],
+                        }
+                    ],
+                }
+            )
 
 
 if __name__ == "__main__":

@@ -161,3 +161,9 @@ output/*
 
 # Detailed career evidence may contain internal project context.
 career_evidence/private/
+career/private/
+
+# Obsidian: keep vault graph settings, not the local workspace.
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+data/.obsidian/

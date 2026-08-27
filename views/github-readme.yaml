@@ -1,0 +1,21 @@
+id: github-readme
+locale: en
+person: shem
+roles:
+  - id: cookpad-senior-ai
+  - id: cathay-mle-lead
+  - id: wisers-platform-engineer
+  - id: tripsaas-data-scientist
+  - id: mcu-research-assistant
+  - id: iii-intern
+skill_groups:
+  - skill-group-cloud-infra
+  - skill-group-data-engineering
+  - skill-group-genai-nlp
+  - skill-group-language
+  - skill-group-leadership
+  - skill-group-mlops
+  - skill-group-programming
+publications:
+  - publication-ai-agent-architecture
+  - publication-podman

@@ -31,7 +31,6 @@ Uptime: 6 roles of experience
 > Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.
 
 
-
 ### 🛠 Tech Stack
 
 

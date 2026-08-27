@@ -9,6 +9,7 @@ import yaml
 from pydantic import BaseModel, ValidationError
 
 from src.interfaces import DataLoader
+from src.project import project_profile
 from src.schema import (
     Basics,
     Certificate,
@@ -119,5 +120,7 @@ class YamlDataLoader(DataLoader):
             raise _validation_error_with_source(error, data_root) from error
 
         # ``mode="json"`` ensures dates and any future JSON-compatible scalar
-        # types are safe to pass to Jinja and the AI provider.
-        return validated.model_dump(mode="json")
+        # types are safe to pass to Jinja. The projector then fills derived
+        # highlights / projects from foci without re-entering Work validation
+        # (which forbids mixed authored foci + highlights).
+        return project_profile(validated.model_dump(mode="json"))
