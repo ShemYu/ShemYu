@@ -130,7 +130,7 @@ class LiveRoleGroundingTest(unittest.TestCase):
         self.assertIn("unpublished_token", codes)
         public = check_role_bullets(
             cookpad,
-            ["Coverage 40% → 95% on a versioned eval set."],
+            ["Raised dish coverage from 50% to 95% (53/56)."],
         )
         self.assertEqual(public, [])
 

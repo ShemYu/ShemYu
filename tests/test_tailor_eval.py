@@ -95,7 +95,7 @@ def live_platform_plan(source):
             HighlightSelection(
                 item_index=cookpad,
                 highlight_indices=[
-                    highlight_index(cookpad_item, "40%"),
+                    highlight_index(cookpad_item, "53/56"),
                     highlight_index(cookpad_item, "staged pipeline"),
                     highlight_index(cookpad_item, "Capability-based evals"),
                 ],
@@ -256,6 +256,8 @@ class TailorEvalTest(unittest.TestCase):
         fragments = load_live_fragments()
         self.assertIn("67.6%", fragments)
         self.assertIn("Moment team", fragments)
+        self.assertIn("15-case / 103-unit", fragments)
+        self.assertNotIn("15-case", fragments)
 
     def test_travel_search_good_plan_passes_identity(self):
         source = load_synthetic()
@@ -432,7 +434,9 @@ class JapaneseConciseHarnessTest(unittest.TestCase):
         self.assertIn("中国語（母語）", html)
         self.assertIn("英語（限定的な実務）", html)
         self.assertIn("40%", html)
+        self.assertIn("50%", html)
         self.assertIn("95%", html)
+        self.assertIn("53/56", html)
         self.assertIn("60%", html)
         self.assertIn("40%", html)
         self.assertIn("0.67", html)
@@ -469,8 +473,13 @@ class JapaneseConciseHarnessTest(unittest.TestCase):
             for highlight in item["highlights"]
         )
         self.assertIn("2 hours to 15 minutes", english)
+        self.assertIn("50% to 95%", english)
+        self.assertIn("53/56", english)
         self.assertIn("2週間から3日", html)
         self.assertIn("15分", html)
+        self.assertIn("50%", html)
+        self.assertIn("95%", html)
+        self.assertIn("53/56", html)
 
     def test_one_page_pdf_gate_is_documented_and_fails_when_not_one_page(self):
         """After PDF render, the job must fail unless page count == 1.

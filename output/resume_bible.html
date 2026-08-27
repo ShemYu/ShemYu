@@ -350,7 +350,7 @@
 
                     <li>Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
 
-                    <li>Coverage 40% → 95% on a versioned eval set; isolate failures to observation / ingredient-state / issue-detection.</li>
+                    <li>Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.</li>
 
                     <li>Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.</li>
 
@@ -360,33 +360,39 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>[User confirmed 2026-08-26] Public outbound highlights are the three video-understanding / ingredient-state / cooking-issues points above. Do not use the previous multimodal-coaching reteach/narrow/advance wording on the one-pager.</li>
+                    <li>[A. What the system is] Video-understanding / cooking-coaching agent. Inputs: cooking video and learner voice. Infer where the learner is stuck; older wording was decide reteach, narrow, or advance so the next prompt targets that gap. Public one-pager architecture is the staged pipeline in highlight 1 (observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues).</li>
 
-                    <li>[User confirmed 2026-08-26] Outbound eval wording is factuality (not truth) and turn-level coaching quality (not per-turn quality).</li>
+                    <li>[A. Archive, not a public highlight] Earlier one-pager variants (now archive only): multimodal coaching / video question-understanding with reteach, narrow, or advance; staged multimodal pipeline separating observation, gap inference, and coaching decisions; versioned capability-based evals for coverage, truth, and per-turn quality. Public eval wording is now factuality (not truth) and turn-level coaching quality (not per-turn quality). Cross-session history was extra context; do not add model names or fusion methods.</li>
 
-                    <li>[User confirmed] Role: video question-understanding agent. Inputs are cooking video and learner voice. The job is to infer where the learner is stuck, then decide reteach, narrow, or advance so the next prompt targets that gap instead of a generic next step.</li>
+                    <li>[B. Eval history — one measurement story] An earlier public sentence said Coverage 40% → 95% on a versioned eval set (and isolate failures to observation / ingredient-state / issue-detection). That was a shorthand, not two competing truths. Source: daily/history.json (23 reports, always 15 cases).</li>
 
-                    <li>[User confirmed] Previous public highlight 1, now evidence only: Built a multimodal coaching agent that reasons over cooking video and learner voice to decide whether to reteach, narrow, or advance; raised expert-grounded coverage from 40% to 95%.</li>
+                    <li>[B. 2026-07-06] Dish 30/74 = 40.5%. This is the reading behind the earlier 40%.</li>
 
-                    <li>[User confirmed] Previous public highlight 1, now evidence only: Built a video question-understanding agent that reads cooking video and learner voice to decide reteach, narrow, or advance; raised chef-grounded candidate coverage from 40% to 95%.</li>
+                    <li>[B. Same-rubric 56-item window 2026-07-08 → 2026-07-27] 28/56 → 53/56 (50% → 94.6%). Owner locked the public sentence to 50% → 95% (53/56) because this is the same denominator. 53/56 is 94.6%; owner accepted writing 95% (53/56). So 40% and 95% were both real readings, but not the same ruler. The public sentence changed to make the ruler explicit — a clarification of how we write the work, not a retraction that the work did not happen.</li>
 
-                    <li>[User confirmed] Prior public wording also included cross-session history to personalize those decisions. Keep that as extra context; do not add model names or fusion methods.</li>
+                    <li>[B. Same-rubric series 2026-07-08 to 2026-08-04] dish_total 56. Peak dish 53/56 on 2026-07-27 and 2026-08-02. Knowledge peaked 38/48 = 79.2% on 2026-08-02. Knowledge coverage remains remaining work; do not put a knowledge number on the public highlight (not 31.9% → 79.2%, 14.9%, 56.3%, or 27/48).</li>
 
-                    <li>[User confirmed] Previous public highlight 3, now evidence only: Architected a staged multimodal reasoning pipeline separating observation, gap inference, and coaching decisions, improving debuggability and reducing failure propagation across agent stages.</li>
+                    <li>[B. Later, different ruler] After 2026-08-11 the set is 61 dish items; 2026-08-12 onward v3_canonical_claim (stricter). Latest 2026-08-19 is 23/61 dish / 27/48 knowledge. That is a different ruler, not a product regression and not an arrow from 53/56. Parent DR units later decomposed into VU / DU / LVO children (109-contract family); 2026-08-18 dish 19/61 is that later metric.</li>
 
-                    <li>[User confirmed] Previous public highlight 3, now evidence only: From cooking video and learner voice, infer where the learner is stuck so the next reteach targets that gap instead of a generic next step.</li>
+                    <li>[B. Internal archive, not on the one-pager] Coaching eval 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit benchmark. Not found in daily/history.json; do not invent a source. Also archive: a 56-case full run under 9 minutes with cache/resume; flaky RCA (73 flaky misses; 64% incomplete candidate hypotheses; knowledge swing +/-8.5 pp to +/-3.2 pp).</li>
 
-                    <li>[User confirmed] Previous public highlight 2, now evidence only: Designed versioned, capability-based agent evaluations and automated scoring for coverage, truth, coherence, and per-turn quality.</li>
+                    <li>[C. Architecture journey] Name lock: Guideline grounder (not Guideline grounding, not Galactic Rounder). Propose / influence only — not a clean Shem-owned shipped lineage.</li>
 
-                    <li>[User confirmed] Public / outbound coverage: 40% to 95% on a versioned eval set. Internal/source wording was chef-grounded candidate coverage (domain-expert grounded).</li>
+                    <li>[C.1 Video Description v1] Very detailed Video Description, then agents to verify. Needed near-100% precision on the transcript-like description; even a small hallucination (even ~1% as a design constraint, not a measured lab rate) damages the rest. Cost is wall-clock, not a one-off: typical source videos about 20–50 minutes; processing about 30–45 minutes across that range. That path did not succeed and is not a public highlight. No SLA, dollar cost, or GPU type recorded.</li>
 
-                    <li>[User confirmed] Internal coaching eval, not outbound: 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit benchmark.</li>
+                    <li>[C.2 Proposed split] Shem proposed (not implemented / not shipped as current production): Recall-first Candidate Generator, and Debater Investigator for video grounding. Diagnosis: mixing recall and precision in one agent hurt performance. Proposed split: Recall first → Ranker → Precision via Investigator. Speech typos: Recode = Recall, Debezter = Debater. Later rewrites absorbed pieces as concepts. Do not write that production is currently this stack, or a clean lineage Video Description v1 → Recall-first → v5 investigator as Shem-owned production.</li>
 
-                    <li>[User confirmed] Internal run note, not outbound: a 56-case full run completed in under 9 minutes with cache/resume and case-level backtraces.</li>
+                    <li>[C.3 Guideline grounder v1] Shem only. No Sonan. Staged ground-then-assess: Detect → Plan → Select → Observe → Correct. Source: 20260424_feat_guideline-grounding-action.md (#299). ~2–4s latency is not a win to write.</li>
 
-                    <li>[User confirmed] Flaky RCA, not outbound: 73 flaky misses; 64% originated as incomplete candidate hypotheses. Knowledge coverage swing +/-8.5 pp to +/-3.2 pp (62% reduction). Misses were also traced to merge and extraction losses.</li>
+                    <li>[C.4 Guideline grounder v2] Collaboration with Sonan (do not invent title or ownership beyond this). ObservationAgent loop, skill-routed observation; Sonan tried to make it more detailed and it took longer. Attempted / possibly not online — do not claim v2 is in production. Source: 20260608_feat_guideline-grounding-v2-observation-agent.md.</li>
 
-                    <li>[Do not claim outbound] 67.6% to 83.0%, 15-case / 103-unit, 56-case / 9 min, 73 flaky misses, 64%, +/-8.5 to +/-3.2, 62% swing, Moment team name.</li>
+                    <li>[C.5 Influence on v5] Guideline grounder design (v1, plus the v2 attempt with Sonan) later influenced the final v5 investigator. Influence only. Do not write that Shem or Sonan implemented, shipped, or owned v5 investigator, or that v5 investigator is the same system as Guideline grounder.</li>
+
+                    <li>[C.6 Iteration] Company iterations often unplanned-refactored the whole architecture. Shem&#39;s pieces mostly remained as concepts that later rewrites absorbed. Shem&#39;s work had upper bounds (caps); the next version quickly overwrote those bounds / that design; after a version was replaced it was no longer online. Culture commentary stays off the one-pager.</li>
+
+                    <li>[C.7 Other systems, evidence only] Video embeddings + semantic search + Visual Explorer (multi-turn frame locator, structured LocatedFrame; internal tool). Shem PRs #213/#217/#220/#222/#202/#239. Gemini Embedding 2 migration to 3072-d with model-scoped cache; no retrieval-accuracy lift sourced. Same-dish / multi-video selection: observe each split cook, select same-dish footage, merge for generation v3 (Shem #606). Observed cooking audit: extra video-fact audit beyond the public four stages; Shem 15b56449 (#666); contract incomplete, no metric.</li>
+
+                    <li>[C.7 Eval design, evidence only] Canonical hash-locked 15-case make eval pipeline + viewer; README example 77/103 (74.8%) is run-varying / unpublished. Assessment v5 + frozen-input LLM-as-judge suite + failure taxonomy; +0.79 / 71.4% / 50% misleading stay unpublished. Delivery / FP metric versions: v1_legacy_pool → v2_polarity_claim → v3_canonical_claim. Human-equivalence / human-standard gate is a conformance suite, not a production accuracy claim.</li>
 
                 </ul>
 
