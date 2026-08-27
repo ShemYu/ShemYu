@@ -14,11 +14,11 @@ summary: Applied AI engineer with 6 years building production agents, RAG platfo
   on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team
   delivering production GenAI systems in financial services.
 summary_ja: 本番環境のエージェント、RAG基盤、共有GenAIインフラの構築に6年従事してきたApplied AIエンジニア。現在はCookpadにて、エージェント評価・推論アーキテクチャ・信頼性を軸にマルチモーダルなコーチングエージェントを開発。以前は金融サービス領域で、本番GenAIシステムを届けるMLEチームをリード。
-city: Taipei
-city_ja: 台北
-region: Taiwan
-region_ja: 台湾
-country_code: TW
+city: Tokyo
+city_ja: 東京
+region: Japan
+region_ja: 日本
+country_code: JP
 profiles:
 - network: GitHub
   username: ShemYu

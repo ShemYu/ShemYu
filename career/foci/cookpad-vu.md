@@ -55,9 +55,11 @@ Name lock: Guideline grounder (not Guideline grounding, not Galactic Rounder). P
 4. **Guideline grounder v2** — Collaboration with Sonan (do not invent title or ownership beyond this). ObservationAgent loop, skill-routed observation. Owner ruling 2026-08-27: **did not ship / not online**. Do not claim v2 is in production. Source: `20260608_feat_guideline-grounding-v2-observation-agent.md`.
 5. **Influence on v5** — Guideline grounder design later influenced the final v5 investigator. Influence only. Do not write that Shem or Sonan implemented, shipped, or owned v5 investigator.
 6. **Iteration** — Company iterations often unplanned-refactored the whole architecture. Shem's pieces mostly remained as concepts that later rewrites absorbed. After a version was replaced it was no longer online. Culture commentary stays off public views.
-7. **Other systems** — Video embeddings + semantic search + Visual Explorer (internal tool). Shem PRs #213/#217/#220/#222/#202/#239. Gemini Embedding 2 migration to 3072-d with model-scoped cache; no retrieval-accuracy lift sourced. Same-dish / multi-video selection: Shem #606. Observed cooking audit: Shem 15b56449 (#666); contract incomplete, no metric.
+7. **Other systems** — Video embeddings + semantic search + Visual Explorer (internal tool). Shem PRs #213/#217/#220/#222/#202/#239. Gemini Embedding 2 migration to 3072-d with model-scoped cache; no retrieval-accuracy lift sourced. Same-dish / multi-video selection (#606) is **not** Shem-authored (Git records Sonanchalant; no co-author trailer). Observed cooking audit: Shem 15b56449 (#666); contract incomplete, no metric.
 
 Canonical hash-locked 15-case `make eval` pipeline + viewer; README example 77/103 (74.8%) is run-varying / unpublished. Assessment v5 + frozen-input LLM-as-judge suite + failure taxonomy stay unpublished unless a view explicitly selects an internal claim.
+
+Tracked commit ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_evidence/moment_coach_ai_git_history.md) (33 main-branch PRs, 2026-02-27 through 2026-08-19).
 
 <!-- graph:start -->
 ## Graph

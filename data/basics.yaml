@@ -9,9 +9,9 @@ summary: |
 location:
   address: ""
   postalCode: ""
-  city: "Taipei"
-  countryCode: "TW"
-  region: "Taiwan"
+  city: "Tokyo"
+  countryCode: "JP"
+  region: "Japan"
 profiles:
   - network: GitHub
     username: ShemYu
