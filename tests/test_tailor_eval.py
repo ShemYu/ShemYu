@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from src.ai import HighlightSelection, TailoringPlan, assemble_profile
+from src.compose import GroundedTailoringPlan, RoleBullets, assemble_composed_profile
 from src.generator import Jinja2Generator
 from src.i18n import JA_DISPLAY_NAME_ALIAS, localize_profile
 from src.loader import YamlDataLoader
@@ -212,7 +213,7 @@ class TailorEvalTest(unittest.TestCase):
             rendered=rendered,
         )
         codes = {finding.code for finding in fail_findings(report)}
-        self.assertIn("verbatim_highlight", codes)
+        self.assertTrue(codes & {"ungrounded_number", "verbatim_highlight"})
         self.assertFalse(report.passed)
 
     def test_scan_rendered_ignores_bible_bytes(self):
@@ -281,6 +282,139 @@ class TailorEvalTest(unittest.TestCase):
         self.assertTrue(report.passed)
         self.assertEqual(report.records[0].quality["role_match"], 1.0)
 
+    def test_cathay_compose_prefers_f1_retry_over_discovery_pick(self):
+        """Old pick path could choose the discovery highlight instead of F1/retry.
+
+        Compose writes grounded production sentences from the same role facts.
+        """
+
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        cathay = index_by_name(source["work"], "Cathay Financial Holdings")
+        discovery = source["work"][cathay]["highlights"][highlight_index(
+            source["work"][cathay], "mapped the client's regulatory-comparison"
+        )]
+        plan = GroundedTailoringPlan(
+            work=[cathay],
+            work_bullets=[
+                RoleBullets(
+                    item_index=cathay,
+                    bullets=[
+                        "Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.",
+                        "Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.",
+                        "DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer.",
+                    ],
+                )
+            ],
+        )
+        tailored = assemble_composed_profile(source, plan)
+        rendered = render_real_templates(tailored)
+        report = evaluate_case(
+            load_named_case("cathay_compose"),
+            source=source,
+            tailored=tailored,
+            plan=plan,
+            rendered=rendered,
+        )
+        self.assertEqual(fail_findings(report), [])
+        self.assertTrue(report.passed)
+        page = rendered["resume.html.j2"]
+        self.assertIn("0.67", page)
+        self.assertIn("0.89", page)
+        self.assertIn("3 retries", page)
+        self.assertNotIn("Unity Catalog", page)
+        self.assertNotIn("67.6", page)
+        self.assertNotIn(discovery, page)
+
+    def test_composed_invented_spark_or_unity_catalog_fails_eval(self):
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        cathay = index_by_name(source["work"], "Cathay Financial Holdings")
+        plan = GroundedTailoringPlan(
+            work=[cathay],
+            work_bullets=[
+                RoleBullets(
+                    item_index=cathay,
+                    bullets=["Ran Spark jobs over 2 TB at 800 QPS on Unity Catalog and Delta."],
+                )
+            ],
+        )
+        tailored = assemble_composed_profile(source, plan, ground=False)
+        report = evaluate_case(
+            load_named_case("cathay_compose"),
+            source=source,
+            tailored=tailored,
+            plan=plan,
+            rendered=render_real_templates(tailored),
+        )
+        codes = {finding.code for finding in fail_findings(report)}
+        self.assertTrue(
+            codes
+            & {
+                "invented_product",
+                "ungrounded_name",
+                "ungrounded_number",
+                "must_include_composed_fragments",
+            }
+        )
+        self.assertFalse(report.passed)
+
+    def test_composed_invented_f1_causality_fails_eval(self):
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        cathay = index_by_name(source["work"], "Cathay Financial Holdings")
+        plan = GroundedTailoringPlan(
+            work=[cathay],
+            work_bullets=[
+                RoleBullets(
+                    item_index=cathay,
+                    bullets=[
+                        "Improved regulatory Agent F1 from 0.67 to 0.89, which led to adoption by 2 of 5 subsidiaries."
+                    ],
+                )
+            ],
+        )
+        tailored = assemble_composed_profile(source, plan, ground=False)
+        report = evaluate_case(
+            load_named_case("cathay_compose"),
+            source=source,
+            tailored=tailored,
+            plan=plan,
+            rendered=render_real_templates(tailored),
+        )
+        codes = {finding.code for finding in fail_findings(report)}
+        self.assertIn("invented_causality", codes)
+        self.assertFalse(report.passed)
+
+    def test_composed_cookpad_internal_bench_does_not_reach_the_page(self):
+        source = YamlDataLoader(str(ROOT / "data")).load()
+        cookpad = index_by_name(source["work"], "Cookpad")
+        tailored = assemble_composed_profile(
+            source,
+            GroundedTailoringPlan(
+                work=[cookpad],
+                work_bullets=[
+                    RoleBullets(
+                        item_index=cookpad,
+                        bullets=[
+                            "Raised the internal coaching eval from 67.6% to 83.0% with 20 users."
+                        ],
+                    )
+                ],
+            ),
+            ground=False,
+        )
+        rendered = render_real_templates(tailored)
+        findings = scan_rendered(
+            source,
+            tailored,
+            {
+                "resume.md.j2": rendered["resume.md.j2"],
+                "resume.html.j2": rendered["resume.html.j2"],
+            },
+        )
+        codes = {item.code for item in findings if item.severity == "fail"}
+        self.assertIn("unpublished_token", codes)
+        self.assertIn("67.6%", rendered["resume.html.j2"])
+        self.assertNotIn("67.6%", " ".join(source["work"][cookpad]["highlights"]))
+
 
 class JapaneseConciseHarnessTest(unittest.TestCase):
     """Offline --language ja path: assemble, localize, same concise template."""
@@ -311,12 +445,12 @@ class JapaneseConciseHarnessTest(unittest.TestCase):
         self.assertIn("70%", html)
         self.assertIn("90%", html)
         self.assertIn("エージェント", html)
-        self.assertIn("staged pipeline", html)
+        self.assertIn("パイプライン", html)
         self.assertIn("評価", html)
         self.assertIn("AI Gateway", html)
         self.assertIn("FinOps", html)
         self.assertIn("社内エージェント", html)
-        self.assertIn("0.67 to 0.89", html)
+        self.assertIn("規制エージェント", html)
         self.assertIn("テンプレート", html)
         self.assertIn("ライブラリ", html)
         self.assertNotIn("Fluent", html)

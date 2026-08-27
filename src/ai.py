@@ -3,13 +3,19 @@
 from __future__ import annotations
 
 import copy
-import json
 import os
 from collections.abc import Mapping
 from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
+from src.compose import (
+    GroundedTailoringPlan,
+    RoleBullets,
+    assemble_composed_profile,
+    composer_instructions,
+    composer_prompt,
+)
 from src.interfaces import AIProvider
 from src.schema import profile_dict
 
@@ -50,11 +56,11 @@ class HighlightSelection(BaseModel):
 
 
 class TailoringPlan(BaseModel):
-    """Selection-only output returned by the specialist agent.
+    """Selection-only plan used by pick-eval and ``assemble_profile``.
 
-    The model can select source entries and (optionally) their bullet
-    indices.  It has no fields for basics, education, summaries, or prose;
-    those values are copied locally from the validated source profile.
+    The live tailor path emits ``GroundedTailoringPlan`` (indices plus
+    composed bullets). This model remains so role-selection tests can still
+    assemble a profile by copying source highlight indices.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -192,17 +198,8 @@ def assemble_profile(
     return _validated_profile(result)
 
 
-def _profile_for_prompt(profile: dict[str, Any]) -> str:
-    """Serialize only the source sections the agent can select."""
-
-    selectable_profile = {
-        section: copy.deepcopy(profile[section]) for section in _INDEX_FIELDS
-    }
-    return json.dumps(selectable_profile, ensure_ascii=False, default=str, sort_keys=True)
-
-
 class OpenAIAgentProvider(AIProvider):
-    """Single specialist Agent that selects source profile indices."""
+    """Specialist Agent that selects entries and composes grounded bullets."""
 
     def __init__(self, model_name: Optional[str] = None, language: str = "en"):
         # Read local development configuration only when this opt-in provider
@@ -219,27 +216,11 @@ class OpenAIAgentProvider(AIProvider):
                 "OpenAI tailoring is unavailable; install the 'tailoring' extra"
             )
 
-        shape = (
-            "Select the same compact one-page shape as the English concise resume: "
-            "prefer the three newest roles; typically at most three highlights per "
-            "role (a 3/4/2 split is acceptable when the second role has four "
-            "high-signal bullets); drop awards, MVP titles, redundant cost bullets, "
-            "generic deploy bullets, documentation-only bullets, and older extra roles. "
-            if self.language == "ja"
-            else "Select at most four work entries, three projects, and three bullets "
-            "per selected item. "
-        )
         self.agent = Agent(
-            name="Resume tailoring specialist",
+            name="Resume compose specialist",
             model=self.model_name,
-            output_type=TailoringPlan,
-            instructions=(
-                "Select relevant source profile entries for the supplied job description. "
-                "Return only zero-based indices in TailoringPlan; never write, rewrite, "
-                "summarize, or invent profile content. Basics and every education entry "
-                "are always retained by the local assembler. "
-                + shape
-            ),
+            output_type=GroundedTailoringPlan,
+            instructions=composer_instructions(self.language),
         )
         # Resume/JD contents are sensitive personal data. The model request is
         # required for tailoring, but duplicate storage in SDK traces is not.
@@ -255,7 +236,7 @@ class OpenAIAgentProvider(AIProvider):
     def tailor_profile(
         self, profile: dict[str, Any], job_description: str
     ) -> dict[str, Any]:
-        """Select and assemble source facts for ``job_description``."""
+        """Select roles and compose grounded bullets for ``job_description``."""
 
         if not isinstance(job_description, str) or not job_description.strip():
             raise ValueError("job_description must not be empty")
@@ -266,17 +247,9 @@ class OpenAIAgentProvider(AIProvider):
         if not source["work"]:
             raise ValueError("profile.work must contain at least one entry")
 
-        prompt = (
-            "JOB DESCRIPTION\n---\n"
-            f"{job_description.strip()}\n---\n"
-            "SOURCE PROFILE (use indices only; do not reproduce or edit content)\n"
-            f"{_profile_for_prompt(source)}\n---\n"
-            "Return a TailoringPlan; the local assembler copies all non-selectable source "
-            "fields unchanged."
-        )
         run_result = Runner.run_sync(
             self.agent,
-            prompt,
+            composer_prompt(source, job_description),
             max_turns=1,
             run_config=self.run_config,
         )
@@ -284,18 +257,21 @@ class OpenAIAgentProvider(AIProvider):
         try:
             plan = (
                 raw_plan
-                if isinstance(raw_plan, TailoringPlan)
-                else TailoringPlan.model_validate(raw_plan)
+                if isinstance(raw_plan, GroundedTailoringPlan)
+                else GroundedTailoringPlan.model_validate(raw_plan)
             )
         except Exception as exc:
-            raise ValueError("Agent returned an invalid TailoringPlan") from exc
-        return assemble_profile(source, plan)
+            raise ValueError("Agent returned an invalid GroundedTailoringPlan") from exc
+        return assemble_composed_profile(source, plan)
 
 
 __all__ = [
     "DEFAULT_MODEL",
+    "GroundedTailoringPlan",
     "HighlightSelection",
+    "RoleBullets",
     "TailoringPlan",
+    "assemble_composed_profile",
     "assemble_profile",
     "OpenAIAgentProvider",
 ]

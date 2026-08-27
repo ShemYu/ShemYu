@@ -50,6 +50,8 @@ def main(
 
     outputs = _tailored_outputs(output_name) if target_jd else CANONICAL_OUTPUTS
     profile = YamlDataLoader(data_dir).load()
+    # No-JD canonical generation is template clip of locked public highlights.
+    # Compose + grounding run only when a job description is supplied.
 
     if target_jd:
         jd_text = Path(target_jd).read_text(encoding="utf-8")

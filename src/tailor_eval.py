@@ -19,7 +19,9 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.ai import TailoringPlan, assemble_profile
+from src.compose import GroundedTailoringPlan, assemble_composed_profile
 from src.generator import for_public_resume, format_date
+from src.grounding import check_profile
 from src.loader import YamlDataLoader
 
 
@@ -29,7 +31,7 @@ DEFAULT_CASES_DIR = "tests/tailor_eval/cases"
 LIVE_FRAGMENTS_PATH = (
     Path(__file__).resolve().parent.parent / "tests" / "tailor_eval" / "fragments_live.yaml"
 )
-ASSEMBLER_VERSION = "1"
+ASSEMBLER_VERSION = "2"
 
 SECTION_HEADINGS = frozenset(
     {
@@ -132,6 +134,8 @@ class GoldenCase(BaseModel):
     must_include_projects: list[str] = Field(default_factory=list)
     must_exclude_projects: list[str] = Field(default_factory=list)
     must_include_highlights: list[str] = Field(default_factory=list)
+    must_include_composed_fragments: list[str] = Field(default_factory=list)
+    must_exclude_composed_fragments: list[str] = Field(default_factory=list)
     preferred_work: list[str] = Field(default_factory=list)
     preferred_projects: list[str] = Field(default_factory=list)
     forbidden_tokens: list[str] = Field(default_factory=list)
@@ -772,29 +776,30 @@ def _source_evidence(source: dict[str, Any]) -> list[str]:
     return values
 
 
+def _tailored_highlights(tailored: dict[str, Any]) -> set[str]:
+    values: set[str] = set()
+    for section in ("work", "projects"):
+        for item in tailored.get(section) or []:
+            for highlight in item.get("highlights") or []:
+                if highlight:
+                    values.add(_norm(highlight))
+    return values
+
+
+def _grounding_findings(source: dict[str, Any], tailored: dict[str, Any]) -> list[ScanFinding]:
+    findings: list[ScanFinding] = []
+    for error in check_profile(source, tailored):
+        findings.append(_fail(error.code, error.message))
+    return findings
+
+
 def _highlight_universe_findings(
     source: dict[str, Any], tailored: dict[str, Any]
 ) -> list[ScanFinding]:
-    findings: list[ScanFinding] = []
-    for section in ("work", "projects"):
-        source_by_name = {
-            item.get("name"): item for item in source.get(section) or [] if item.get("name")
-        }
-        for item in tailored.get(section) or []:
-            name = item.get("name")
-            source_item = source_by_name.get(name)
-            if source_item is None:
-                continue
-            allowed = list(source_item.get("highlights") or [])
-            for highlight in item.get("highlights") or []:
-                if highlight not in allowed:
-                    findings.append(
-                        _fail(
-                            "allowed_highlight_universe",
-                            f"{section} {name!r} highlight is not a source highlight of that item",
-                        )
-                    )
-    return findings
+    """Pick-path leftover: composed bullets are checked by grounding instead."""
+
+    del source, tailored
+    return []
 
 
 def scan_rendered(
@@ -802,8 +807,10 @@ def scan_rendered(
     tailored: dict[str, Any],
     rendered: dict[str, str],
 ) -> list[ScanFinding]:
-    findings = _highlight_universe_findings(source, tailored)
+    findings = _grounding_findings(source, tailored)
+    findings.extend(_highlight_universe_findings(source, tailored))
     allowed = public_fields(source).allowed
+    composed = _tailored_highlights(tailored)
     evidence = [token for token in _source_evidence(source) if token]
     for template in PUBLIC_SCAN_TEMPLATES:
         if template not in rendered:
@@ -813,14 +820,16 @@ def scan_rendered(
             extract_public_md(body) if template.endswith(".md.j2") else extract_public_html(body)
         )
         for value in _extracted_slots(extracted):
-            if _norm(value) not in allowed:
-                findings.append(
-                    _fail(
-                        "verbatim_highlight",
-                        f"extracted text is not a source field or allowed composition: {value!r}",
-                        template,
-                    )
+            normalized = _norm(value)
+            if normalized in allowed or normalized in composed:
+                continue
+            findings.append(
+                _fail(
+                    "verbatim_highlight",
+                    f"extracted text is not a source field or allowed composition: {value!r}",
+                    template,
                 )
+            )
         for token in evidence:
             if token in body:
                 findings.append(
@@ -834,7 +843,6 @@ def scan_rendered(
 
 
 def scan_bible(source: dict[str, Any], tailored: dict[str, Any], html_text: str) -> list[ScanFinding]:
-    del tailored
     findings: list[ScanFinding] = []
     extracted = extract_bible(html_text)
     work_by_name = {item.get("name"): item for item in source.get("work") or []}
@@ -855,15 +863,23 @@ def scan_bible(source: dict[str, Any], tailored: dict[str, Any], html_text: str)
             else project_by_name.get(item.name)
         )
         source_highlights = list((source_item or {}).get("highlights") or [])
+        tailored_item = None
+        tailored_section = tailored.get("work" if item.kind == "work" else "projects") or []
+        for candidate in tailored_section:
+            if candidate.get("name") == item.name:
+                tailored_item = candidate
+                break
+        tailored_highlights = list((tailored_item or {}).get("highlights") or [])
         for highlight in item.highlights:
-            if highlight not in source_highlights:
-                findings.append(
-                    _fail(
-                        "bible_highlight_verbatim",
-                        f"bible highlight is not a source highlight of {item.name!r}: {highlight!r}",
-                        BIBLE_SCAN_TEMPLATE,
-                    )
+            if highlight in source_highlights or highlight in tailored_highlights:
+                continue
+            findings.append(
+                _fail(
+                    "bible_highlight_verbatim",
+                    f"bible highlight is not a source or composed highlight of {item.name!r}: {highlight!r}",
+                    BIBLE_SCAN_TEMPLATE,
                 )
+            )
         source_evidence = list((source_item or {}).get("evidence") or [])
         for evidence in item.evidence:
             if evidence not in source_evidence:
@@ -960,19 +976,31 @@ def score_quality(source: dict[str, Any], tailored: dict[str, Any], jd: str) -> 
 
 
 def _prompt_version() -> str:
-    payload = json.dumps(TailoringPlan.model_json_schema(), sort_keys=True, default=str)
+    payload = json.dumps(
+        {
+            "pick": TailoringPlan.model_json_schema(),
+            "compose": GroundedTailoringPlan.model_json_schema(),
+        },
+        sort_keys=True,
+        default=str,
+    )
     return hashlib.sha256(f"{ASSEMBLER_VERSION}\n{payload}".encode()).hexdigest()
 
 
-def _plan_dict(plan: TailoringPlan | Mapping[str, Any] | None) -> dict[str, Any] | None:
+def _plan_dict(
+    plan: TailoringPlan | GroundedTailoringPlan | Mapping[str, Any] | None,
+) -> dict[str, Any] | None:
     if plan is None:
         return None
-    if isinstance(plan, TailoringPlan):
+    if isinstance(plan, (TailoringPlan, GroundedTailoringPlan)):
         return plan.model_dump()
     try:
-        return TailoringPlan.model_validate(plan).model_dump()
+        return GroundedTailoringPlan.model_validate(plan).model_dump()
     except Exception:
-        return dict(plan)
+        try:
+            return TailoringPlan.model_validate(plan).model_dump()
+        except Exception:
+            return dict(plan)
 
 
 def _identity_findings(case: GoldenCase, tailored: dict[str, Any]) -> list[ScanFinding]:
@@ -1001,6 +1029,23 @@ def _identity_findings(case: GoldenCase, tailored: dict[str, Any]) -> list[ScanF
                 _fail(
                     "must_include_highlights",
                     f"assembled profile missing highlight {highlight!r}",
+                )
+            )
+    assembled_blob = "\n".join(assembled_highlights)
+    for fragment in case.must_include_composed_fragments:
+        if fragment not in assembled_blob:
+            findings.append(
+                _fail(
+                    "must_include_composed_fragments",
+                    f"assembled highlights missing composed fragment {fragment!r}",
+                )
+            )
+    for fragment in case.must_exclude_composed_fragments:
+        if fragment and fragment in assembled_blob:
+            findings.append(
+                _fail(
+                    "must_exclude_composed_fragments",
+                    f"assembled highlights contain forbidden fragment {fragment!r}",
                 )
             )
     for name in case.preferred_work:
@@ -1051,7 +1096,12 @@ def evaluate_case(
         raise ValueError("live tailor eval is not available")
     started = time.perf_counter()
     if tailored is None and plan is not None:
-        tailored = assemble_profile(source, plan)
+        if isinstance(plan, GroundedTailoringPlan):
+            tailored = assemble_composed_profile(source, plan, ground=False)
+        elif isinstance(plan, Mapping) and "work_bullets" in plan:
+            tailored = assemble_composed_profile(source, plan, ground=False)
+        else:
+            tailored = assemble_profile(source, plan)
     findings: list[ScanFinding] = []
     quality: dict[str, float] = {}
     selected_work: list[str] = []
@@ -1064,6 +1114,8 @@ def evaluate_case(
         selected_work = [item.get("name") or "" for item in tailored.get("work") or []]
         selected_projects = [item.get("name") or "" for item in tailored.get("projects") or []]
         findings.extend(_identity_findings(case, tailored))
+        if not rendered:
+            findings.extend(_grounding_findings(source, tailored))
         quality = score_quality(source, tailored, case.jd)
         if (
             case.min_keyword_coverage is not None
