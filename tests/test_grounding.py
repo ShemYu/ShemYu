@@ -15,6 +15,7 @@ from src.grounding import (
     GroundingErrorList,
     check_profile,
     check_role_bullets,
+    extract_proper_nouns,
     is_constraint_evidence,
 )
 from src.loader import YamlDataLoader
@@ -70,7 +71,62 @@ class EvidenceLayerTest(unittest.TestCase):
         )
 
 
+class ProperNounExtractionTest(unittest.TestCase):
+    def test_sentence_initial_verbs_and_genai_are_not_names(self):
+        designed = extract_proper_nouns(
+            "Designed GenAI infrastructure (AI Gateway, Guardrails, MLflow)."
+        )
+        self.assertNotIn("Designed GenAI", designed)
+        self.assertNotIn("Designed", designed)
+        self.assertNotIn("GenAI", designed)
+        productionized = extract_proper_nouns(
+            "Productionized the DS-built PoC as a Databricks deployment workflow."
+        )
+        self.assertNotIn("Productionized", productionized)
+        self.assertIn("Databricks", productionized)
+
+    def test_invented_product_names_are_still_extracted(self):
+        names = extract_proper_nouns(
+            "Productionized Spark pipelines with TypeScript and LiteLLM."
+        )
+        self.assertNotIn("Productionized", names)
+        self.assertIn("Spark", names)
+        self.assertIn("TypeScript", names)
+        self.assertIn("LiteLLM", names)
+
+
 class LiveRoleGroundingTest(unittest.TestCase):
+    def test_designed_genai_and_productionized_yaml_facts_are_not_ungrounded_names(self):
+        cathay = live_work("Cathay Financial Holdings")
+        errors = check_role_bullets(
+            cathay,
+            [
+                "Designed GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.",
+                "Productionized the DS-built PoC as a Databricks deployment workflow, storing related data on the Databricks data layer.",
+            ],
+        )
+        self.assertEqual([item.code for item in errors if item.code == "ungrounded_name"], [])
+        self.assertEqual(errors, [])
+
+    def test_invented_proper_name_still_fails_ungrounded_name(self):
+        cathay = live_work("Cathay Financial Holdings")
+        errors = check_role_bullets(
+            cathay,
+            ["Designed GenAI infrastructure on the Aetheron platform."],
+        )
+        name_errors = [item for item in errors if item.code == "ungrounded_name"]
+        self.assertTrue(
+            any("Aetheron" in item.message for item in name_errors),
+            name_errors,
+        )
+        self.assertFalse(
+            any(
+                "Designed" in item.message or "GenAI" in item.message
+                for item in name_errors
+            ),
+            name_errors,
+        )
+
     def test_cathay_grounded_f1_and_retry_pass(self):
         cathay = live_work("Cathay Financial Holdings")
         bullets = [

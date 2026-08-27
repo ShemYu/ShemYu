@@ -28,12 +28,19 @@ _NUMBER = re.compile(
 )
 
 # Title-case / CamelCase spans and all-caps product acronyms (F1, AWS, QPS).
+# A span may start with a resume verb ("Designed GenAI"); those verbs are
+# stripped before the remainder is treated as a name.
 _PROPER_SPAN = re.compile(
     r"\b(?:[A-Z][a-zA-Z0-9]+(?:[ -][A-Z][a-zA-Z0-9]+)*)\b"
 )
 _ACRONYM = re.compile(r"\b[A-Z]{2,}[A-Z0-9]*\b|\bF1\b")
+_SPAN_TOKEN = re.compile(r"[A-Za-z0-9]+")
+# Designed, Productionized, Shipped — not Spark, TypeScript, LiteLLM.
+_VERB_LIKE = re.compile(r"^[A-Z][a-z]+(?:ized|ised|ed|ing)$")
 
-# Sentence-initial verbs and generic English that are not product names.
+# Sentence-initial verbs, irregular resume verbs, and generic English that
+# are not product / people / system names. Verb-like -ed/-ing/-ized tokens
+# are also skipped even when they are not listed here.
 _NAME_STOP = frozenset(
     {
         "A",
@@ -41,10 +48,13 @@ _NAME_STOP = frozenset(
         "All",
         "An",
         "And",
+        "Applied",
         "Architected",
         "Assisted",
+        "Began",
         "Built",
         "Capability",
+        "Chose",
         "Coordinated",
         "Coverage",
         "Created",
@@ -52,11 +62,17 @@ _NAME_STOP = frozenset(
         "Delivered",
         "Designed",
         "Developed",
+        "Did",
         "Do",
+        "Drove",
         "Extracted",
         "Facilitated",
         "For",
+        "Found",
         "From",
+        "Gave",
+        "Grew",
+        "Held",
         "I",
         "Implemented",
         "Improved",
@@ -65,10 +81,13 @@ _NAME_STOP = frozenset(
         "Internal",
         "Isolated",
         "Iterated",
+        "Kept",
         "Led",
+        "Made",
         "Maintained",
         "Mapped",
         "Max",
+        "Met",
         "My",
         "Named",
         "Not",
@@ -79,23 +98,50 @@ _NAME_STOP = frozenset(
         "Per",
         "Previous",
         "Prior",
+        "Productionized",
         "Public",
+        "Put",
         "Raised",
+        "Ran",
         "Reduced",
         "Regulatory",
         "Role",
         "Same",
         "Selected",
+        "Set",
+        "Shipped",
+        "Sold",
         "Solutions",
+        "Spoke",
         "Stored",
         "Supported",
+        "Taught",
         "The",
         "This",
         "That",
+        "Took",
         "Using",
         "User",
         "With",
         "Won",
+        "Wrote",
+    }
+)
+
+# Generic tech terms: not treated as proper names. Product layers (Spark,
+# TypeScript, LiteLLM, Unity Catalog) stay names and still hard-fail.
+_GENERIC_TECH = frozenset(
+    {
+        "ai",
+        "api",
+        "cpu",
+        "genai",
+        "gpu",
+        "llm",
+        "ml",
+        "mlops",
+        "nlp",
+        "rag",
     }
 )
 
@@ -205,12 +251,51 @@ def extract_numbers(text: str) -> list[str]:
     return _NUMBER.findall(text or "")
 
 
+def _is_skipped_name_token(token: str) -> bool:
+    """Return True for ordinary English / generic tech, not a proper name."""
+
+    if not token or token in _NAME_STOP:
+        return True
+    if token.lower().replace("-", "") in _GENERIC_TECH:
+        return True
+    return bool(_VERB_LIKE.fullmatch(token))
+
+
+def _names_from_span(span: str) -> list[str]:
+    """Drop verbs and generic tech from a title-case span; keep real names.
+
+    ``Designed GenAI`` → nothing. ``Built Spark`` → ``Spark``.
+    ``Unity Catalog`` → ``Unity Catalog``.
+    """
+
+    parts = _SPAN_TOKEN.findall(span)
+    names: list[str] = []
+    current: list[str] = []
+    for part in parts:
+        if _is_skipped_name_token(part):
+            if current:
+                names.append(" ".join(current))
+                current = []
+            continue
+        current.append(part)
+    if current:
+        names.append(" ".join(current))
+    return names
+
+
 def extract_proper_nouns(text: str) -> list[str]:
     found: list[str] = []
     seen: set[str] = set()
-    for match in (*_PROPER_SPAN.findall(text or ""), *_ACRONYM.findall(text or "")):
-        token = match.strip()
-        if not token or token in _NAME_STOP:
+    for span in _PROPER_SPAN.findall(text or ""):
+        for token in _names_from_span(span):
+            key = token.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            found.append(token)
+    for token in _ACRONYM.findall(text or ""):
+        token = token.strip()
+        if _is_skipped_name_token(token):
             continue
         key = token.lower()
         if key in seen:
