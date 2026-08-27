@@ -9,6 +9,7 @@ The goal is to preserve enough detail to support a public resume without inventi
 | Layer | Location | Purpose |
 |---|---|---|
 | Detailed private master | `career_evidence/private/<company>.md` | Full product context, workstream history, metrics, denominators, versions, sources, boundaries, and interview gaps. Ignored by Git. |
+| Tracked Git-history inventory | `career_evidence/moment_coach_ai_git_history.md` | Main-branch contribution ledger and resume-use boundaries derived from Moment Coach AI commits. |
 | Publication data | `data/work/<company>.yaml` | Verified and disclosure-safe summary/highlights that generated resumes may publish. |
 | Canonical outputs | `README.md`, `RESUME.md`, `output/resume*.html` | Generated artifacts. Never edit these to introduce a new career fact. |
 
