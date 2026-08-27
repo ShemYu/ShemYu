@@ -8,9 +8,10 @@
         :root {
             --page-width: 210mm;
             --page-height: 297mm;
-            --text: #111;
-            --muted: #444;
-            --rule: #222;
+            --ink: #14202b;
+            --muted: #52606d;
+            --accent: #173f5f;
+            --rule: #c9d2da;
         }
 
         * {
@@ -24,20 +25,21 @@
         }
 
         body {
-            background: #e9e9e9;
-            color: var(--text);
-            font-family: Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "WenQuanYi Micro Hei", Meiryo, sans-serif;
-            font-size: {% if language == 'ja' %}9.2pt{% else %}10pt{% endif %};
-            line-height: {% if language == 'ja' %}1.22{% else %}1.28{% endif %};
+            background: #e7ebee;
+            color: var(--ink);
+            font-family: Arial, Helvetica, "Hiragino Sans", "Noto Sans JP", sans-serif;
+            font-size: {% if language == 'ja' %}8.75pt{% else %}10.5pt{% endif %};
+            line-height: {% if language == 'ja' %}1.24{% else %}1.34{% endif %};
+            -webkit-font-smoothing: antialiased;
         }
 
         .resume {
             width: var(--page-width);
             min-height: var(--page-height);
             margin: 12px auto;
-            padding: {% if language == 'ja' %}10mm 14mm 9mm{% else %}13mm 16mm 12mm{% endif %};
+            padding: {% if language == 'ja' %}9mm 13mm 8mm{% else %}10.5mm 14mm 9.5mm{% endif %};
             background: #fff;
-            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.16);
+            box-shadow: 0 2px 12px rgba(20, 32, 43, 0.16);
         }
 
         a {
@@ -45,63 +47,65 @@
             text-decoration: none;
         }
 
+        .doc-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2mm;
+            color: var(--muted);
+            font-size: 8pt;
+        }
+
+        .doc-title {
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+        }
+
         .header {
-            text-align: center;
-            margin-bottom: {% if language == 'ja' %}2.2mm{% else %}3.5mm{% endif %};
+            padding-bottom: 3.2mm;
+            border-bottom: 1.4pt solid var(--accent);
         }
 
         h1 {
             margin: 0;
-            font-size: {% if language == 'ja' %}18pt{% else %}24pt{% endif %};
-            line-height: 1.05;
-            letter-spacing: 0.01em;
+            color: var(--accent);
+            font-size: {% if language == 'ja' %}19pt{% else %}27pt{% endif %};
+            line-height: 1;
+            letter-spacing: -0.015em;
         }
 
         .headline {
-            margin-top: 1.2mm;
-            font-size: 11pt;
+            margin-top: 1.4mm;
+            font-size: 11.5pt;
             font-weight: 700;
+            letter-spacing: 0.01em;
         }
 
         .contact {
+            display: flex;
+            flex-wrap: wrap;
             margin-top: 1.8mm;
             color: var(--muted);
-            font-size: 9pt;
+            font-size: 8.7pt;
         }
 
-        .contact span + span::before {
+        .contact-item + .contact-item::before {
             content: " | ";
             padding: 0 1.2mm;
-            color: #777;
+            color: #8a96a0;
         }
 
         section {
-            margin-top: {% if language == 'ja' %}2.2mm{% else %}3.2mm{% endif %};
+            margin-top: {% if language == 'ja' %}2.35mm{% else %}3.4mm{% endif %};
         }
 
         h2 {
-            margin: 0 0 1.7mm;
-            padding-bottom: 0.7mm;
-            border-bottom: 0.8pt solid var(--rule);
-            font-size: 10.5pt;
+            margin: 0 0 {% if language == 'ja' %}1.35mm{% else %}1.55mm{% endif %};
+            color: var(--accent);
+            font-size: {% if language == 'ja' %}9.2pt{% else %}9.5pt{% endif %};
             line-height: 1.1;
-            letter-spacing: {% if language == 'ja' %}0.04em{% else %}0.06em{% endif %};
+            letter-spacing: {% if language == 'ja' %}0.06em{% else %}0.12em{% endif %};
             text-transform: {% if language == 'ja' %}none{% else %}uppercase{% endif %};
-        }
-
-        .doc-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 2.2mm;
-            color: var(--muted);
-            font-size: 9pt;
-        }
-
-        .doc-title {
-            color: var(--text);
-            font-weight: 700;
-            letter-spacing: 0.12em;
         }
 
         p {
@@ -109,33 +113,14 @@
         }
 
         .summary {
-            color: #222;
-        }
-
-        .role-summary {
-            margin-top: 0.6mm;
-            font-size: 9.3pt;
-        }
-
-        .skill-row {
-            margin-bottom: 0.7mm;
-            font-size: 9.2pt;
-        }
-
-        .skill-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .skill-name {
-            font-weight: 700;
+            max-width: 178mm;
+            color: #273746;
         }
 
         .entry {
-            margin-bottom: {% if language == 'ja' %}1.8mm{% else %}2.7mm{% endif %};
-            {% if language != 'ja' %}
+            margin-bottom: {% if language == 'ja' %}1.65mm{% else %}2.4mm{% endif %};
             break-inside: avoid;
             page-break-inside: avoid;
-            {% endif %}
         }
 
         .entry:last-child {
@@ -146,66 +131,110 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            gap: 6mm;
+            gap: 5mm;
+        }
+
+        .entry-heading {
+            min-width: 0;
+            font-size: {% if language == 'ja' %}9.7pt{% else %}10.2pt{% endif %};
+            line-height: 1.15;
         }
 
         .entry-title {
-            font-size: 10pt;
             font-weight: 700;
+        }
+
+        .entry-company::before {
+            content: " | ";
+            padding: 0 0.7mm;
+            color: #83909a;
+            font-weight: 400;
+        }
+
+        .entry-company {
+            color: #344a5d;
+            font-weight: 600;
         }
 
         .entry-date {
             flex: 0 0 auto;
             color: var(--muted);
-            font-size: 9pt;
+            font-size: 8.7pt;
             white-space: nowrap;
         }
 
-        .entry-subtitle {
-            margin-top: 0.3mm;
-            color: #333;
-            font-size: 9.4pt;
-            font-weight: 600;
+        .role-summary {
+            margin-top: 0.55mm;
+            color: #465767;
+            font-size: 9.2pt;
+            font-style: italic;
         }
 
         ul {
-            margin: 1mm 0 0;
-            padding-left: 4.5mm;
+            margin: {% if language == 'ja' %}0.75mm{% else %}0.9mm{% endif %} 0 0;
+            padding-left: 4.2mm;
         }
 
         li {
-            margin-bottom: {% if language == 'ja' %}0.4mm{% else %}0.7mm{% endif %};
-            padding-left: 0.5mm;
+            margin-bottom: {% if language == 'ja' %}0.3mm{% else %}0.6mm{% endif %};
+            padding-left: 0.45mm;
+        }
+
+        li::marker {
+            color: var(--accent);
         }
 
         li:last-child {
             margin-bottom: 0;
         }
 
+        .skill-row {
+            display: grid;
+            grid-template-columns: 34mm 1fr;
+            column-gap: 2mm;
+            margin-bottom: 0.65mm;
+            font-size: {% if language == 'ja' %}8.75pt{% else %}9.2pt{% endif %};
+        }
+
+        .skill-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-name {
+            color: #344a5d;
+            font-weight: 700;
+        }
+
         .education-row,
-        .certificate-row {
+        .credential-row {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            gap: 6mm;
-            margin-bottom: 1mm;
+            gap: 5mm;
+            margin-bottom: 0.65mm;
             break-inside: avoid;
             page-break-inside: avoid;
         }
 
         .education-row:last-child,
-        .certificate-row:last-child {
+        .credential-row:last-child {
             margin-bottom: 0;
         }
 
         .education-main,
-        .certificate-main {
+        .credential-main,
+        .credential-label {
             font-weight: 700;
         }
 
-        .education-detail {
-            color: #333;
+        .education-detail,
+        .credential-detail {
+            color: #3e4f5e;
             font-weight: 400;
+        }
+
+        .recognition {
+            margin-top: 0.65mm;
         }
 
         @media print {
@@ -216,6 +245,8 @@
 
             body {
                 background: #fff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .resume {
@@ -235,18 +266,20 @@
             <div>{{ as_of }}</div>
         </div>
         {% endif %}
+
         <header class="header">
             <h1>{{ basics.name }}</h1>
-            <div class="headline">{{ basics.label }}</div>
+            {% if basics.label %}<div class="headline">{{ basics.label }}</div>{% endif %}
             <div class="contact">
-                {% if basics.email %}<span><a href="mailto:{{ basics.email }}">{{ basics.email }}</a></span>{% endif %}
-                {% if basics.phone %}<span>{{ basics.phone }}</span>{% endif %}
-                {% if basics.location.city %}<span>{{ basics.location.city }}, {{ basics.location.region }}</span>{% endif %}
-                {% if basics.url %}<span><a href="{{ basics.url }}">{{ basics.url | replace('https://', '') | replace('http://', '') }}</a></span>{% endif %}
-                {% if language == 'ja' %}
-                    {% for profile in basics.profiles if profile.network == 'LinkedIn' and profile.url %}
-                    <span><a href="{{ profile.url }}">LinkedIn</a></span>
+                {% if contacts is defined and contacts %}
+                    {% for item in contacts %}
+                    <span class="contact-item">{% if item.kind == 'email' %}<a href="mailto:{{ item.label }}">{{ item.label }}</a>{% elif item.url %}<a href="{{ item.url }}">{{ item.label }}</a>{% else %}{{ item.label }}{% endif %}</span>
                     {% endfor %}
+                {% else %}
+                    {% if basics.email %}<span class="contact-item"><a href="mailto:{{ basics.email }}">{{ basics.email }}</a></span>{% endif %}
+                    {% if basics.phone %}<span class="contact-item">{{ basics.phone }}</span>{% endif %}
+                    {% if basics.location.city %}<span class="contact-item">{{ basics.location.city }}{% if basics.location.region %}, {{ basics.location.region }}{% endif %}</span>{% endif %}
+                    {% if basics.url %}<span class="contact-item"><a href="{{ basics.url }}">{{ basics.url | replace('https://', '') | replace('http://', '') }}</a></span>{% endif %}
                 {% endif %}
             </div>
         </header>
@@ -258,35 +291,21 @@
         </section>
         {% endif %}
 
-        {% if skills %}
-        <section>
-            <h2>{{ ui.skills }}</h2>
-            {% for skill in skills if skill.name not in ['Language', 'Leadership & Communication', '語学', 'リーダーシップ / コミュニケーション'] %}
-            <p class="skill-row"><span class="skill-name">{{ skill.name }}:</span> {{ skill.keywords[:7] | join(', ') }}</p>
-            {% endfor %}
-            {% for skill in skills if skill.name in ['Language', '語学'] %}
-            <p class="skill-row"><span class="skill-name">{{ ui.languages }}:</span> {{ skill.keywords | join(', ') }}</p>
-            {% endfor %}
-        </section>
-        {% endif %}
-
         {% if work %}
         <section>
             <h2>{{ ui.experience }}</h2>
-            {% for w in work[:3] %}
-            {% set role_index = loop.index0 %}
+            {% for w in work %}
             <article class="entry">
                 <div class="entry-header">
-                    <div class="entry-title">{% if language == 'ja' %}{{ w.name }}{% else %}{{ w.position }}{% endif %}</div>
-                    <div class="entry-date">{{ w.startDate | format_date }} - {{ w.endDate | default('Present', true) | format_date }}</div>
+                    <div class="entry-heading">
+                        <span class="entry-title">{{ w.position }}</span><span class="entry-company">{{ w.name }}</span>
+                    </div>
+                    <div class="entry-date">{{ w.startDate | format_date }} - {{ w.endDate | default(ui.present, true) | format_date }}</div>
                 </div>
-                <div class="entry-subtitle">{% if language == 'ja' %}{{ w.position }}{% if w.location %} · {{ w.location }}{% endif %}{% else %}{{ w.name }}{% endif %}</div>
-                {% if language == 'ja' and w.summary %}
-                <p class="role-summary">{{ w.summary }}</p>
-                {% endif %}
+                {% if w.summary %}<p class="role-summary">{{ w.summary }}</p>{% endif %}
                 {% if w.highlights %}
                 <ul>
-                    {% for highlight in w.highlights[:highlight_caps[role_index]] %}
+                    {% for highlight in w.highlights %}
                     <li>{% if language == 'ja' and w.highlight_axes is defined and w.highlight_axes[loop.index0] %}<strong>{{ w.highlight_axes[loop.index0] }}</strong> {% endif %}{{ highlight }}</li>
                     {% endfor %}
                 </ul>
@@ -296,33 +315,39 @@
         </section>
         {% endif %}
 
-        {% if education %}
+        {% if skills %}
         <section>
-            <h2>{{ ui.education }}</h2>
-            {% for edu in education[:education_limit] %}
+            <h2>{{ ui.skills }}</h2>
+            {% for skill in skills %}
+            <p class="skill-row"><span class="skill-name">{{ skill.name }}</span><span>{{ skill.keywords | join(', ') }}</span></p>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if education or certificates or awards %}
+        <section>
+            <h2>{{ ui.credentials }}</h2>
+            {% for edu in education %}
             <div class="education-row">
                 <div>
                     {% if language == 'ja' %}
                     <span class="education-main">{{ edu.studyType }}（{{ edu.area }}）</span><span class="education-detail">, {{ edu.institution }}{% if edu.score %} - {{ ui.gpa }} {{ edu.score }}{% endif %}</span>
                     {% else %}
-                    <span class="education-main">{{ edu.studyType }} in {{ edu.area }}</span><span class="education-detail">, {{ edu.institution }}{% if edu.score %} - GPA {{ edu.score }}{% endif %}</span>
+                    <span class="education-main">{% if edu.studyType == 'Master' %}M.S.{% elif edu.studyType == 'Bachelor' %}B.S.{% else %}{{ edu.studyType }}{% endif %} in {{ edu.area }}</span><span class="education-detail">, {{ edu.institution }}{% if edu.score %} - GPA {{ edu.score }}{% endif %}</span>
                     {% endif %}
                 </div>
                 <div class="entry-date">{{ edu.startDate | format_date }} - {{ edu.endDate | format_date }}</div>
             </div>
             {% endfor %}
-        </section>
-        {% endif %}
-
-        {% if certificates %}
-        <section>
-            <h2>{{ ui.certificates }}</h2>
-            {% for cert in certificates if 'Cloud Quest' not in cert.name %}
-            <div class="certificate-row">
-                <div><span class="certificate-main">{{ cert.name }}</span>{% if cert.issuer %}, {{ cert.issuer }}{% endif %}</div>
+            {% for cert in certificates %}
+            <div class="credential-row">
+                <div><span class="credential-main">{{ cert.name }}</span>{% if cert.issuer %}<span class="credential-detail">, {{ cert.issuer }}</span>{% endif %}</div>
                 {% if cert.date %}<div class="entry-date">{{ cert.date | format_date }}</div>{% endif %}
             </div>
             {% endfor %}
+            {% if awards %}
+            <p class="recognition"><span class="credential-label">{{ ui.recognition }}:</span> {{ awards | map(attribute='name') | join('; ') }}</p>
+            {% endif %}
         </section>
         {% endif %}
     </main>

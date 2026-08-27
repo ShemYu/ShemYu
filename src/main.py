@@ -19,12 +19,30 @@ VIEW_OUTPUTS = (
     ("github-readme", "readme.md.j2", "README.md"),
 )
 
+DETAILED_VIEW_OUTPUT = (
+    "detailed",
+    "resume_detailed.html.j2",
+    "output/resume-detailed.html",
+)
+AVAILABLE_VIEW_OUTPUTS = (*VIEW_OUTPUTS, DETAILED_VIEW_OUTPUT)
+
+
+def resume_pdf_path(language: str) -> str:
+    suffix = "-ja" if language == "ja" else ""
+    return f"output/pdf/shem-yu-resume{suffix}.pdf"
+
+
+def detailed_resume_pdf_path() -> str:
+    return "output/pdf/shem-yu-resume-detailed.pdf"
+
 
 def main(
     language: str = DEFAULT_LANGUAGE,
     views: Sequence[tuple[str, str, str]] = VIEW_OUTPUTS,
 ) -> None:
     language = normalize_language(language)
+    if language != "en" and any(view_id == "detailed" for view_id, *_ in views):
+        raise ValueError("The detailed resume currently supports English only")
     career_dir = Path("career")
     views_dir = Path("views")
     template_dir = "templates"
@@ -44,13 +62,26 @@ def main(
 
     generator.generate_many(jobs)
 
-    if language == "ja" and any(view_id == "one-pager" for view_id, _template, _path in views):
+    if any(view_id == "one-pager" for view_id, _template, _path in views):
         html_path = next(path for view_id, _template, path in views if view_id == "one-pager")
-        pdf_path = str(Path(html_path).with_suffix(".pdf"))
+        pdf_path = resume_pdf_path(language)
         from src.pdf import render_and_assert_one_page
 
         pages = render_and_assert_one_page(html_path, pdf_path)
         print(f"One-page check passed: {pdf_path} ({pages} page)")
+
+    if any(view_id == "detailed" for view_id, _template, _path in views):
+        html_path = next(
+            path for view_id, _template, path in views if view_id == "detailed"
+        )
+        pdf_path = detailed_resume_pdf_path()
+        from src.pdf import PdfRenderError, count_pdf_pages, render_html_to_pdf
+
+        pdf_bytes = render_html_to_pdf(html_path, pdf_path)
+        pages = count_pdf_pages(pdf_bytes)
+        if pages < 1:
+            raise PdfRenderError("Detailed resume did not contain any PDF pages")
+        print(f"Detailed resume rendered: {pdf_path} ({pages} pages)")
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -66,7 +97,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--view",
         default=None,
-        choices=tuple(item[0] for item in VIEW_OUTPUTS),
+        choices=tuple(item[0] for item in AVAILABLE_VIEW_OUTPUTS),
         help="Render a single view instead of the canonical set.",
     )
     return parser.parse_args(argv)
@@ -75,7 +106,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def selected_views(view_id: str | None) -> Sequence[tuple[str, str, str]]:
     if view_id is None:
         return VIEW_OUTPUTS
-    return tuple(item for item in VIEW_OUTPUTS if item[0] == view_id)
+    return tuple(item for item in AVAILABLE_VIEW_OUTPUTS if item[0] == view_id)
 
 
 if __name__ == "__main__":

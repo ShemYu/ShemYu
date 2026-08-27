@@ -1,16 +1,32 @@
 # Resume publication standard
 
-`career/` is the source of truth. Views under `views/` select claim ids.
-Canonical generation (`uv run python -m src.main`) does **not** compose.
-It binds those ids and template-clips the one-pager.
+`career/` is the source of truth. Views under `views/` select claim ids and define the final document order. Canonical generation (`uv run python -m src.main`) is deterministic and does not call a model.
 
-`--language ja` is the same bind path with `text.ja` and view axis tags.
-It does not call a model.
+The one-pager may carry an editorial rewrite next to a selected claim id. The rewrite is presentation, not a new fact: it may shorten, normalize tense, or improve clarity, but every assertion must remain supported by the referenced public claim. A bullet may list `supporting_claims` when its implementation and outcome live on separate claim nodes. Every cited claim must be public, publishable, and attached to the same role (or the same project for project bullets).
+
+Multi-claim bullets must provide an explicit rewrite for the current locale; the renderer never silently prints only the primary claim. The bound output records every source id in `highlight_claim_ids`, aligned one-to-one with `highlights`. Templates render every selected item exactly once and must not use hidden list slices, name-based filters, or language-specific content caps.
+
+## Resume editorial standard
+
+`views/one-pager.yaml` and `views/detailed.yaml` use `senior-impact-v1`. Approved bullets follow this order when the evidence supports it:
+
+`ownership / implementation → operating context or problem → measurable outcome`
+
+- A technology name is supporting detail, not the subject of the bullet.
+- A benchmark or adoption number does not stand alone without the practice that produced or operationalized it.
+- Implementation and outcome for the same system should normally be composed into one bullet.
+- Filler openings such as “Responsible for” and “Worked on” are rejected.
+
+The deterministic gate rejects obvious metric-first and tool-first regressions. Exact tests lock the approved wording. Neither mechanism permits an editorial rewrite to add facts beyond its cited claims; semantic accuracy still requires review when the wording changes.
+
+The detailed resume is a separate English master artifact. It may span multiple pages and should include all substantive public claims without repeating the same result in both Experience and Technical Depth. Internal evidence stays excluded, and FinOps results from DOGI/FinOps are counted once.
+
+`--language ja` is the same bind path with `text.ja` and view axis tags. It does not call a model.
 
 ## Public vs internal
 
-`disclosure: public` claims may be listed on `views/one-pager.yaml` and
-`views/full.yaml`. Put internal benchmarks, case counts, pp swings, and
+`disclosure: public` claims may be listed on `views/one-pager.yaml`,
+`views/detailed.yaml`, and `views/full.yaml`. Put internal benchmarks, case counts, pp swings, and
 similar eval notes on `disclosure: internal` claims. The Bible view may
 list them under evidence. `do_not_claim` stays on the node so humans know
 what **not** to publish.

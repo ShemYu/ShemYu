@@ -1,7 +1,7 @@
 ---
 id: googleadk
 type: skill
-title: GoogleADK
+title: Google ADK
 disclosure: public
 ---
 

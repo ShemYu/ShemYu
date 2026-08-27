@@ -56,9 +56,9 @@ Led 4 full-time reports (7 including contractors), overseeing AI project deploym
 
 - Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
 
-- Won CFH Cloud Creative Award 2024 (1st place).
+- CFH Cloud Creative Award 2024, 1st Place
 
-- Named departmental MVP, Q1 2025.
+- Departmental MVP, Q1 2025
 
 
 
@@ -169,7 +169,7 @@ _2012-06 - 2016-06_
 
 - **MLOps & Deployment**: Databricks, MLflow, Docker, CI/CD (Azure DevOps), Kubernetes, AWS SageMaker, AWS Lambda
 
-- **Programming & ML Frameworks**: Python (expert), R (basic), C/C++ (familiar), Hugging Face, FastAPI, GoogleADK, LangChain, LangGraph, PyTorch, TensorFlow, scikit-learn, pandas, NumPy, SciPy, Matplotlib
+- **Programming & ML Frameworks**: Python, R (basic), C/C++ (familiar), Hugging Face, FastAPI, Google ADK, LangChain, LangGraph, PyTorch, TensorFlow, scikit-learn, pandas, NumPy, SciPy, Matplotlib
 
 
 
@@ -216,7 +216,7 @@ Infer where a learner is stuck from cooking video and voice, then coach the next
 
 
 
-**Keywords**: multimodal agents, capability-based evals, video understanding
+**Keywords**: Multimodal AI, Agent Evaluation, video understanding
 
 
 
@@ -244,7 +244,7 @@ Internal productivity tools powered by multi-agent workflows, including meeting 
 
 
 
-**Keywords**: Multi-Agent System, Workflow Orchestration, Redis, Postgres, FinOps, LangGraph/ADK Pattern
+**Keywords**: Multi-Agent System, Workflow Orchestration, Redis, PostgreSQL, FinOps, LangGraph/ADK Pattern
 
 
 

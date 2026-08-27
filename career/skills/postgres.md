@@ -1,7 +1,7 @@
 ---
 id: postgres
 type: skill
-title: Postgres
+title: PostgreSQL
 disclosure: public
 ---
 

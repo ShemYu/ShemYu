@@ -31,6 +31,8 @@ UI_LABELS: dict[str, dict[str, str]] = {
         "experience": "Professional Experience",
         "education": "Education",
         "certificates": "Certifications",
+        "credentials": "Education & Credentials",
+        "recognition": "Recognition",
         "present": "Present",
         "in": " in ",
         "gpa": "GPA",
@@ -44,6 +46,8 @@ UI_LABELS: dict[str, dict[str, str]] = {
         "experience": "職務経歴",
         "education": "学歴",
         "certificates": "資格",
+        "credentials": "学歴・資格",
+        "recognition": "受賞",
         "present": "現在",
         "in": "（",
         "gpa": "GPA",
@@ -333,12 +337,6 @@ JA_AXIS_TAGS: dict[str, str] = {
     ): "ライブラリ",
 }
 
-# Concise HTML highlight caps: English stays 3/3/2; Japanese uses the GT 3/4/2 shape.
-HIGHLIGHT_CAPS = {
-    "en": (3, 3, 2),
-    "ja": (3, 4, 2),
-}
-
 _FORBIDDEN_JA_CLAIMS = (
     "日本語（Fluent）",
     "日本語 (Fluent)",
@@ -403,13 +401,6 @@ def as_of_label(language: str, today: date | None = None) -> str:
     if language != "ja":
         return day.isoformat()
     return f"{day.year}年{day.month}月{day.day}日 {UI_LABELS['ja']['as_of_suffix']}"
-
-
-def highlight_cap(language: str, role_index: int) -> int:
-    caps = HIGHLIGHT_CAPS[normalize_language(language)]
-    if role_index < len(caps):
-        return caps[role_index]
-    return caps[-1]
 
 
 def axis_tag(source_highlight: str) -> str | None:
@@ -562,13 +553,11 @@ def _profile_blob(profile: Mapping[str, Any]) -> str:
 
 __all__ = [
     "DEFAULT_LANGUAGE",
-    "HIGHLIGHT_CAPS",
     "JA_DISPLAY_NAME_ALIAS",
     "SUPPORTED_LANGUAGES",
     "as_of_label",
     "axis_tag",
     "format_date",
-    "highlight_cap",
     "localize_profile",
     "normalize_language",
     "translate_text",

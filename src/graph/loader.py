@@ -8,7 +8,7 @@ from typing import Any, Iterable
 import yaml
 from pydantic import ValidationError
 
-from src.graph.schema import GraphNode, ParsedPage, parse_node
+from src.graph.schema import Claim, Focus, GraphNode, ParsedPage, parse_node
 
 
 def parse_markdown_page(path: Path) -> tuple[dict[str, Any], str]:
@@ -58,6 +58,7 @@ class CareerGraph:
             raise ValueError("duplicate node id: " + ", ".join(sorted(set(duplicates))))
         self._assert_filename_matches_id()
         self._assert_links_resolve()
+        self._assert_claim_links_are_reciprocal()
 
     def _assert_filename_matches_id(self) -> None:
         mismatches = []
@@ -77,6 +78,28 @@ class CareerGraph:
                     missing.append(f"{node.id} -> {target}")
         if missing:
             raise ValueError("dangling graph link: " + "; ".join(missing))
+
+    def _assert_claim_links_are_reciprocal(self) -> None:
+        """Keep Focus.claims and Claim.focus as one consistent graph edge."""
+
+        mismatches: list[str] = []
+        for page in self.pages:
+            node = page.node
+            if isinstance(node, Claim):
+                focus = self.get(node.focus)
+                if not isinstance(focus, Focus) or node.id not in focus.claims:
+                    mismatches.append(
+                        f"claim {node.id} points to {node.focus}, but the focus does not list it"
+                    )
+            elif isinstance(node, Focus):
+                for claim_id in node.claims:
+                    claim = self.get(claim_id)
+                    if not isinstance(claim, Claim) or claim.focus != node.id:
+                        mismatches.append(
+                            f"focus {node.id} lists {claim_id}, but the claim points elsewhere"
+                        )
+        if mismatches:
+            raise ValueError("non-reciprocal claim link: " + "; ".join(mismatches))
 
     def get(self, node_id: str) -> GraphNode:
         try:
