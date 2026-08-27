@@ -34,8 +34,9 @@ data layer” is the allowed wording.
 
 ## Cookpad numbers
 
-Public / outbound coverage is **50% → 95% (53/56)** on a fixed 15-case,
-56-item eval set. Do not write 40% → 95% as the same ruler.
+Public / outbound **recall** is **50% → 95% (53/56)** on a fixed 15-case,
+56-item eval set. Do not write 40% → 95% as the same ruler. Do not treat
+67.6 → 83.0 as recall or as a second coverage curve.
 
 Never put on the page:
 

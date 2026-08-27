@@ -361,8 +361,6 @@
 
                     <li>Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics and must not be compared with the 56-item result. Knowledge coverage remained an optimization target.</li>
 
-                    <li>Candidate coverage improved from 67.6% to 83.0% on a separate 15-case, 103-unit benchmark. Evaluation work also included a sub-9-minute 56-case run, RCA across 73 flaky misses, and reduced Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp. Keep these separate from the public 56-item dish metric.</li>
-
                     <li>Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs but was not verified as the shipped architecture.</li>
 
                     <li>Defined the upstream observation problem and designed and implemented a staged Detect → Plan → Select → Observe → Correct pipeline so downstream causal diagnosis could be evaluated independently. A legacy 14-case manual review found dish-specific signals in 13 cases but correct diagnoses in only 2, isolating unresolved primary-cause selection in Assessment. This is stage-diagnostic evidence, not visual accuracy or uplift. Sources: PR #299 and cooking_experiment_analysis/report/20250423/.</li>

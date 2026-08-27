@@ -2,6 +2,12 @@
 
 Facts already in the graph were preserved. Rulings below are owner-confirmed. Remaining items are optional polish, not lost history.
 
+## Ruling: 67.6 → 83.0 is not recall
+
+Owner: the real recall improvement is 50% → 95% (53/56). The 15-case/103-unit
+67.6 → 83.0 reading is retired from the story (`cookpad-vu-internal-coaching`,
+status `do-not-claim`). Not on the Bible view.
+
 ## Synced from origin/main Cookpad evidence (PR #25)
 
 Public one-pager bullets unchanged. Internal Cookpad claims now match

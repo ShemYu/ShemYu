@@ -76,7 +76,8 @@ class LiveCareerGraphTest(unittest.TestCase):
         graph = load_graph("career")
         profile = bind_view(graph, load_view("views/bible.yaml"))
         cookpad = profile["work"][0]
-        self.assertTrue(any("67.6" in item for item in cookpad["evidence"]))
+        blob = " ".join(cookpad["evidence"])
+        self.assertNotIn("67.6", blob)
         self.assertTrue(any("13 cases" in item for item in cookpad["evidence"]))
         self.assertTrue(any("ObservationAgent" in item for item in cookpad["evidence"]))
 

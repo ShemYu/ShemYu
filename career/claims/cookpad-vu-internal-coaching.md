@@ -2,24 +2,24 @@
 id: cookpad-vu-internal-coaching
 type: claim
 title: |-
-  Candidate coverage improved from 67.6% to 83.0% on a separate 15-case, 103-unit benchmark. Evaluation work also included a sub-9-minute 56-case run, RCA across 73 flaky misses, and reduced Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp. Keep these separate from the public 56-item dish metric.
+  A 15-case / 103-unit 67.6% → 83.0% candidate-coverage reading is not the recall improvement. Public recall is dish coverage 50% → 95% (53/56) on the fixed 15-case, 56-item rubric. Do not publish 67.6 → 83.0, +15.4 pp, or juxtapose it as a second coverage arrow.
 focus: cookpad-vu
-status: confirmed
+status: do-not-claim
 disclosure: internal
-source: user-confirmed
+source: user-confirmed:2026-08-27
 metric: ''
 text:
   en: |-
-    Candidate coverage improved from 67.6% to 83.0% on a separate 15-case, 103-unit benchmark. Evaluation work also included a sub-9-minute 56-case run, RCA across 73 flaky misses, and reduced Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp. Keep these separate from the public 56-item dish metric.
+    A 15-case / 103-unit 67.6% → 83.0% candidate-coverage reading is not the recall improvement. Public recall is dish coverage 50% → 95% (53/56) on the fixed 15-case, 56-item rubric. Do not publish 67.6 → 83.0, +15.4 pp, or juxtapose it as a second coverage arrow.
   ja: ''
 do_not_claim:
-- 67.6 → 83.0 on the one-pager
-- 15-case / 103-unit or 56-case / 9 min on the one-pager
-- flaky-miss RCA on the one-pager
+- 67.6 → 83.0 as recall, coverage, or a second improvement curve
+- +15.4 pp
+- 15-case / 103-unit on the one-pager
 ---
 
 <!-- claim-text:start -->
-Candidate coverage improved from 67.6% to 83.0% on a separate 15-case, 103-unit benchmark. Evaluation work also included a sub-9-minute 56-case run, RCA across 73 flaky misses, and reduced Knowledge coverage swing from +/-8.5 pp to +/-3.2 pp. Keep these separate from the public 56-item dish metric.
+A 15-case / 103-unit 67.6% → 83.0% candidate-coverage reading is not the recall improvement. Public recall is dish coverage 50% → 95% (53/56) on the fixed 15-case, 56-item rubric. Do not publish 67.6 → 83.0, +15.4 pp, or juxtapose it as a second coverage arrow.
 <!-- claim-text:end -->
 
 <!-- graph:start -->

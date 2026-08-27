@@ -9,7 +9,6 @@ roles:
       - cookpad-vu-evals
     evidence:
       - cookpad-vu-ruler-note
-      - cookpad-vu-internal-coaching
       - cookpad-vu-architecture-bound
       - cookpad-vu-grounder-v1
       - cookpad-vu-observation-agent

@@ -29,6 +29,7 @@ do_not_claim:
 - 40% → 95% as the same ruler
 - combining 56-item dish metric with later 61-item or 109-contract rubrics
 - 93% grounding accuracy / 93% coverage
+- 67.6 → 83.0 / +15.4 pp as recall or a second coverage arrow
 - Guideline grounder v2 or ObservationAgent as production
 - Shem owned or shipped v5 investigator
 - attributing PR #606 to Shem
@@ -46,7 +47,7 @@ Public highlight is 50% → 95% (53/56) on a fixed 15-case, 56-item set (same-ru
 - 2026-07-06 30/74 = 40.5% is a **different ruler**, not an arrow into 53/56.
 - After 2026-08-11 the set is 61 dish items; 2026-08-12 onward `v3_canonical_claim`. Later 23/61 is not a product regression from 53/56.
 - Knowledge coverage remained remaining work; do not publish knowledge percentages.
-- Separate internal benchmark: 67.6% → 83.0% on 15-case / 103-unit candidate coverage; 56-case run under 9 minutes; flaky RCA; knowledge swing +/-8.5 pp → +/-3.2 pp. Keep off the one-pager.
+- Do not use 67.6% → 83.0% as recall; that number is retired from the story.
 
 ## C. Architecture
 
@@ -66,6 +67,6 @@ Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_
 ## Graph
 
 - role: [[cookpad-senior-ai|Senior AI Engineer]]
-- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-ruler-note|Dish 50-95 uses a different rubric than 40.5% and later 61-item v3]], [[cookpad-vu-internal-coaching|Separate 15-case 103-unit candidate-coverage benchmark 67.6 to 83.0]], [[cookpad-vu-architecture-bound|Video-description path and proposed recall/precision split did not ship]], [[cookpad-vu-grounder-v1|Guideline Grounder v1 staged observation; 13/14 signal vs 2/14 diagnoses]], [[cookpad-vu-observation-agent|Designed ObservationAgent v2 and mentored Sonan; did not ship]], [[cookpad-vu-video-infra|Video Explorer, embeddings, semantic retrieval, Visual Explorer]], [[cookpad-vu-eval-architecture|Versioned assessment suites, frozen replay, LLM-as-judge, canonical GT]], [[cookpad-vu-git-history|33 main-branch PRs inventoried in moment_coach_ai_git_history.md]]
+- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching|67.6-83.0 is not the recall story; public recall is 50-95 (53/56)]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
 - stack: [[multimodal-agents|multimodal agents]], [[capability-based-evals|capability-based evals]], [[video-understanding|video understanding]]
 <!-- graph:end -->
