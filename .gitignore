@@ -155,7 +155,6 @@ cython_debug/
 
 # Resume
 CV_*.pdf
-target_jd.txt
 output/*
 !output/resume.html
 !output/resume_bible.html

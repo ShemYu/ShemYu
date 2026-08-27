@@ -26,7 +26,7 @@ def count_pdf_pages(pdf_bytes: bytes) -> int:
 def assert_one_page(pdf_bytes: bytes) -> int:
     """Fail the job when the rendered PDF is not exactly one page.
 
-    The Japanese concise harness is a one-page 職務経歴書. After PDF render,
+    The Japanese concise clip is a one-page 職務経歴書. After PDF render,
     callers must invoke this check so a two-page dump cannot ship.
     """
 

@@ -1,9 +1,0 @@
-name: Weekend Weather Bot
-description: Hobby weather bot.
-url: ""
-startDate: "2024-06"
-endDate: "2024-08"
-keywords:
-  - Hobby
-highlights:
-  - "Posted weekend forecasts to a private chat."
