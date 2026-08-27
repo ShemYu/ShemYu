@@ -12,6 +12,14 @@ on:
         required: true
         default: resume_tailored
         type: string
+      language:
+        description: Resume language (en or ja). ja emits a one-page 職務経歴書 PDF.
+        required: true
+        type: choice
+        default: en
+        options:
+          - en
+          - ja
 
 permissions:
   contents: read
@@ -42,6 +50,16 @@ jobs:
           python-version: "3.11"
           enable-cache: true
 
+      - name: Install Chrome and CJK fonts for Japanese PDF
+        if: ${{ inputs.language == 'ja' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null && ! command -v chromium-browser >/dev/null; then
+            wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt-get install -y /tmp/chrome.deb
+          fi
+
       - name: Sync locked tailoring dependencies
         run: uv sync --locked --extra tailoring
 
@@ -67,8 +85,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.6-luna
           OUTPUT_NAME: ${{ inputs.output_name }}
+          LANGUAGE: ${{ inputs.language }}
         run: |
-          uv run --locked --extra tailoring python -m src.main /tmp/job-description.txt --output-name "$OUTPUT_NAME"
+          uv run --locked --extra tailoring python -m src.main /tmp/job-description.txt --language "$LANGUAGE" --output-name "$OUTPUT_NAME"
 
       - name: Prepare tailored artifact
         env:
@@ -78,6 +97,9 @@ jobs:
           cp "output/tailored/$OUTPUT_NAME.md" /tmp/tailored-resume/
           cp "output/tailored/$OUTPUT_NAME.html" /tmp/tailored-resume/
           cp "output/tailored/${OUTPUT_NAME}_bible.html" /tmp/tailored-resume/
+          if [[ -f "output/tailored/${OUTPUT_NAME}.pdf" ]]; then
+            cp "output/tailored/${OUTPUT_NAME}.pdf" /tmp/tailored-resume/
+          fi
 
       - name: Upload tailored resume
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
