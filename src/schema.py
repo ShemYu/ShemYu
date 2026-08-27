@@ -154,7 +154,10 @@ class Work(ProfileModel):
     endDate: str = ""
     location: str = ""
     summary: str = ""
+    # Locked public layer for canonical / template-clip. Compose may also
+    # read these; they are not the only selectable inventory.
     highlights: list[str] = Field(default_factory=list)
+    # Full archive. Constraint lines are do-not-publish / do-not-invent notes.
     evidence: list[str] = Field(default_factory=list)
 
     _start_date = field_validator("startDate", mode="before")(
@@ -215,7 +218,7 @@ class Project(ProfileModel):
     endDate: str = ""
     keywords: list[str] = Field(default_factory=list)
     highlights: list[str] = Field(default_factory=list)
-    evidence: list[str] = Field(default_factory=list)
+    evidence: list[str] = Field(default_factory=list)  # full archive; see Work.evidence
 
     _start_date = field_validator("startDate", mode="before")(
         validate_date

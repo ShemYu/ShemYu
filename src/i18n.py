@@ -1,8 +1,8 @@
 """Local rendering helpers for tailored resumes.
 
-The tailor agent still returns only TailoringPlan indices. Japanese text is
-applied here after assemble, using exact source-string maps so numbers and
-facts stay unchanged. Unmapped strings are left in English.
+The tailor composes English or Japanese bullets, then this module translates
+remaining assembled strings. Exact source-string maps keep numbers and facts
+unchanged. Unmapped composed sentences are left as written.
 
 Display alias: the Chinese characters 「余顯漁」 are not stored in
 ``data/basics.yaml``. Japanese headers may show ``余顯漁（Shem Yu）`` as a
@@ -107,9 +107,41 @@ JA_STRINGS: dict[str, str] = {
         "パイプラインを設計し、デバッグ容易性を高め、エージェント各段階への障害伝播を抑制。"
     ),
     (
+        "Built and iterated the video-understanding system as a staged pipeline: "
+        "observable facts → recipe-specific ingredient definitions → ingredient "
+        "state → cooking issues."
+    ): (
+        "観察可能な事実 → レシピ固有の材料定義 → 材料の状態 → 調理上の課題、という"
+        "段階的パイプラインとして動画理解システムを構築し反復。"
+    ),
+    (
+        "Coverage 40% → 95% on a versioned eval set; isolate failures to observation "
+        "/ ingredient-state / issue-detection."
+    ): (
+        "バージョン管理された評価セットでカバレッジを40%から95%へ。"
+        "失敗を観察 / 材料状態 / 課題検出に切り分ける。"
+    ),
+    (
+        "Capability-based evals and automated scoring for observation accuracy, "
+        "issue coverage, factuality, coherence, and turn-level coaching quality."
+    ): (
+        "観察精度、課題カバレッジ、事実性、一貫性、ターン単位のコーチング品質に対する"
+        "能力ベース評価と自動スコアリング。"
+    ),
+    (
+        "Led 4 full-time reports (7 including contractors), overseeing AI project "
+        "deployment and departmental internal agent development."
+    ): (
+        "正社員4名（業務委託を含めると7名）をリードし、AIプロジェクトのデプロイと"
+        "部門内エージェント開発を統括。"
+    ),
+    (
         "Led a 4-person MLE team, overseeing AI project deployment and departmental "
         "internal agent development."
     ): "4名のMLEチームをリードし、AIプロジェクトのデプロイと部門内エージェント開発を統括。",
+    (
+        "Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries."
+    ): "規制対応エージェントのF1を0.67から0.89へ改善。5社中2社で採用。",
     (
         "Developed Departmental Internal AI Agents with Google ADK, automating deep "
         "research tasks, reducing analysis time from 2 hours to 15 minutes."
@@ -251,6 +283,19 @@ JA_STRINGS: dict[str, str] = {
 # Lookup is against the English source highlight.
 JA_AXIS_TAGS: dict[str, str] = {
     (
+        "Built and iterated the video-understanding system as a staged pipeline: "
+        "observable facts → recipe-specific ingredient definitions → ingredient "
+        "state → cooking issues."
+    ): "パイプライン",
+    (
+        "Coverage 40% → 95% on a versioned eval set; isolate failures to observation "
+        "/ ingredient-state / issue-detection."
+    ): "エージェント",
+    (
+        "Capability-based evals and automated scoring for observation accuracy, "
+        "issue coverage, factuality, coherence, and turn-level coaching quality."
+    ): "評価",
+    (
         "Built a multimodal coaching agent that reasons over cooking video and learner "
         "voice to decide whether to reteach, narrow, or advance; raised expert-grounded "
         "coverage from 40% to 95%."
@@ -274,6 +319,9 @@ JA_AXIS_TAGS: dict[str, str] = {
         "research tasks, reducing analysis time from 2 hours to 15 minutes."
     ): "社内エージェント",
     "Improved regulatory Agent F1 from 0.67 to 0.89.": "規制エージェント",
+    (
+        "Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries."
+    ): "規制エージェント",
     (
         "Develop standardized ML project templates (AI Cloud Platform template; "
         "FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, "
