@@ -1,0 +1,57 @@
+LINE Yahoo / LY Corporation. Machine Learning Engineer - AI Agent Development / Generative AI.
+Official id: ly00493. Location: Akasaka office (東京都港区赤坂2-17-22 赤坂トラストタワー).
+Official page: https://www.lycorp.co.jp/ja/recruit/career/job-categories/ly00493/
+Beth attachment title: [Build+] LY MLE (AI Agent Development) _ Generative AI .pdf
+
+ポジション概要
+生成AI関連技術を活用した新サービスの設計、開発、実装をお任せします。
+
+主な業務内容
+- 大規模言語モデル（LLM）を利用した各種新システムの開発
+  - LLMを利用してさまざまな新システムの開発が可能か検証し、プロトタイプを作成します。
+  - LLMエージェントを用いた新機能提案や機能改善提案を行います。
+  - AIエージェント開発、Model Context Protocol（MCP）などのLLMツール開発、モデルのファインチューニング、プロンプト開発とその評価などが含まれます。
+- LLMを活用した社内システムの効率化
+  - LINEヤフーが提供するサービスの内部システムにLLMを活用し、業務効率化を図るシステムを構築します。
+- 生成AIモデルの設計、トレーニング、最適化
+- クライアントのニーズに基づくAIソリューションの提案と開発
+- データ収集、前処理、解析の実施
+- 開発したAIシステムのテストと評価、公開新技術の迅速な評価と検証
+
+求める人物像
+- 急速に進化する技術環境において、ソリューションを自ら設計・提案しタスク化できる方
+- AIエージェントのような新技術領域への興味・関心、検証意欲をお持ちの方
+- LLMのようなMLモデルを用いたソリューション開発に意欲的な方
+- 職種問わず円滑にコミュニケーションをとれる方
+- 周囲に対して常にリスペクトを持って行動できる方
+
+必要な経験/スキル
+- 機械学習モデル、特にLLMについての基本的な知識と利用経験
+- 自然言語処理、画像処理、機械学習技術のいずれかを用いたサービスやプロダクトの改善経験
+- アルゴリズム、データ構造の知識およびソフトウェア設計経験
+- Linux環境でのWebアプリケーションもしくはサーバー開発経験（実装3年以上）
+- AIやLLMエージェントの利用についてのセキュリティリスク意識
+- 学術論文などの専門文書を日常的に読む経験
+
+あると望ましい経験/スキル
+- 生成AIを活用したサービスの開発経験
+- Tool CallingやDeep ResearchなどLLM、AIエージェントの仕組みとその応用についての知識（実務問わず）
+- データ設計・開発・収集の経験（テストデータ、学習データ）
+- MLモデル、LLMのセキュリティに関する知識および実装経験
+- 査読あり論文投稿や国際会議での発表経験
+
+参考プロダクト
+- Yahoo!広告 ディスプレイ広告の画像生成AI
+- LINE Creative Lab の生成AI画像生成 / URL画像生成
+- 生成AIを活用したヤフコメ記事
+- 新機能「AIトピ」
+
+OWNER-LOCKED TAILORING AXIS (follow this; do not invent facts):
+- Lead with Cookpad video-understanding / eval / reasoning architecture / reliability.
+- Public Cookpad highlight (locked): Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set. 50%→95% (53/56) is OK here.
+- Do not write 40% → 95% as the public Cookpad sentence.
+- Do not write 67.6%, 83%, or 103-unit.
+- Cathay agents / Google ADK / F1 only if YAML-backed and selected; do not invent.
+- Do not write Japanese Fluent, N1, ビジネス日本語, or LiteLLM.
+- Do not invent Spark TB/QPS numbers, visa lines, or Cookpad start-date changes.
+- Compose every work/project bullet in Japanese. Keep source numbers and Latin product names unchanged.

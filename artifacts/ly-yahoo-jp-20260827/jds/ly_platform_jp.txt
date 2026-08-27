@@ -1,0 +1,29 @@
+LINE Yahoo / LY Corporation. Machine Learning Engineer - AI, ML Platform. Location: Tokyo.
+Official id: ly00161. https://www.lycorp.co.jp/ja/recruit/career/job-categories/ly00161/
+
+Position Overview: As a machine learning engineer in the data and AI field, you will be responsible for developing machine learning models and system platforms (from design to construction of batch processing machine learning, online machine learning, client federated learning, etc.). This position will allow you to lead the development of innovative machine learning technologies.
+
+Main business activities:
+- As a lead engineer, assist with technology selection and design, development team, and smooth progress
+- Developing, implementing, and improving performance of machine learning solutions for individual businesses and services
+- Design, development, and optimization of general-purpose machine learning architectures and models involving large-scale distributed processing using large-scale data
+- Standardization and utilization of machine learning-related libraries, data pipelines, intermediate data, etc.
+- Development and design of cross-business machine learning platforms
+- Development and implementation of machine learning and information recommendation engines that combine table data such as user behavior logs with media data such as images and text, as well as image and language models.
+- Promote and lead projects in collaboration with platform development and business organizations
+
+Required: Expert knowledge of ML, CS, mathematics; ~5 years designing/developing ML systems; Python and Rust familiarity; TB-to-PB data exploration/feature/model/system/eval; ~2 years distributed systems (Hadoop, Spark, MPI).
+Desirable: LLM and multimodal ops; high-QPS low-latency ML online APIs; microservices; client-side ML; recommendation systems; business/ops analysis.
+Products mentioned: TechVerse2025 Ray/DeepSpeed embeddings; Yamla Rust realtime ML platform; stamp/sticker recommendation; federated learning.
+
+OWNER-LOCKED TAILORING AXIS (follow this; do not invent facts):
+- Platform first. Lead with Wisers AI Cloud Platform template / FastAPI / Kubernetes, 2 weeks → 3 days, adopted by 30+.
+- Then Cathay GenAI infrastructure: AI Gateway, Guardrails, MLflow / Databricks.
+- Include GAIA and/or RKB RAG if space.
+- TripSaaS only if space.
+- Do not lead with Cookpad dish coverage 50% → 95% on this Platform version. If Cookpad is selected, use the staged video-understanding pipeline and/or capability-based evals, not the coverage arrow as the first bullet.
+- Do not write 40% → 95% as the public Cookpad sentence.
+- Do not write 67.6%, 83%, or 103-unit.
+- Do not write Japanese Fluent, N1, ビジネス日本語, or LiteLLM.
+- Do not invent Spark TB/QPS numbers, visa lines, or Cookpad start-date changes.
+- Compose every work/project bullet in Japanese. Keep source numbers and Latin product names unchanged.
