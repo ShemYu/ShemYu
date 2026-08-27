@@ -52,6 +52,7 @@ OWNER-LOCKED TAILORING AXIS (follow this; do not invent facts):
 - Do not write 40% → 95% as the public Cookpad sentence.
 - Do not write 67.6%, 83%, or 103-unit.
 - Cathay agents / Google ADK / F1 only if YAML-backed and selected; do not invent.
+- MCP may appear only if source-backed (skills Cloud & Infra list MCP Protocol; Cathay/platform work may mention it only if that role's YAML contains it).
 - Do not write Japanese Fluent, N1, ビジネス日本語, or LiteLLM.
 - Do not invent Spark TB/QPS numbers, visa lines, or Cookpad start-date changes.
 - Compose every work/project bullet in Japanese. Keep source numbers and Latin product names unchanged.
