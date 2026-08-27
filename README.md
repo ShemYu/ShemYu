@@ -21,7 +21,7 @@
 User: Shem Yu
 Role: Senior AI Engineer
 Company: Cookpad
-Location: Taipei, Taiwan
+Location: Tokyo, Japan
 Uptime: 6 roles of experience
 ```
 
