@@ -1,0 +1,106 @@
+id: bible
+locale: en
+person: shem
+roles:
+  - id: cookpad-senior-ai
+    claims:
+      - cookpad-vu-pipeline
+      - cookpad-vu-dish-coverage
+      - cookpad-vu-evals
+    evidence:
+      - cookpad-vu-ruler-note
+      - cookpad-vu-internal-coaching
+      - cookpad-vu-architecture-bound
+  - id: cathay-mle-lead
+    claims:
+      - cathay-dogi-agents
+      - cathay-gaia-infra
+      - cathay-finops-gpu
+      - cathay-finops-cloud
+      - cathay-rkb-discovery
+      - cathay-rkb-decouple
+      - cathay-rkb-f1
+      - cathay-rkb-retry
+      - cathay-gaia-deploy
+    evidence:
+      - cathay-dogi-launch-metric
+      - cathay-rkb-autolabel
+      - cathay-rkb-quota
+    include_awards: true
+  - id: wisers-platform-engineer
+    claims:
+      - wisers-templates
+      - wisers-uap
+      - wisers-docs
+  - id: tripsaas-data-scientist
+    claims:
+      - tripsaas-clustering
+      - tripsaas-itinerary
+  - id: mcu-research-assistant
+    claims:
+      - mcu-collab
+  - id: iii-intern
+    claims:
+      - iii-fullstack
+      - iii-insights
+projects:
+  - id: cookpad-vu
+    claims:
+      - cookpad-vu-pipeline
+      - cookpad-vu-dish-coverage
+      - cookpad-vu-evals
+  - id: cathay-dogi
+    claims:
+      - cathay-dogi-agents
+      - cathay-dogi-mvp-scope
+      - cathay-dogi-delegation
+      - cathay-dogi-scheduling
+      - cathay-dogi-session
+  - id: cathay-gaia
+    claims:
+      - cathay-gaia-architecture
+      - cathay-gaia-vector
+      - cathay-gaia-governance
+      - cathay-gaia-multiproduct
+  - id: cathay-finops
+    claims:
+      - cathay-finops-gpu
+      - cathay-finops-cloud
+  - id: cathay-rkb
+    claims:
+      - cathay-rkb-ingest
+      - cathay-rkb-chunking
+      - cathay-rkb-retrieval
+      - cathay-rkb-integration
+      - cathay-rkb-f1
+  - id: wisers-platform
+    claims:
+      - wisers-templates
+      - wisers-uap
+      - wisers-docs
+  - id: tripsaas-analytics
+    claims:
+      - tripsaas-clustering
+      - tripsaas-itinerary
+  - id: iii-social
+    claims:
+      - iii-fullstack
+      - iii-insights
+skill_groups:
+  - skill-group-cloud-infra
+  - skill-group-data-engineering
+  - skill-group-genai-nlp
+  - skill-group-language
+  - skill-group-leadership
+  - skill-group-mlops
+  - skill-group-programming
+education:
+  - mcu-master
+  - mcu-bachelor
+certificates:
+  - aws-certified-cloud-practitioner
+  - aws-cloud-quest-cloud-practitioner
+  - aws-certified-machine-learning-specialty
+publications:
+  - publication-ai-agent-architecture
+  - publication-podman

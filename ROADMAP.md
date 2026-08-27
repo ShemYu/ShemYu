@@ -20,5 +20,5 @@ This document outlines the future development plans for the Career History Knowl
 - [ ] **Linting**: Add linting for YAML files.
 
 ## Remaining usability work
-1. **Guided data editing**: Adding or updating files under `data/` is still manual.
+1. **Guided wiki editing**: Adding or updating pages under `career/` is still manual.
 2. **PDF releases**: HTML-to-PDF export and versioned release artifacts are not automated yet.

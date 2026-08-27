@@ -4,9 +4,8 @@ Canonical ``--language ja`` clips locked public highlights, then this module
 translates remaining assembled strings. Exact source-string maps keep numbers
 and facts unchanged. Unmapped strings are left as written.
 
-Display alias: the Chinese characters 「余顯漁」 are not stored in
-``data/basics.yaml``. Japanese headers may show ``余顯漁（Shem Yu）`` as a
-presentation-only alias of the YAML name ``Shem Yu``.
+Display alias: Japanese headers may show ``余顯漁（Shem Yu）``. The
+characters live on ``career/people/shem.md`` as ``title_ja``.
 """
 
 from __future__ import annotations
@@ -14,7 +13,7 @@ from __future__ import annotations
 import copy
 import re
 from datetime import date
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 SUPPORTED_LANGUAGES = ("en", "ja")
 DEFAULT_LANGUAGE = "en"
@@ -432,6 +431,31 @@ def _translate_list_field(item: dict[str, Any], field: str, language: str) -> No
     item[field] = [translate_text(value, language) for value in values]
 
 
+def _public_claim_index(role: Mapping[str, Any]) -> dict[str, tuple[str, str]]:
+    """Map locked English claim text to (text_ja, axis)."""
+
+    index: dict[str, tuple[str, str]] = {}
+    for focus in role.get("foci") or []:
+        for claim in focus.get("claims") or []:
+            if claim.get("layer") != "public":
+                continue
+            text = str(claim.get("text") or "").strip()
+            if not text:
+                continue
+            index[text] = (str(claim.get("text_ja") or ""), str(claim.get("axis") or ""))
+    return index
+
+
+def _localize_highlight(text: str, language: str, claim_index: Mapping[str, tuple[str, str]]) -> tuple[str, Optional[str]]:
+    mapped_ja, mapped_axis = claim_index.get(text.strip(), ("", ""))
+    if language == "ja" and mapped_ja:
+        localized = mapped_ja
+    else:
+        localized = translate_text(text, language)
+    axis = mapped_axis or axis_tag(text)
+    return localized, axis
+
+
 def localize_profile(profile: Mapping[str, Any], language: str) -> dict[str, Any]:
     """Translate clipped public strings. Does not add or drop career facts."""
 
@@ -450,13 +474,30 @@ def localize_profile(profile: Mapping[str, Any], language: str) -> dict[str, Any
     result["basics"] = basics
 
     work_items = []
+    claim_index_all: dict[str, tuple[str, str]] = {}
     for item in result.get("work") or []:
         source_highlights = list(item.get("highlights") or [])
         localized = _translate_mapping(
             item, language, ("name", "position", "summary", "location")
         )
-        localized["highlights"] = [translate_text(text, language) for text in source_highlights]
-        localized["highlight_axes"] = [axis_tag(text) for text in source_highlights]
+        claim_index = _public_claim_index(item)
+        claim_index_all.update(claim_index)
+        highlights: list[str] = []
+        axes: list[Optional[str]] = []
+        for text in source_highlights:
+            highlight, axis = _localize_highlight(text, language, claim_index)
+            highlights.append(highlight)
+            axes.append(axis)
+        localized["highlights"] = highlights
+        localized["highlight_axes"] = axes
+        for focus in localized.get("foci") or []:
+            focus["name"] = translate_text(focus.get("name"), language)
+            focus["problem"] = translate_text(focus.get("problem"), language)
+            for claim in focus.get("claims") or []:
+                if claim.get("text_ja"):
+                    claim["text"] = claim["text_ja"]
+                else:
+                    claim["text"] = translate_text(claim.get("text"), language)
         work_items.append(localized)
     result["work"] = work_items
 
@@ -465,7 +506,11 @@ def localize_profile(profile: Mapping[str, Any], language: str) -> dict[str, Any
         localized = _translate_mapping(
             item, language, ("name", "description", "summary")
         )
-        _translate_list_field(localized, "highlights", language)
+        localized_highlights = []
+        for text in localized.get("highlights") or []:
+            highlight, _axis = _localize_highlight(text, language, claim_index_all)
+            localized_highlights.append(highlight)
+        localized["highlights"] = localized_highlights
         projects.append(localized)
     result["projects"] = projects
 

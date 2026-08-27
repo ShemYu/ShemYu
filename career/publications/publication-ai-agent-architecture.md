@@ -1,0 +1,16 @@
+---
+id: publication-ai-agent-architecture
+type: publication
+title: AI Agent 專案架構最佳實踐
+publisher: Medium
+released: ''
+url: https://medium.com/@shemyu/ai-agent-%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90-8d8613fde368
+summary: Best practices for AI Agent project architecture.
+disclosure: public
+---
+
+<!-- graph:start -->
+## Graph
+
+- (no typed links)
+<!-- graph:end -->

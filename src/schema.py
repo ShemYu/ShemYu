@@ -1,19 +1,21 @@
 """Pydantic models for the profile data used by the resume generator.
 
-The YAML files are the human-edited source of truth, while templates and the
-AI provider consume the JSON-compatible representation returned by
-``Profile.model_dump(mode="json")``.  Keeping the models here (rather than in
-the loader or generator) gives both consumers the same contract.
+The YAML files are the human-edited source of truth. Career history is
+authored as Role → Focus → Claim (``Work.foci``). Templates still consume
+the JSON-compatible dictionary from the loader, which projects public
+claims into ``highlights`` and product/platform foci into ``projects``.
+Keeping the models here (rather than in the loader or generator) gives
+both consumers the same contract.
 """
 
 from __future__ import annotations
 
 from datetime import date, datetime
 import re
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal, Optional
 from urllib.parse import urlsplit
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator, model_validator
 
 
 NonEmptyString = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
@@ -42,6 +44,29 @@ def normalize_date(value: Any) -> Any:
 
 
 _DATE_PATTERN = re.compile(r"^(?:\d{4}|\d{4}-\d{2}|\d{4}-\d{2}-\d{2})$")
+_SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+FocusKind = Literal["product", "platform", "research", "leadership", "other"]
+Ownership = Literal["led", "implemented", "designed", "proposed", "collaborated"]
+ReleaseState = Literal["prototype", "internal-eval", "production", "launched", "absorbed"]
+ClaimLayer = Literal["public", "bible", "archive"]
+
+
+def validate_slug(value: Any) -> str:
+    """Require a stable lowercase hyphenated id for foci and claims.
+
+    Obsidian ``[[id]]`` / ``[[id|title]]`` wrappers are stripped so wiki
+    links and machine ids are the same edge.
+    """
+
+    if not isinstance(value, str):
+        raise ValueError("id must be a string")
+    text = value.strip()
+    if text.startswith("[[") and text.endswith("]]"):
+        text = text[2:-2].split("|", 1)[0].strip()
+    if not _SLUG_PATTERN.fullmatch(text):
+        raise ValueError("id must be a lowercase hyphenated slug")
+    return text
 
 
 def validate_date(value: Any, *, allow_empty: bool = True, allow_present: bool = False) -> str:
@@ -147,6 +172,73 @@ class Basics(ProfileModel):
     _url = field_validator("url", "image", mode="before")(validate_url)
 
 
+class Metric(ProfileModel):
+    """Numeric contract behind a public or archive claim.
+
+    YAML may use ``from`` / ``to``; the Python / dump names are
+    ``from_value`` / ``to_value`` so they are not reserved words.
+    """
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    name: NonEmptyString
+    display: NonEmptyString
+    from_value: str = Field(default="", alias="from")
+    to_value: str = Field(default="", alias="to")
+    window: str = ""
+    cohort: str = ""
+    n_cases: Optional[int] = None
+    n_items: Optional[int] = None
+    source: str = ""
+
+
+class Claim(ProfileModel):
+    """One locked fact, at a publication layer, optionally with a metric."""
+
+    id: NonEmptyString
+    layer: ClaimLayer
+    rank: int = 0
+    resume: bool = True
+    text: NonEmptyString
+    text_ja: str = ""
+    axis: str = ""
+    metric: Optional[Metric] = None
+    do_not_claim: list[str] = Field(default_factory=list)
+    source: str = ""
+
+    _id = field_validator("id", mode="before")(validate_slug)
+
+
+class Focus(ProfileModel):
+    """What was being worked on inside a role, independent of resume clip."""
+
+    id: NonEmptyString
+    name: NonEmptyString
+    kind: FocusKind = "product"
+    startDate: str = ""
+    endDate: str = ""
+    problem: str = ""
+    ownership: Ownership = "implemented"
+    release: ReleaseState = "production"
+    stack: list[str] = Field(default_factory=list)
+    public_rank: int = 0
+    claims: list[Claim] = Field(default_factory=list)
+    do_not_claim: list[str] = Field(default_factory=list)
+
+    _id = field_validator("id", mode="before")(validate_slug)
+    _start_date = field_validator("startDate", mode="before")(validate_date)
+    _end_date = field_validator("endDate", mode="before")(
+        lambda value: validate_date(value, allow_present=True)
+    )
+
+
+class Award(ProfileModel):
+    name: NonEmptyString
+    date: str = ""
+
+    _date = field_validator("date", mode="before")(validate_date)
+
+
 class Work(ProfileModel):
     name: NonEmptyString
     position: NonEmptyString
@@ -154,8 +246,12 @@ class Work(ProfileModel):
     endDate: str = ""
     location: str = ""
     summary: str = ""
-    # Locked public layer for canonical / template-clip. Compose may also
-    # read these; they are not the only selectable inventory.
+    # Nested source of truth. When present, highlights/evidence must be empty
+    # in YAML; the loader derives those lists for templates.
+    foci: list[Focus] = Field(default_factory=list)
+    awards: list[Award] = Field(default_factory=list)
+    # Locked public layer for canonical / template-clip. Authored only on
+    # roles that have not yet migrated to foci.
     highlights: list[str] = Field(default_factory=list)
     # Full archive. Constraint lines are do-not-publish / do-not-invent notes.
     evidence: list[str] = Field(default_factory=list)
@@ -166,6 +262,15 @@ class Work(ProfileModel):
     _end_date = field_validator("endDate", mode="before")(
         lambda value: validate_date(value, allow_present=True)
     )
+
+    @model_validator(mode="after")
+    def reject_mixed_authored_sot(self) -> "Work":
+        if self.foci and (self.highlights or self.evidence):
+            raise ValueError(
+                "a role with foci must not also author highlights or evidence; "
+                "those fields are derived at load time"
+            )
+        return self
 
 
 class Education(ProfileModel):
@@ -240,6 +345,31 @@ class Profile(ProfileModel):
     skills: list[Skill] = Field(default_factory=list)
     projects: list[Project] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def reject_duplicate_focus_and_claim_ids(self) -> "Profile":
+        focus_ids: list[str] = []
+        claim_ids: list[str] = []
+        for role in self.work:
+            for focus in role.foci:
+                focus_ids.append(focus.id)
+                for claim in focus.claims:
+                    claim_ids.append(claim.id)
+        _reject_duplicates(focus_ids, "focus id")
+        _reject_duplicates(claim_ids, "claim id")
+        return self
+
+
+def _reject_duplicates(values: list[str], label: str) -> None:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for value in values:
+        if value in seen:
+            duplicates.add(value)
+        seen.add(value)
+    if duplicates:
+        joined = ", ".join(sorted(duplicates))
+        raise ValueError(f"{label} must be unique: {joined}")
+
 
 def profile_dict(value: Profile | dict[str, Any]) -> dict[str, Any]:
     """Validate a profile and return a JSON-friendly dictionary."""
@@ -249,10 +379,14 @@ def profile_dict(value: Profile | dict[str, Any]) -> dict[str, Any]:
 
 
 __all__ = [
+    "Award",
     "Basics",
     "Certificate",
+    "Claim",
     "Education",
+    "Focus",
     "Location",
+    "Metric",
     "Profile",
     "ProfileModel",
     "Project",
@@ -262,6 +396,7 @@ __all__ = [
     "Work",
     "normalize_date",
     "validate_date",
+    "validate_slug",
     "profile_dict",
     "validate_url",
 ]

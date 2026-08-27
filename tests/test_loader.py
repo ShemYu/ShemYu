@@ -78,8 +78,81 @@ class YamlDataLoaderTest(unittest.TestCase):
         project_names = [item["name"] for item in profile["projects"]]
         self.assertEqual(work_names, list(dict.fromkeys(work_names)))
         self.assertEqual(project_names, list(dict.fromkeys(project_names)))
-        self.assertTrue(work_names)
-        self.assertTrue(project_names)
+        focus_ids = [
+            focus["id"]
+            for role in profile["work"]
+            for focus in role.get("foci") or []
+        ]
+        self.assertEqual(focus_ids, list(dict.fromkeys(focus_ids)))
+
+    def test_live_one_pager_clip_keeps_locked_public_bullets(self):
+        profile = YamlDataLoader("data").load()
+        cookpad = next(item for item in profile["work"] if item["name"] == "Cookpad")
+        cathay = next(
+            item for item in profile["work"] if item["name"] == "Cathay Financial Holdings"
+        )
+        self.assertEqual(
+            cookpad["highlights"][:3],
+            [
+                "Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.",
+                "Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.",
+                "Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.",
+            ],
+        )
+        self.assertEqual(
+            cathay["highlights"][:3],
+            [
+                "Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.",
+                "Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.",
+                "Implemented FinOps agent, achieving 30% GPU cost reduction.",
+            ],
+        )
+
+    def test_foci_are_projected_into_highlights_and_projects(self):
+        with tempfile.TemporaryDirectory() as data_dir:
+            work_dir = os.path.join(data_dir, "work")
+            os.makedirs(work_dir)
+            with open(os.path.join(data_dir, "basics.yaml"), "w", encoding="utf-8") as f:
+                f.write("name: Test User\n")
+            with open(os.path.join(work_dir, "role.yaml"), "w", encoding="utf-8") as f:
+                f.write(
+                    "\n".join(
+                        [
+                            "name: Cookpad",
+                            "position: Engineer",
+                            "startDate: '2026-02'",
+                            "endDate: Present",
+                            "foci:",
+                            "  - id: cookpad-vu",
+                            "    name: Video-understanding coaching agent",
+                            "    kind: product",
+                            "    problem: Infer where a learner is stuck.",
+                            "    stack:",
+                            "      - multimodal agents",
+                            "    claims:",
+                            "      - id: cookpad-vu-pipeline",
+                            "        layer: public",
+                            "        rank: 1",
+                            "        text: Built the staged pipeline.",
+                            "      - id: cookpad-vu-internal",
+                            "        layer: archive",
+                            "        text: Internal 67.6 to 83.0 stays off the page.",
+                            "",
+                        ]
+                    )
+                )
+
+            profile = YamlDataLoader(data_dir).load()
+
+        self.assertEqual(
+            profile["work"][0]["highlights"], ["Built the staged pipeline."]
+        )
+        self.assertEqual(
+            profile["work"][0]["evidence"],
+            ["Internal 67.6 to 83.0 stays off the page."],
+        )
+        self.assertEqual(profile["projects"][0]["name"], "Video-understanding coaching agent")
+        self.assertEqual(profile["projects"][0]["keywords"], ["multimodal agents"])
 
 
 if __name__ == '__main__':

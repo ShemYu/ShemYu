@@ -328,7 +328,6 @@
         <section style="margin-bottom: 5mm;">
              <p style="font-style: italic; color: #444; border-left: 2px solid #ddd; padding-left: 10px;">
                 Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.
-
             </p>
         </section>
 
@@ -360,39 +359,11 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>[A. What the system is] Video-understanding / cooking-coaching agent. Inputs: cooking video and learner voice. Infer where the learner is stuck; older wording was decide reteach, narrow, or advance so the next prompt targets that gap. Public one-pager architecture is the staged pipeline in highlight 1 (observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues).</li>
+                    <li>An earlier public sentence said Coverage 40% → 95% on a versioned eval set. 40.5% (30/74 on 2026-07-06) and 53/56 were both real readings, but not the same ruler. Public wording is 50% → 95% (53/56) on the same-rubric 56-item window.</li>
 
-                    <li>[A. Archive, not a public highlight] Earlier one-pager variants (now archive only): multimodal coaching / video question-understanding with reteach, narrow, or advance; staged multimodal pipeline separating observation, gap inference, and coaching decisions; versioned capability-based evals for coverage, truth, and per-turn quality. Public eval wording is now factuality (not truth) and turn-level coaching quality (not per-turn quality). Cross-session history was extra context; do not add model names or fusion methods.</li>
+                    <li>Internal coaching eval 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit benchmark is archive only; not found in daily/history.json.</li>
 
-                    <li>[B. Eval history — one measurement story] An earlier public sentence said Coverage 40% → 95% on a versioned eval set (and isolate failures to observation / ingredient-state / issue-detection). That was a shorthand, not two competing truths. Source: daily/history.json (23 reports, always 15 cases).</li>
-
-                    <li>[B. 2026-07-06] Dish 30/74 = 40.5%. This is the reading behind the earlier 40%.</li>
-
-                    <li>[B. Same-rubric 56-item window 2026-07-08 → 2026-07-27] 28/56 → 53/56 (50% → 94.6%). Owner locked the public sentence to 50% → 95% (53/56) because this is the same denominator. 53/56 is 94.6%; owner accepted writing 95% (53/56). So 40% and 95% were both real readings, but not the same ruler. The public sentence changed to make the ruler explicit — a clarification of how we write the work, not a retraction that the work did not happen.</li>
-
-                    <li>[B. Same-rubric series 2026-07-08 to 2026-08-04] dish_total 56. Peak dish 53/56 on 2026-07-27 and 2026-08-02. Knowledge peaked 38/48 = 79.2% on 2026-08-02. Knowledge coverage remains remaining work; do not put a knowledge number on the public highlight (not 31.9% → 79.2%, 14.9%, 56.3%, or 27/48).</li>
-
-                    <li>[B. Later, different ruler] After 2026-08-11 the set is 61 dish items; 2026-08-12 onward v3_canonical_claim (stricter). Latest 2026-08-19 is 23/61 dish / 27/48 knowledge. That is a different ruler, not a product regression and not an arrow from 53/56. Parent DR units later decomposed into VU / DU / LVO children (109-contract family); 2026-08-18 dish 19/61 is that later metric.</li>
-
-                    <li>[B. Internal archive, not on the one-pager] Coaching eval 67.6% to 83.0% (+15.4 pp) on a 15-case, 103-unit benchmark. Not found in daily/history.json; do not invent a source. Also archive: a 56-case full run under 9 minutes with cache/resume; flaky RCA (73 flaky misses; 64% incomplete candidate hypotheses; knowledge swing +/-8.5 pp to +/-3.2 pp).</li>
-
-                    <li>[C. Architecture journey] Name lock: Guideline grounder (not Guideline grounding, not Galactic Rounder). Propose / influence only — not a clean Shem-owned shipped lineage.</li>
-
-                    <li>[C.1 Video Description v1] Very detailed Video Description, then agents to verify. Needed near-100% precision on the transcript-like description; even a small hallucination (even ~1% as a design constraint, not a measured lab rate) damages the rest. Cost is wall-clock, not a one-off: typical source videos about 20–50 minutes; processing about 30–45 minutes across that range. That path did not succeed and is not a public highlight. No SLA, dollar cost, or GPU type recorded.</li>
-
-                    <li>[C.2 Proposed split] Shem proposed (not implemented / not shipped as current production): Recall-first Candidate Generator, and Debater Investigator for video grounding. Diagnosis: mixing recall and precision in one agent hurt performance. Proposed split: Recall first → Ranker → Precision via Investigator. Speech typos: Recode = Recall, Debezter = Debater. Later rewrites absorbed pieces as concepts. Do not write that production is currently this stack, or a clean lineage Video Description v1 → Recall-first → v5 investigator as Shem-owned production.</li>
-
-                    <li>[C.3 Guideline grounder v1] Shem only. No Sonan. Staged ground-then-assess: Detect → Plan → Select → Observe → Correct. Source: 20260424_feat_guideline-grounding-action.md (#299). ~2–4s latency is not a win to write.</li>
-
-                    <li>[C.4 Guideline grounder v2] Collaboration with Sonan (do not invent title or ownership beyond this). ObservationAgent loop, skill-routed observation; Sonan tried to make it more detailed and it took longer. Attempted / possibly not online — do not claim v2 is in production. Source: 20260608_feat_guideline-grounding-v2-observation-agent.md.</li>
-
-                    <li>[C.5 Influence on v5] Guideline grounder design (v1, plus the v2 attempt with Sonan) later influenced the final v5 investigator. Influence only. Do not write that Shem or Sonan implemented, shipped, or owned v5 investigator, or that v5 investigator is the same system as Guideline grounder.</li>
-
-                    <li>[C.6 Iteration] Company iterations often unplanned-refactored the whole architecture. Shem&#39;s pieces mostly remained as concepts that later rewrites absorbed. Shem&#39;s work had upper bounds (caps); the next version quickly overwrote those bounds / that design; after a version was replaced it was no longer online. Culture commentary stays off the one-pager.</li>
-
-                    <li>[C.7 Other systems, evidence only] Video embeddings + semantic search + Visual Explorer (multi-turn frame locator, structured LocatedFrame; internal tool). Shem PRs #213/#217/#220/#222/#202/#239. Gemini Embedding 2 migration to 3072-d with model-scoped cache; no retrieval-accuracy lift sourced. Same-dish / multi-video selection: observe each split cook, select same-dish footage, merge for generation v3 (Shem #606). Observed cooking audit: extra video-fact audit beyond the public four stages; Shem 15b56449 (#666); contract incomplete, no metric.</li>
-
-                    <li>[C.7 Eval design, evidence only] Canonical hash-locked 15-case make eval pipeline + viewer; README example 77/103 (74.8%) is run-varying / unpublished. Assessment v5 + frozen-input LLM-as-judge suite + failure taxonomy; +0.79 / 71.4% / 50% misleading stay unpublished. Delivery / FP metric versions: v1_legacy_pool → v2_polarity_claim → v3_canonical_claim. Human-equivalence / human-standard gate is a conformance suite, not a production accuracy claim.</li>
+                    <li>Guideline grounder (v1 Shem-only; v2 with Sonan, did not ship) later influenced v5 investigator. Influence only — not a clean Shem-owned shipped lineage. Video Description v1 did not succeed as production.</li>
 
                 </ul>
 
@@ -424,11 +395,11 @@
 
                     <li>Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.</li>
 
+                    <li>Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.</li>
+
                     <li>Won CFH Cloud Creative Award 2024 (1st place).</li>
 
                     <li>Named departmental MVP, Q1 2025.</li>
-
-                    <li>Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.</li>
 
                 </ul>
 
@@ -436,35 +407,11 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>[User confirmed 2026-08-26] Team size ruling: 4 full-time reports, 7 including contractors. Summary and outbound use 4 full-time (7 including contractors).</li>
+                    <li>First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.</li>
 
-                    <li>[Do not claim outbound] coordinated 10 cross-functional contributors — user does not know where 10 came from.</li>
+                    <li>Problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate on public highlights.</li>
 
-                    <li>[User confirmed 2026-08-26] Discovery team was DS + Shem (MLE). They went to the client, mapped the workflow, ran a workshop so the BU could show how they do regulatory comparison, and chose that as the pilot.</li>
-
-                    <li>[User confirmed 2026-08-26] Outbound may say legal and/or compliance participated in that workshop.</li>
-
-                    <li>[User confirmed 2026-08-26] DS built the PoC. Shem did production readiness: rewrite as a Databricks deployment workflow, and store related data on the Databricks data layer per internal access rules. Do not write that Shem built the PoC.</li>
-
-                    <li>[User confirmed 2026-08-26] Shem decoupled the PoC workflow into external-regulation processing, internal-regulation processing, and comparison (外規 / 內規 / 比對). All three are daily-triggered because regulation updates&#39; finest grain is one day. Public. Shem decoupled / productionized; DS built the PoC.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate (e.g. 80% in retrieval) on public highlights. Do not write isolate-failures-to-retrieval-vs-generation as a highlight.</li>
-
-                    <li>[Do not invent] Shem forgot the data-layer name. Do not write Unity Catalog, Delta, or a table name.</li>
-
-                    <li>[User confirmed 2026-08-26] Cathay regulatory Agent F1 0.67 to 0.89 and RKB adopted by 2 of 5 subsidiaries describe the same regulatory system. Outbound may merge into one sentence. Do not invent extra causality (e.g. F1 caused adoption).</li>
-
-                    <li>[User confirmed 2026-08-26] Regulatory-pipeline reliability (not Cookpad): per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day. This is the public/simplified wording.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: many retries came from Bedrock quota.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: early peak — external/Taiwan regulation updates (end of a legislative session) triggered the analysis flow; high parallelism hit Bedrock quota.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only: observed failure rate peaked at 15%; the system digested that peak. This is an observed peak, not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
-
-                    <li>[User confirmed 2026-08-26] Evidence only, not outbound: consultant advice to collect usage before asking AWS/client for a quota increase.</li>
-
-                    <li>[Do not claim outbound] Stage-level diagnostics as a highlight (only per-record status is confirmed). Failure-rate threshold/gate. Spark/TB/QPS. Auto-labeling / 4-stage / retrieval miss-rate on public highlights.</li>
+                    <li>Many retries came from Bedrock quota. Early peak — external/Taiwan regulation updates at the end of a legislative session — high parallelism hit Bedrock quota. Observed failure rate peaked at 15%; the system digested that peak. Not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
 
                 </ul>
 
@@ -513,7 +460,7 @@
             <div class="job-entry">
                 <div class="entry-header">
                     <div>
-                        <h3>Research assistant</h3> <span style="font-size:9pt;">@ Ming Chuan University - data science Lab.</span>
+                        <h3>Research assistant</h3> <span style="font-size:9pt;">@ Ming Chuan University</span>
                     </div>
                     <div class="date">2017-06-01 – 2019-06-01</div>
                 </div>
@@ -557,6 +504,30 @@
             <div class="project-entry">
                 <div class="entry-header">
                     <div>
+                        <h3>Video-understanding coaching agent</h3>
+
+                    </div>
+
+                    <div class="date">2026-02 – Present</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
+
+                    <li>Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.</li>
+
+                    <li>Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
                         <h3>DOGI Multi-Agent Productivity Suite</h3>
 
                     </div>
@@ -567,6 +538,8 @@
 
                 <ul>
 
+                    <li>Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.</li>
+
                     <li>Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.</li>
 
                     <li>Implemented multi-agent delegation patterns for enterprise workflows.</li>
@@ -574,8 +547,6 @@
                     <li>Developed meeting scheduling agent integrating calendar and internal APIs.</li>
 
                     <li>Designed session persistence and storage strategy using Redis/Postgres.</li>
-
-                    <li>Delivered FinOps agent for AWS cost insights and early anomaly detection.</li>
 
                 </ul>
 
@@ -611,6 +582,28 @@
             <div class="project-entry">
                 <div class="entry-header">
                     <div>
+                        <h3>FinOps</h3>
+
+                    </div>
+
+                    <div class="date">2025-01 – 2025-12</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Implemented FinOps agent, achieving 30% GPU cost reduction.</li>
+
+                    <li>Reduced overall cloud spend by 40% through FinOps practices.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
                         <h3>Regulatory Knowledge Base (RKB)</h3>
 
                     </div>
@@ -629,7 +622,75 @@
 
                     <li>Integrated with internal Gen-AI platform for unified access and governance.</li>
 
-                    <li>Adopted by 2 of 5 subsidiaries.</li>
+                    <li>Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>AI Cloud Platform and UAP Common Library</h3>
+
+                    </div>
+
+                    <div class="date">2020-11 – 2022-05</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Develop standardized ML project templates (AI Cloud Platform template; FastAPI, CI/CD, Kubernetes), reducing deployment time from 2 weeks to 3 days, adopted by 30+ projects.</li>
+
+                    <li>Implement NLP-focused Python library (UAP Common Library) with 70% internal adoption and 90%+ code coverage, improving productivity and reliability for AI developers.</li>
+
+                    <li>Lead automation of documentation pipelines via Sphinx and CI, enhancing onboarding efficiency and platform usability.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Travel order analytics and itinerary features</h3>
+
+                    </div>
+
+                    <div class="date">2019-12 – 2020-11</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Analyze customer order data using statistical modeling (FP-Growth, K-means, 4 clusters) to support marketing and segmentation strategies.</li>
+
+                    <li>Extract and optimize feature patterns from travel itineraries with CKIP NLP and frequent pattern mining, improving search relevance and user experience.</li>
+
+                </ul>
+
+
+            </div>
+
+            <div class="project-entry">
+                <div class="entry-header">
+                    <div>
+                        <h3>Social data analysis applications</h3>
+
+                    </div>
+
+                    <div class="date">2017-05 – 2017-11</div>
+
+                </div>
+
+                <ul>
+
+                    <li>Develop full-stack web applications from end to end for social data analysis, supporting the transformation of raw posts into interactive word clouds and buzzword visualizations.</li>
+
+                    <li>Analyze and extract insights from social media data, applying NLP and visualization tools to generate actionable reports for industry partners.</li>
 
                 </ul>
 

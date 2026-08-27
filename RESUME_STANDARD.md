@@ -1,24 +1,22 @@
 # Resume publication standard
 
-The YAML under `data/` is the source of truth. Canonical generation
-(`uv run python -m src.main`) does **not** compose. It template-clips the
-locked public `highlights` (newest roles, highlight caps in the concise HTML).
+`career/` is the source of truth. Views under `views/` select claim ids.
+Canonical generation (`uv run python -m src.main`) does **not** compose.
+It binds those ids and template-clips the one-pager.
 
-`--language ja` is the same clip path with localized labels and mapped
-public strings. It does not call a model.
+`--language ja` is the same bind path with `text.ja` and view axis tags.
+It does not call a model.
 
-## Public vs evidence
+## Public vs internal
 
-Work and project `highlights` are the public layer (role, product,
-disclosure-safe results). Put internal benchmarks, case counts, pp swings,
-and similar eval notes in `evidence`.
+`disclosure: public` claims may be listed on `views/one-pager.yaml` and
+`views/full.yaml`. Put internal benchmarks, case counts, pp swings, and
+similar eval notes on `disclosure: internal` claims. The Bible view may
+list them under evidence. `do_not_claim` stays on the node so humans know
+what **not** to publish.
 
-`evidence` is the full archive. Constraint lines stay in YAML so humans know
-what **not** to publish. They are not a license to put internal benchmarks
-on the public page.
-
-If a number or product name is missing from the publishable source, leave it
-off the page. Do not guess.
+If a number or product name is missing from a public claim, leave it off
+the page. Do not guess.
 
 ## Invented facts (never)
 
@@ -36,7 +34,8 @@ data layer” is the allowed wording.
 
 ## Cookpad numbers
 
-Public / outbound coverage is **40% → 95% on a versioned eval set**.
+Public / outbound coverage is **50% → 95% (53/56)** on a fixed 15-case,
+56-item eval set. Do not write 40% → 95% as the same ruler.
 
 Never put on the page:
 

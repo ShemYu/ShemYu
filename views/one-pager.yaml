@@ -1,0 +1,43 @@
+id: one-pager
+locale: en
+person: shem
+roles:
+  - id: cookpad-senior-ai
+    claims:
+      - cookpad-vu-pipeline
+      - cookpad-vu-dish-coverage
+      - cookpad-vu-evals
+  - id: cathay-mle-lead
+    claims:
+      - cathay-dogi-agents
+      - cathay-gaia-infra
+      - cathay-finops-gpu
+      - cathay-finops-cloud
+  - id: wisers-platform-engineer
+    claims:
+      - wisers-templates
+      - wisers-uap
+skill_groups:
+  - skill-group-cloud-infra
+  - skill-group-data-engineering
+  - skill-group-genai-nlp
+  - skill-group-language
+  - skill-group-leadership
+  - skill-group-mlops
+  - skill-group-programming
+education:
+  - mcu-master
+  - mcu-bachelor
+certificates:
+  - aws-certified-cloud-practitioner
+  - aws-cloud-quest-cloud-practitioner
+  - aws-certified-machine-learning-specialty
+axis:
+  cookpad-vu-pipeline: パイプライン
+  cookpad-vu-dish-coverage: エージェント
+  cookpad-vu-evals: 評価
+  cathay-dogi-agents: 社内エージェント
+  cathay-gaia-infra: AI Gateway
+  cathay-finops-cloud: FinOps
+  wisers-templates: テンプレート
+  wisers-uap: ライブラリ
