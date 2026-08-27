@@ -2,7 +2,7 @@
 
 This directory is the evidence layer upstream of the public resume data in `data/`.
 
-The goal is to preserve enough detail to tailor a resume for different job descriptions without inventing facts, overstating causality, or losing the methodology behind a metric. Detailed masters may be long. Public resumes should be selective.
+The goal is to preserve enough detail to support a public resume without inventing facts, overstating causality, or losing the methodology behind a metric. Detailed masters may be long. Public resumes should be selective.
 
 ## Storage layers
 
@@ -11,7 +11,6 @@ The goal is to preserve enough detail to tailor a resume for different job descr
 | Detailed private master | `career_evidence/private/<company>.md` | Full product context, workstream history, metrics, denominators, versions, sources, boundaries, and interview gaps. Ignored by Git. |
 | Publication data | `data/work/<company>.yaml` | Verified and disclosure-safe summary/highlights that generated resumes may publish. |
 | Canonical outputs | `README.md`, `RESUME.md`, `output/resume*.html` | Generated artifacts. Never edit these to introduce a new career fact. |
-| Tailored outputs | `output/tailored/` | Job-specific selections from publication data. They may shorten or reorder facts, never strengthen them. |
 
 The current Cookpad master is `career_evidence/private/cookpad.md`. Its Obsidian copy is a research mirror; the repo-local file is the working source of truth.
 
@@ -44,8 +43,7 @@ Before promoting a claim into `data/`, check:
 3. Resolve timeline, ownership, deployment, and impact gaps through interview.
 4. Draft several source-faithful bullet candidates in the private master.
 5. Promote verified, disclosure-safe facts into `data/work/<company>.yaml`.
-6. Regenerate canonical outputs with `uv run --locked python -m src.main`.
-7. Tailor for a job description by selecting from canonical facts. Do not rewrite the evidence to match the job.
+6. Regenerate canonical outputs with `uv run --locked python -m src.main`. Do not rewrite evidence to match a job description.
 
 ## Acceptance standard
 

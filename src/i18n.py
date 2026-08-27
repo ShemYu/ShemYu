@@ -1,8 +1,8 @@
-"""Local rendering helpers for tailored resumes.
+"""Local rendering helpers for the deterministic Japanese one-pager.
 
-The tailor composes English or Japanese bullets, then this module translates
-remaining assembled strings. Exact source-string maps keep numbers and facts
-unchanged. Unmapped composed sentences are left as written.
+Canonical ``--language ja`` clips locked public highlights, then this module
+translates remaining assembled strings. Exact source-string maps keep numbers
+and facts unchanged. Unmapped strings are left as written.
 
 Display alias: the Chinese characters 「余顯漁」 are not stored in
 ``data/basics.yaml``. Japanese headers may show ``余顯漁（Shem Yu）`` as a
@@ -51,7 +51,7 @@ UI_LABELS: dict[str, dict[str, str]] = {
     },
 }
 
-# Exact source-string translations. Keys must match YAML / assembled profile
+# Exact source-string translations. Keys must match YAML / clipped profile
 # values character-for-character. Do not add fluency, tools, or metrics that
 # are not in the source string.
 JA_STRINGS: dict[str, str] = {
@@ -433,7 +433,7 @@ def _translate_list_field(item: dict[str, Any], field: str, language: str) -> No
 
 
 def localize_profile(profile: Mapping[str, Any], language: str) -> dict[str, Any]:
-    """Translate assembled public strings. Does not add or drop career facts."""
+    """Translate clipped public strings. Does not add or drop career facts."""
 
     language = normalize_language(language)
     result = copy.deepcopy(dict(profile))

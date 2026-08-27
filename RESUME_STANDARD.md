@@ -1,43 +1,24 @@
-# Resume sentence standard
+# Resume publication standard
 
-First draft. Iterate sentence taste locally; do not treat this file as career
-history. The YAML under `data/` remains the source of truth. Tailoring may
-compose at most three resume-standard sentences per selected role from that
-role's facts. It must not invent experience.
+The YAML under `data/` is the source of truth. Canonical generation
+(`uv run python -m src.main`) does **not** compose. It template-clips the
+locked public `highlights` (newest roles, highlight caps in the concise HTML).
 
-Canonical generation (`uv run python -m src.main`, no job description) does
-**not** compose. It template-clips the locked public `highlights` (newest
-roles, highlight caps in the concise HTML). Compose runs only when a JD is
-supplied.
+`--language ja` is the same clip path with localized labels and mapped
+public strings. It does not call a model.
 
-## Sentence shape
+## Public vs evidence
 
-- One idea per line.
-- Verb + scope + result.
-- At most three lines per selected work or project role.
-- Prefer production, measurement, and ownership that the JD actually needs.
+Work and project `highlights` are the public layer (role, product,
+disclosure-safe results). Put internal benchmarks, case counts, pp swings,
+and similar eval notes in `evidence`.
 
-## Grounding (hard fail)
+`evidence` is the full archive. Constraint lines stay in YAML so humans know
+what **not** to publish. They are not a license to put internal benchmarks
+on the public page.
 
-Every number, proper name, and causal claim on the page must already appear in
-that role's **publishable** source:
-
-- locked public `highlights`
-- `evidence` lines that are not tagged do-not-claim / not outbound /
-  evidence-only / do-not-invent
-
-`evidence` is the full archive. Constraint lines stay in YAML so the composer
-knows what **not** to write. They are not a license to publish internal
-benchmarks.
-
-If a number or product name is missing from the publishable source, drop it.
-Do not guess.
-
-## Do not write unless the JD needs them
-
-- Awards, MVP titles
-- Generic “deployed on X ensuring scalable and secure operations”
-- Documentation-only / onboarding-docs bullets
+If a number or product name is missing from the publishable source, leave it
+off the page. Do not guess.
 
 ## Invented facts (never)
 
