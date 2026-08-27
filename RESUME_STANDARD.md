@@ -55,12 +55,15 @@ data layer” is the allowed wording.
 
 ## Cookpad numbers
 
-Public / outbound coverage is **40% → 95% on a versioned eval set**.
+Public / outbound coverage is **50% → 95% (53/56) on a fixed 15-case, 56-item eval set**.
+
+Do not write **40% → 95%** as the public sentence. That earlier shorthand used a different ruler (30/74 = 40.5%).
 
 Never put on the page:
 
 - internal 67.6 → 83.0 (or +15.4 pp)
-- 15-case / 103-unit or 56-case / 9 min
+- 103-unit
+- 56-case / 9 min
 - flaky-miss RCA
 - 20 users
 - Moment team name

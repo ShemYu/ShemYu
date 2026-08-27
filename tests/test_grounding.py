@@ -265,6 +265,13 @@ class LiveRoleGroundingTest(unittest.TestCase):
             ["Raised dish coverage from 50% to 95% (53/56)."],
         )
         self.assertEqual(public, [])
+        public_locked = check_role_bullets(
+            cookpad,
+            [
+                "Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set."
+            ],
+        )
+        self.assertEqual(public_locked, [])
 
 
 class AssembleComposedTest(unittest.TestCase):

@@ -236,7 +236,6 @@ UNPUBLISHED_TOKENS = (
     "67.6",
     "83.0",
     "15.4 pp",
-    "15-case",
     "103-unit",
     "56-case",
     "flaky",

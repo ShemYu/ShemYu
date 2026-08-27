@@ -182,8 +182,9 @@ def composer_instructions(language: str = "en") -> str:
     if language == "ja":
         language_rule = (
             "Write each composed bullet in Japanese. Keep source numbers and "
-            "Latin product names unchanged (40%, 95%, 0.67, 0.89, Databricks, "
-            "Google ADK). Do not add 日本語 Fluent, N1, ビジネス日本語, or LiteLLM. "
+            "Latin product names unchanged (50%, 95%, 53/56, 0.67, 0.89, "
+            "Databricks, Google ADK). Do not write 40%→95% as the Cookpad "
+            "public sentence. Do not add 日本語 Fluent, N1, ビジネス日本語, or LiteLLM. "
             "Prefer the three newest roles. Drop awards, MVP titles, redundant "
             "cost bullets, generic deploy bullets, and documentation-only "
             "bullets unless the job description clearly needs them."

@@ -115,6 +115,13 @@ JA_STRINGS: dict[str, str] = {
         "段階的パイプラインとして動画理解システムを構築し反復。"
     ),
     (
+        "Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, "
+        "56-item eval set; knowledge coverage remains the remaining optimization target."
+    ): (
+        "固定の15-case・56-item評価セットで料理カバー率を50%から95%（53/56）へ向上。"
+        "ナレッジカバー率は残りの最適化対象。"
+    ),
+    (
         "Coverage 40% → 95% on a versioned eval set; isolate failures to observation "
         "/ ingredient-state / issue-detection."
     ): (
@@ -287,6 +294,10 @@ JA_AXIS_TAGS: dict[str, str] = {
         "observable facts → recipe-specific ingredient definitions → ingredient "
         "state → cooking issues."
     ): "パイプライン",
+    (
+        "Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, "
+        "56-item eval set; knowledge coverage remains the remaining optimization target."
+    ): "評価",
     (
         "Coverage 40% → 95% on a versioned eval set; isolate failures to observation "
         "/ ingredient-state / issue-detection."
