@@ -17,5 +17,5 @@ disclosure: public
 <!-- graph:start -->
 ## Graph
 
-- claims: [[cookpad-vu-dish-coverage]], [[cookpad-vu-ruler-note|Dish 50-95 uses a different rubric than 40.5% and later 61-item v3]]
+- claims: [[cookpad-vu-dish-coverage]], [[cookpad-vu-ruler-note]]
 <!-- graph:end -->

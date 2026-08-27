@@ -158,6 +158,10 @@ CV_*.pdf
 output/*
 !output/resume.html
 !output/resume_bible.html
+!output/pdf/
+output/pdf/*
+!output/pdf/shem-yu-resume.pdf
+tmp/
 
 # Detailed career evidence may contain internal project context.
 career_evidence/private/

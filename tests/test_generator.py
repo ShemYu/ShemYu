@@ -188,15 +188,22 @@ class PublicResumeLayerTest(unittest.TestCase):
                 "{% for w in work %}{{ w.highlights[0] }}|{% if w.evidence is defined %}{{ w.evidence }}{% endif %}{% endfor %}",
                 encoding="utf-8",
             )
+            Path(template_dir, "resume_detailed.html.j2").write_text(
+                "{% for w in work %}{{ w.highlights[0] }}|{% if w.evidence is defined %}{{ w.evidence }}{% endif %}{% endfor %}",
+                encoding="utf-8",
+            )
             Path(template_dir, "resume_bible.html.j2").write_text(
                 "{% for w in work %}{{ w.evidence[0] }}{% endfor %}",
                 encoding="utf-8",
             )
             generator = Jinja2Generator(template_dir)
             public = generator.render(profile, "resume.html.j2")
+            detailed = generator.render(profile, "resume_detailed.html.j2")
             bible = generator.render(profile, "resume_bible.html.j2")
         self.assertIn("coverage 40% to 95%", public)
         self.assertNotIn("15-case", public)
+        self.assertIn("coverage 40% to 95%", detailed)
+        self.assertNotIn("15-case", detailed)
         self.assertIn("15-case / 103-unit internal benchmark", bible)
 
 

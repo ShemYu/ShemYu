@@ -41,5 +41,5 @@ The FinOps agent in this suite is the same work as [[cathay-finops]] / [[cathay-
 
 - role: [[cathay-mle-lead|Machine Learning Engineer, team lead]]
 - claims: [[cathay-dogi-agents]], [[cathay-dogi-mvp-scope]], [[cathay-dogi-delegation|Implemented multi-agent delegation patterns for enterprise workflows.]], [[cathay-dogi-scheduling|Developed meeting scheduling agent integrating calendar and internal APIs.]], [[cathay-dogi-session|Designed session persistence and storage strategy using Redis/Postgres.]], [[cathay-dogi-launch-metric]], [[cathay-dogi-finops-agent]]
-- stack: [[multi-agent-system|Multi-Agent System]], [[workflow-orchestration|Workflow Orchestration]], [[redis|Redis]], [[postgres|Postgres]], [[finops|FinOps]], [[langgraph-adk-pattern|LangGraph/ADK Pattern]]
+- stack: [[multi-agent-system|Multi-Agent System]], [[workflow-orchestration|Workflow Orchestration]], [[redis|Redis]], [[postgres|PostgreSQL]], [[finops|FinOps]], [[langgraph-adk-pattern|LangGraph/ADK Pattern]]
 <!-- graph:end -->

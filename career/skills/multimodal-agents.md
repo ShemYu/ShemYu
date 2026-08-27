@@ -1,7 +1,7 @@
 ---
 id: multimodal-agents
 type: skill
-title: multimodal agents
+title: Multimodal AI
 disclosure: public
 ---
 

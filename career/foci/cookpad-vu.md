@@ -17,6 +17,15 @@ claims:
 - cookpad-vu-pipeline
 - cookpad-vu-dish-coverage
 - cookpad-vu-evals
+- cookpad-vu-multimodal-infrastructure
+- cookpad-vu-observation-diagnostic
+- cookpad-vu-evaluation-platform
+- cookpad-vu-reliability-engineering
+- cookpad-vu-multi-agent-recall
+- cookpad-vu-evaluation-grounding
+- cookpad-vu-end-to-end-evaluation
+- cookpad-vu-rag-refactor
+- cookpad-vu-evaluation-to-production
 - cookpad-vu-ruler-note
 - cookpad-vu-internal-coaching
 - cookpad-vu-architecture-bound
@@ -67,6 +76,6 @@ Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_
 ## Graph
 
 - role: [[cookpad-senior-ai|Senior AI Engineer]]
-- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching|67.6-83.0 is not the recall story; public recall is 50-95 (53/56)]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
-- stack: [[multimodal-agents|multimodal agents]], [[capability-based-evals|capability-based evals]], [[video-understanding|video understanding]]
+- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-multimodal-infrastructure]], [[cookpad-vu-observation-diagnostic]], [[cookpad-vu-evaluation-platform]], [[cookpad-vu-reliability-engineering]], [[cookpad-vu-multi-agent-recall]], [[cookpad-vu-evaluation-grounding]], [[cookpad-vu-end-to-end-evaluation]], [[cookpad-vu-rag-refactor]], [[cookpad-vu-evaluation-to-production]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
+- stack: [[multimodal-agents|Multimodal AI]], [[capability-based-evals|Agent Evaluation]], [[video-understanding|video understanding]]
 <!-- graph:end -->

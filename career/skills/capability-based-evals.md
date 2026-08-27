@@ -1,7 +1,7 @@
 ---
 id: capability-based-evals
 type: skill
-title: capability-based evals
+title: Agent Evaluation
 disclosure: public
 ---
 

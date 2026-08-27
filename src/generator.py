@@ -11,7 +11,7 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pydantic import BaseModel
 
-from src.i18n import HIGHLIGHT_CAPS, as_of_label, format_date as format_date_localized
+from src.i18n import as_of_label, format_date as format_date_localized
 from src.i18n import normalize_language, ui_labels
 from src.interfaces import ContentGenerator
 from src.schema import validate_url
@@ -21,6 +21,7 @@ import copy
 PUBLIC_RESUME_TEMPLATES = frozenset(
     {
         "resume.html.j2",
+        "resume_detailed.html.j2",
         "resume.md.j2",
         "readme.md.j2",
     }
@@ -132,8 +133,8 @@ class Jinja2Generator(ContentGenerator):
         payload["language"] = self.language
         payload["ui"] = ui_labels(self.language)
         payload["as_of"] = as_of_label(self.language)
-        payload["highlight_caps"] = list(HIGHLIGHT_CAPS[self.language])
-        payload["education_limit"] = 2 if self.language == "ja" else 1
+        payload.setdefault("awards", [])
+        payload.setdefault("contacts", [])
         return payload
 
     @staticmethod

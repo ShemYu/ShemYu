@@ -1,0 +1,262 @@
+id: detailed
+locale: en
+editorial_standard: senior-impact-v1
+person: shem
+headline: Senior AI Engineer | AI Agents, Multimodal AI, RAG & MLOps
+summary: >-
+  Senior AI engineer with 6+ years building and productionizing AI agents,
+  multimodal systems, enterprise RAG, and shared GenAI platforms across consumer
+  and financial products. Combines hands-on architecture and production
+  engineering with people leadership, evaluation discipline, and measurable
+  improvements in quality, latency, cost, and delivery speed.
+contact:
+  email: true
+  phone: false
+  location: true
+  profiles:
+    - LinkedIn
+    - GitHub
+    - Medium
+roles:
+  - id: cookpad-senior-ai
+    summary: >-
+      Develops Moment Coach AI, a multimodal cooking coach that uses video and learner
+      voice to identify where a cook is stuck and guide the next step.
+    claims:
+      - id: cookpad-vu-multi-agent-recall
+        supporting_claims:
+          - cookpad-vu-dish-coverage
+        text: >-
+          Built a multi-agent video-understanding system to identify cooking issues
+          from video, improving recall from 50% to 95% through iterative grounding,
+          retrieval, and reasoning improvements.
+      - id: cookpad-vu-evaluation-grounding
+        text: >-
+          Designed evaluation-focused video grounding around ingredients, actions,
+          timing, and state changes, reducing video context from 40 to 7 minutes while
+          maintaining comparable precision.
+      - id: cookpad-vu-end-to-end-evaluation
+        text: >-
+          Built an end-to-end agent evaluation framework spanning ground-truth design,
+          automated judging, human review, and reproducible test runs.
+      - id: cookpad-vu-rag-refactor
+        text: >-
+          Refactored a single-agent video-understanding workflow into a multi-agent,
+          RAG-style architecture to separate evidence retrieval from downstream
+          reasoning and address observed failure modes.
+      - id: cookpad-vu-evaluation-to-production
+        text: >-
+          Designed an evaluation-to-production architecture for AI agents, covering
+          capability-based testing, human review, controlled rollout, and production
+          monitoring.
+  - id: cathay-mle-lead
+    title: Machine Learning Engineer / Team Lead
+    summary: >-
+      Led 4 full-time engineers (7 including contractors), overseeing production AI
+      deployments and departmental agent development across enterprise GenAI, RAG,
+      workflow automation, and FinOps.
+    claims:
+      - id: cathay-dogi-mvp-scope
+        text: >-
+          Led a five-agent productivity suite from 13 requirements through MVP and
+          launch to LINE users.
+      - id: cathay-dogi-agents
+        text: >-
+          Designed and delivered internal research automation with Google ADK,
+          reducing a two-hour analysis workflow to 15 minutes.
+      - id: cathay-gaia-architecture
+        supporting_claims:
+          - cathay-gaia-infra
+        text: >-
+          Designed the overall architecture and built the core infrastructure for an
+          enterprise GenAI platform, including an AI Gateway, guardrails, and MLflow;
+          reduced latency for internal AI services by 60%.
+      - id: cathay-rkb-discovery
+        supporting_claims:
+          - cathay-rkb-f1
+        text: >-
+          Mapped a regulatory-comparison workflow with legal and compliance
+          stakeholders, selected it as the pilot, and productionized the PoC as a
+          Databricks deployment workflow; improved the regulatory agent's F1 from 0.67
+          to 0.89. The system was adopted by 2 of 5 subsidiaries.
+      - id: cathay-finops-gpu
+        supporting_claims:
+          - cathay-finops-cloud
+        text: >-
+          Implemented a FinOps agent and broader cost-control practices for internal AI
+          services, reducing GPU costs by 30% and overall cloud spend by 40%.
+  - id: wisers-platform-engineer
+    summary: >-
+      Led AI-platform standardization and cross-team solution integration across new
+      and legacy machine-learning projects.
+    claims:
+      - id: wisers-templates
+        text: >-
+          Standardized ML service delivery with reusable FastAPI, CI/CD, and Kubernetes
+          project templates, cutting deployment time from two weeks to three days and
+          achieving adoption across 30+ projects.
+      - id: wisers-uap
+        text: >-
+          Built UAP, a shared NLP-focused Python library with 70% internal adoption and
+          90%+ code coverage, improving productivity and reliability for AI developers.
+      - id: wisers-docs
+        text: >-
+          Led Sphinx- and CI-based documentation automation, improving developer
+          onboarding and platform usability.
+  - id: tripsaas-data-scientist
+    summary: >-
+      Maintained ETL pipelines and data collection while developing analytical and
+      search features from order and itinerary data.
+    claims:
+      - id: tripsaas-clustering
+        text: >-
+          Analyzed customer-order data using FP-Growth and K-means, producing four
+          customer clusters to support marketing and segmentation strategies.
+      - id: tripsaas-itinerary
+        text: >-
+          Extracted and optimized feature patterns from travel itineraries using CKIP
+          NLP and frequent-pattern mining, improving search relevance and user
+          experience.
+  - id: mcu-research-assistant
+    title: Research Assistant
+    summary: >-
+      Served as a teaching assistant for Database Theory while leading applied
+      data-science collaborations with external industry partners.
+    claims:
+      - id: mcu-collab
+        text: >-
+          Led student research teams across multiple industry-university collaboration
+          projects, coordinated with external partners, and delivered actionable data
+          science solutions.
+  - id: iii-intern
+    summary: >-
+      Coordinated communication and project delivery between university and III teams
+      while building social-data analysis applications.
+    claims:
+      - id: iii-fullstack
+        text: >-
+          Developed end-to-end full-stack applications that transformed raw social
+          posts into interactive word clouds and buzzword visualizations.
+      - id: iii-insights
+        text: >-
+          Applied NLP and data visualization to extract social-media insights and
+          produce actionable reports for industry partners.
+projects:
+  - id: cathay-dogi
+    claims:
+      - id: cathay-dogi-delegation
+        supporting_claims:
+          - cathay-dogi-scheduling
+        text: >-
+          Implemented multi-agent delegation for enterprise workflows and developed a
+          scheduling agent integrating calendar and internal APIs.
+      - id: cathay-dogi-session
+        text: >-
+          Designed stateful agent workflows with Redis/PostgreSQL-backed session
+          persistence and storage.
+  - id: cathay-gaia
+    claims:
+      - id: cathay-gaia-vector
+        supporting_claims:
+          - cathay-gaia-governance
+          - cathay-gaia-deploy
+        text: >-
+          Integrated Databricks Vector Search and scalable document pipelines;
+          delivered evaluation, guardrail, and governance modules for production
+          workloads; deployed solutions through Databricks workflows and AWS
+          infrastructure.
+      - id: cathay-gaia-multiproduct
+        text: >-
+          Extended the shared platform across internal products, including meeting
+          assistants and FinOps agents.
+  - id: cathay-rkb
+    claims:
+      - id: cathay-rkb-decouple
+        supporting_claims:
+          - cathay-rkb-retry
+        text: >-
+          Decoupled the PoC into daily external-regulation, internal-regulation, and
+          comparison workflows, adding per-record status and up to three retries with
+          increasing waits before failed records were retried the following day.
+      - id: cathay-rkb-ingest
+        supporting_claims:
+          - cathay-rkb-chunking
+        text: >-
+          Designed ingestion for PDFs and structured government rules, including
+          chunking, metadata tagging, and cleanup workflows.
+      - id: cathay-rkb-retrieval
+        supporting_claims:
+          - cathay-rkb-integration
+        text: >-
+          Used iterative evaluation to improve retrieval recall and precision, then
+          integrated RKB with the internal GenAI platform for unified access and
+          governance.
+skill_rows:
+  - title: AI Agents & GenAI
+    skills:
+      - agent-system-design
+      - multimodal-agents
+      - retrieval-augmented-generation-rag
+      - large-language-models-llm
+      - capability-based-evals
+      - embedding-databases
+      - vector-search
+  - title: Agent Frameworks
+    skills:
+      - googleadk
+      - langgraph
+      - langchain
+      - workflow-orchestration
+      - multi-agent-system
+  - title: Platform & MLOps
+    skills:
+      - aws
+      - databricks
+      - kubernetes
+      - docker
+      - mlflow
+      - ci-cd-azure-devops
+      - ai-gateway
+      - guardrails
+  - title: Data & Backend
+    skills:
+      - python-expert
+      - fastapi
+      - sql
+      - postgres
+      - redis
+      - data-pipeline-design
+      - etl
+  - title: ML & NLP
+    skills:
+      - hugging-face
+      - pytorch
+      - tensorflow
+      - scikit-learn
+      - pandas
+      - numpy
+      - ckip-nlp
+  - title: Leadership
+    skills:
+      - team-leadership
+      - project-management
+      - cross-team-collaboration
+  - title: Languages
+    skills:
+      - chinese-native
+      - english-limited-working
+education:
+  - id: mcu-master
+    include_score: true
+  - id: mcu-bachelor
+    include_score: false
+certificates:
+  - aws-certified-machine-learning-specialty
+  - aws-certified-cloud-practitioner
+  - aws-cloud-quest-cloud-practitioner
+awards:
+  - named-departmental-mvp-q1-2025
+  - won-cfh-cloud-creative-award-2024-1st-place
+publications:
+  - publication-ai-agent-architecture
+  - publication-podman

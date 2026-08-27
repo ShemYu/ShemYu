@@ -1,7 +1,7 @@
 ---
 id: python-expert
 type: skill
-title: Python (expert)
+title: Python
 disclosure: public
 ---
 

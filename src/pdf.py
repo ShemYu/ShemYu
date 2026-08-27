@@ -24,17 +24,11 @@ def count_pdf_pages(pdf_bytes: bytes) -> int:
 
 
 def assert_one_page(pdf_bytes: bytes) -> int:
-    """Fail the job when the rendered PDF is not exactly one page.
-
-    The Japanese concise clip is a one-page 職務経歴書. After PDF render,
-    callers must invoke this check so a two-page dump cannot ship.
-    """
+    """Fail the job when the rendered resume is not exactly one page."""
 
     pages = count_pdf_pages(pdf_bytes)
     if pages != 1:
-        raise PdfRenderError(
-            f"Japanese 職務経歴書 must be exactly 1 page, got {pages}"
-        )
+        raise PdfRenderError(f"Resume must be exactly 1 page, got {pages}")
     return pages
 
 
@@ -43,6 +37,12 @@ def find_chrome() -> str | None:
         path = shutil.which(name)
         if path:
             return path
+    for candidate in (
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path("/Applications/Chromium.app/Contents/MacOS/Chromium"),
+    ):
+        if candidate.is_file():
+            return str(candidate)
     return None
 
 

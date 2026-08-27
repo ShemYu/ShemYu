@@ -23,6 +23,6 @@ disclosure: public
 
 - person: [[shem|Shem Yu]]
 - company: [[cathay-financial-holdings|Cathay Financial Holdings]]
-- awards: [[won-cfh-cloud-creative-award-2024-1st-place|Won CFH Cloud Creative Award 2024 (1st place).]], [[named-departmental-mvp-q1-2025|Named departmental MVP, Q1 2025.]]
+- awards: [[won-cfh-cloud-creative-award-2024-1st-place|CFH Cloud Creative Award 2024, 1st Place]], [[named-departmental-mvp-q1-2025|Departmental MVP, Q1 2025]]
 - foci: [[cathay-dogi|DOGI Multi-Agent Productivity Suite]], [[cathay-finops|FinOps]], [[cathay-gaia|GAIA Enterprise Gen-AI Platform]], [[cathay-rkb|Regulatory Knowledge Base (RKB)]]
 <!-- graph:end -->

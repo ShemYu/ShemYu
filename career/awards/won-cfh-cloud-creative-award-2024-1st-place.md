@@ -1,7 +1,7 @@
 ---
 id: won-cfh-cloud-creative-award-2024-1st-place
 type: award
-title: Won CFH Cloud Creative Award 2024 (1st place).
+title: CFH Cloud Creative Award 2024, 1st Place
 title_ja: CFH Cloud Creative Award 2024（1位）を受賞。
 role: cathay-mle-lead
 date: '2024'

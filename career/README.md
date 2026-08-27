@@ -19,7 +19,7 @@ This directory is the source of truth for Shem’s career. Each Markdown file is
 
 Filename must equal `id`.
 
-On a **claim** note: `id` / `focus` / `disclosure` are the query index; **`text.en` / `text.ja` are the locked full wording**. `title` may be a short stub (the migrator chopped at ~72 characters with `...`); that is not the fact. The note body repeats `text` so you can read it in Obsidian without opening YAML.
+On a **claim** note: `id` / `focus` / `disclosure` are the query index; **`text.en` / `text.ja` are the locked full wording**. `title` may be a short stub (the migrator chopped at ~72 characters with `...`); that is not the fact. The note body repeats `text` so you can read it in Obsidian without opening YAML. A concise view may carry an editorial rewrite beside the primary claim id and cite related facts with `supporting_claims`. The rewrite cannot add a fact absent from those cited nodes, and every cited claim must belong to the same role or project.
 
 Open **`career/` as the Obsidian vault** (not the repo root). Obsidian’s graph
 view only follows `[[wikilinks]]` in note bodies. Each note has a generated

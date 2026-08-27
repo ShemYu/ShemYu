@@ -1,43 +1,122 @@
 id: one-pager
 locale: en
+editorial_standard: senior-impact-v1
 person: shem
+headline: Senior AI Engineer | AI Agents, Multimodal Systems & GenAI Platforms
+summary: >-
+  Senior AI engineer with 6+ years delivering production AI systems across consumer and
+  financial products. Expertise spans multimodal agents, evaluation systems, enterprise
+  RAG, and GenAI platforms, backed by hands-on architecture, MLOps, and team leadership.
+contact:
+  email: true
+  phone: false
+  location: true
+  profiles:
+    - LinkedIn
+    - GitHub
 roles:
   - id: cookpad-senior-ai
+    include_summary: false
     claims:
-      - cookpad-vu-pipeline
-      - cookpad-vu-dish-coverage
-      - cookpad-vu-evals
+      - id: cookpad-vu-pipeline
+        supporting_claims:
+          - cookpad-vu-dish-coverage
+        text: >-
+          Built and iterated a staged video-understanding pipeline spanning observation,
+          ingredient-state reasoning, and cooking-issue detection; improved dish coverage
+          on a fixed evaluation set from 50% to 95% (53/56).
+        text_ja: 観察、材料状態の推論、調理上の課題検出を段階化した動画理解パイプラインを構築・反復し、固定評価セットで料理カバレッジを50%から95%（53/56）へ向上。
+      - id: cookpad-vu-evals
+        text: >-
+          Established capability-based evaluations and automated scoring for observation
+          accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
   - id: cathay-mle-lead
+    title: Machine Learning Engineer / Team Lead
+    summary: >-
+      Led 4 full-time engineers (7 including contractors) across production AI deployment
+      and internal agent development.
+    include_summary: true
     claims:
-      - cathay-dogi-agents
-      - cathay-gaia-infra
-      - cathay-finops-gpu
-      - cathay-finops-cloud
+      - id: cathay-gaia-infra
+        text: >-
+          Designed and built enterprise GenAI infrastructure spanning an AI Gateway,
+          guardrails, and MLflow, reducing latency for internal AI services by 60%.
+      - id: cathay-dogi-agents
+        text: >-
+          Designed and delivered internal research automation that reduced a two-hour
+          analysis workflow to 15 minutes.
+        text_ja: >-
+          社内リサーチ自動化を設計・提供し、2時間の分析業務を15分へ短縮。
+      - id: cathay-rkb-discovery
+        supporting_claims:
+          - cathay-rkb-f1
+        text: >-
+          Mapped a regulatory-comparison workflow with legal and compliance stakeholders,
+          then productionized the PoC on Databricks; improved the agent's F1 from 0.67 to
+          0.89. The system was adopted by 2 of 5 subsidiaries.
+        text_ja: 法務・コンプライアンス関係者と規制比較ワークフローを整理し、PoCをDatabricks上で本番運用に向けてワークフロー化。エージェントのF1を0.67から0.89へ改善。5社中2社で採用。
   - id: wisers-platform-engineer
+    include_summary: false
     claims:
-      - wisers-templates
-      - wisers-uap
-skill_groups:
-  - skill-group-cloud-infra
-  - skill-group-data-engineering
-  - skill-group-genai-nlp
-  - skill-group-language
-  - skill-group-leadership
-  - skill-group-mlops
-  - skill-group-programming
+      - id: wisers-templates
+        text: >-
+          Standardized ML delivery with FastAPI, CI/CD, and Kubernetes templates, cutting
+          deployment time from 2 weeks to 3 days; adopted by 30+ projects.
+      - id: wisers-uap
+        text: >-
+          Built a shared NLP Python library with 70% internal adoption and 90%+ code
+          coverage, improving developer productivity and reliability.
+  - id: tripsaas-data-scientist
+    include_summary: false
+    claims:
+      - id: tripsaas-clustering
+        text: >-
+          Analyzed customer-order data with FP-Growth and K-means clustering to support
+          marketing segmentation.
+skill_rows:
+  - title: AI & Agent Systems
+    title_ja: 生成AI / エージェント
+    skills:
+      - agent-system-design
+      - multimodal-agents
+      - retrieval-augmented-generation-rag
+      - capability-based-evals
+      - embedding-databases
+  - title: Engineering
+    title_ja: エンジニアリング
+    skills:
+      - python-expert
+      - fastapi
+      - googleadk
+      - langgraph
+      - sql
+      - postgres
+      - redis
+  - title: Platforms & MLOps
+    title_ja: プラットフォーム / MLOps
+    skills:
+      - aws
+      - databricks
+      - kubernetes
+      - docker
+      - mlflow
+      - ci-cd-azure-devops
+      - ai-gateway
+      - guardrails
 education:
-  - mcu-master
-  - mcu-bachelor
+  - id: mcu-master
+    include_score: false
 certificates:
-  - aws-certified-cloud-practitioner
-  - aws-cloud-quest-cloud-practitioner
   - aws-certified-machine-learning-specialty
+awards:
+  - named-departmental-mvp-q1-2025
+  - won-cfh-cloud-creative-award-2024-1st-place
 axis:
   cookpad-vu-pipeline: パイプライン
   cookpad-vu-dish-coverage: エージェント
   cookpad-vu-evals: 評価
   cathay-dogi-agents: 社内エージェント
   cathay-gaia-infra: AI Gateway
-  cathay-finops-cloud: FinOps
+  cathay-rkb-discovery: 規制比較
   wisers-templates: テンプレート
   wisers-uap: ライブラリ
