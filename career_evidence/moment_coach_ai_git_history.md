@@ -54,14 +54,14 @@ This is the tracked, repo-derived inventory behind future Cookpad resume work. I
 
 | Work | Confirmed contribution | Boundary |
 |---|---|---|
-| Guideline Grounding v2 ObservationAgent / PR #461 / `741fa4a3` | Shem designed the ObservationAgent iteration. Sonan, an intern mentored by Shem, implemented it according to Shem's design. | Git implementation authorship belongs to Sonan. Attribute design to Shem and implementation to Sonan; do not describe this as Sonan's independent design. This attribution does not apply to PR #606. |
+| Guideline Grounding v2 ObservationAgent / PR #461 / `741fa4a3` | Shem designed the iteration and mentored Sonan through its implementation. | Attribute design and mentorship to Shem, implementation to Sonan; unrelated to PR #606. |
 
 ## Resume-relevant workstream facts
 
 These are safe technical summaries of the ledger, not ready-made impact bullets:
 
 1. Built multimodal video infrastructure spanning upload/storage, video services, embedding generation, semantic retrieval, and a stateful frame-finding agent.
-2. Defined the upstream observation problem first—the generic Video Description path was missing or mixing target-dish facts—then designed and implemented staged video-grounding agents to clean that input layer through temporal localization, observation planning, frame selection, crop-level inspection, and description correction. This separation made it possible to evaluate downstream causal diagnosis independently. A legacy 2026-04-28 manual review found some dish-specific grounding signal in 13/14 evaluable cases, but classified only 2/14 as successful end-to-end corrections; the gap is evidence that the upstream intervention worked well enough to expose unresolved downstream Assessment failure, not 92.9% visual accuracy or diagnostic uplift.
+2. Defined the upstream observation problem and designed and implemented staged video grounding so downstream diagnosis could be evaluated independently. A legacy 14-case manual review found dish-specific signals in 13 cases but correct diagnoses in only 2, isolating unresolved causal selection in Assessment rather than establishing visual accuracy or uplift.
 3. Built versioned, replayable evaluation systems over frozen agent states, with static/canonical ground-truth lineage, automated extraction and judging, review surfaces, and case-level backtraces.
 4. Improved candidate-generation reliability through recall-focused warmup axes, multi-draw union, chunked scoring, holistic ranking, and explicit downstream contract validation.
 5. Developed evaluation-integrity tooling that distinguishes source evidence, candidate claims, extraction, judge decisions, delivery views, and human-equivalence constraints.
