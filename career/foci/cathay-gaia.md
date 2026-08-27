@@ -34,6 +34,6 @@ Internal Gen-AI platform providing model hub, guardrails, retrieval systems, eva
 ## Graph
 
 - role: [[cathay-mle-lead|Machine Learning Engineer, team lead]]
-- claims: [[cathay-gaia-infra]], [[cathay-gaia-architecture]], [[cathay-gaia-vector|Integrated Databricks VectorSearch and scalable document pipelines.]], [[cathay-gaia-governance]], [[cathay-gaia-multiproduct]], [[cathay-gaia-deploy]]
+- claims: [[cathay-gaia-infra]], [[cathay-gaia-architecture|Designed the overall system architecture for the enterprise Gen-AI platform.]], [[cathay-gaia-vector|Integrated Databricks VectorSearch and scalable document pipelines.]], [[cathay-gaia-governance]], [[cathay-gaia-multiproduct]], [[cathay-gaia-deploy]]
 - stack: [[llm-ops|LLM Ops]], [[databricks|Databricks]], [[vector-search|Vector Search]], [[agents|Agents]], [[rag|RAG]], [[model-serving|Model Serving]]
 <!-- graph:end -->

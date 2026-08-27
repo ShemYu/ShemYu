@@ -77,7 +77,8 @@ class LiveCareerGraphTest(unittest.TestCase):
         profile = bind_view(graph, load_view("views/bible.yaml"))
         cookpad = profile["work"][0]
         self.assertTrue(any("67.6" in item for item in cookpad["evidence"]))
-        self.assertTrue(any("Guideline grounder" in item for item in cookpad["evidence"]))
+        self.assertTrue(any("13 cases" in item for item in cookpad["evidence"]))
+        self.assertTrue(any("ObservationAgent" in item for item in cookpad["evidence"]))
 
     def test_full_view_keeps_legacy_project_claims(self):
         graph = load_graph("career")

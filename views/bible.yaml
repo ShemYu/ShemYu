@@ -11,6 +11,11 @@ roles:
       - cookpad-vu-ruler-note
       - cookpad-vu-internal-coaching
       - cookpad-vu-architecture-bound
+      - cookpad-vu-grounder-v1
+      - cookpad-vu-observation-agent
+      - cookpad-vu-video-infra
+      - cookpad-vu-eval-architecture
+      - cookpad-vu-git-history
   - id: cathay-mle-lead
     claims:
       - cathay-dogi-agents

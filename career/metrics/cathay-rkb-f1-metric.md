@@ -17,5 +17,5 @@ disclosure: public
 <!-- graph:start -->
 ## Graph
 
-- claims: [[cathay-rkb-f1]]
+- claims: [[cathay-rkb-f1|Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.]]
 <!-- graph:end -->
