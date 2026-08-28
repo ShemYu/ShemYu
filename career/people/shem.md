@@ -9,11 +9,10 @@ image: https://avatars.githubusercontent.com/u/ShemYu?v=4
 email: shauns4y@gmail.com
 phone: +886 953 240 855
 url: https://github.com/ShemYu
-summary: Applied AI engineer with 6 years building production agents, RAG platforms, and shared
-  GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus
-  on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team
-  delivering production GenAI systems in financial services.
-summary_ja: 本番環境のエージェント、RAG基盤、共有GenAIインフラの構築に6年従事してきたApplied AIエンジニア。現在はCookpadにて、エージェント評価・推論アーキテクチャ・信頼性を軸にマルチモーダルなコーチングエージェントを開発。以前は金融サービス領域で、本番GenAIシステムを届けるMLEチームをリード。
+summary: |-
+  Senior AI engineer with 6+ years in applied AI. Production agents, RAG, MLOps, and shared GenAI infrastructure — serving, APIs, deploy — concentrated in the last four years, across financial services and consumer products. Hands-on on architecture and production; previously led an MLE team. Usual levers: evaluation, latency, cost, and delivery speed.
+summary_ja: |-
+  Applied AIに6年以上従事。本番エージェント、RAG、MLOps、共有GenAIインフラ（serving、API、デプロイ）は直近4年が中心。金融とコンシューマ製品。アーキテクチャと本番を自ら担当し、以前はMLEチームをリード。評価、レイテンシ、コスト、デリバリー速度を主なレバーとする。
 city: Tokyo
 city_ja: 東京
 region: Japan

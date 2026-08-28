@@ -5,7 +5,7 @@
 
 
 ## Summary
-Applied AI engineer with 6 years building production agents, RAG platforms, and shared GenAI infrastructure. Now at Cookpad developing multimodal coaching agents, with a focus on agent evaluation, reasoning architecture, and reliability. Previously led an MLE team delivering production GenAI systems in financial services.
+Senior AI engineer with 6+ years in applied AI. Production agents, RAG, MLOps, and shared GenAI infrastructure — serving, APIs, deploy — concentrated in the last four years, across financial services and consumer products. Hands-on on architecture and production; previously led an MLE team. Usual levers: evaluation, latency, cost, and delivery speed.
 
 
 
@@ -50,7 +50,9 @@ Led 4 full-time reports (7 including contractors), overseeing AI project deploym
 
 - Decoupled the DS-built PoC into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates' finest grain is one day.
 
-- Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.
+- Improved regulatory Agent F1 from 0.67 to 0.89.
+
+- Adopted by 2 of 5 subsidiaries.
 
 - Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.
 
@@ -315,7 +317,7 @@ Semantic search, retrieval, and comparison on regulatory and legal documents usi
 
 - Integrated with internal Gen-AI platform for unified access and governance.
 
-- Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.
+- Improved regulatory Agent F1 from 0.67 to 0.89.
 
 
 

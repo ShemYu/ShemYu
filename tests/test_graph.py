@@ -53,7 +53,7 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertEqual(
             cookpad["highlights"],
             [
-                "Built and iterated a staged video-understanding pipeline spanning observation, ingredient-state reasoning, and cooking-issue detection; improved dish coverage on a fixed evaluation set from 50% to 95% (53/56).",
+                "Built and iterated a staged video-understanding pipeline spanning observation, ingredient-state reasoning, and cooking-issue detection; improved dish coverage on a fixed evaluation set from 50% to 95%.",
                 "Established capability-based evaluations and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.",
             ],
         )
@@ -69,7 +69,7 @@ class LiveCareerGraphTest(unittest.TestCase):
             [
                 "Designed and built enterprise GenAI infrastructure spanning an AI Gateway, guardrails, and MLflow, reducing latency for internal AI services by 60%.",
                 "Designed and delivered internal research automation that reduced a two-hour analysis workflow to 15 minutes.",
-                "Mapped a regulatory-comparison workflow with legal and compliance stakeholders, then productionized the PoC on Databricks; improved the agent's F1 from 0.67 to 0.89. The system was adopted by 2 of 5 subsidiaries.",
+                "Mapped a regulatory-comparison workflow with legal and compliance stakeholders, then productionized the PoC on Databricks; improved the agent's F1 from 0.67 to 0.89. Adopted by 2 of 5 subsidiaries.",
             ],
         )
         self.assertEqual(
@@ -77,7 +77,7 @@ class LiveCareerGraphTest(unittest.TestCase):
             [
                 ["cathay-gaia-infra"],
                 ["cathay-dogi-agents"],
-                ["cathay-rkb-discovery", "cathay-rkb-f1"],
+                ["cathay-rkb-discovery", "cathay-rkb-f1", "cathay-rkb-adoption"],
             ],
         )
         for role in profile["work"]:
@@ -96,6 +96,9 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertNotIn("Reduced overall cloud spend by 40%", rendered)
         self.assertIn("LangGraph", rendered)
         self.assertNotIn("R (basic)", rendered)
+        self.assertNotIn("Moment Coach AI", rendered)
+        self.assertNotIn("53/56", rendered)
+        self.assertIn("6+ years in applied AI", profile["basics"]["summary"])
 
     def test_one_pager_cannot_select_internal_claim(self):
         from src.render.adapter import _require_claim
@@ -159,13 +162,26 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertIn("five-agent productivity suite", text)
         self.assertIn("multi-agent video-understanding system", text)
         self.assertIn("recall from 50% to 95%", text)
+        self.assertNotIn("53/56", text)
         self.assertIn("video context from 40 to 7 minutes", text)
         self.assertIn("end-to-end agent evaluation framework", text)
         self.assertIn("single-agent video-understanding workflow", text)
         self.assertIn("evaluation-to-production architecture", text)
+        self.assertIn("in use at 2 of 5 subsidiaries", text)
+        self.assertNotIn("F1 from 0.67 to 0.89. The system was adopted", text)
         self.assertNotIn("dish-specific signals in 13 of 14 cases", text)
         self.assertNotIn("versioned, replayable evaluations", text)
         self.assertNotIn("these later changes caused", text)
+        self.assertNotIn("TensorFlow", " ".join(
+            keyword
+            for row in profile["skills"]
+            for keyword in row["keywords"]
+        ))
+        self.assertIn("Moment Coach AI", cookpad["summary"])
+        self.assertIn("6+ years in applied AI", profile["basics"]["summary"])
+        self.assertIn("last four years", profile["basics"]["summary"])
+        self.assertIn("serving, APIs, deploy", profile["basics"]["summary"])
+        self.assertNotIn("cloud architecture", profile["basics"]["summary"].lower())
 
         rendered = Jinja2Generator("templates").render(
             profile, "resume_detailed.html.j2"

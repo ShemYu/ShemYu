@@ -20,6 +20,7 @@ claims:
 - cathay-rkb-discovery
 - cathay-rkb-decouple
 - cathay-rkb-f1
+- cathay-rkb-adoption
 - cathay-rkb-retry
 - cathay-rkb-ingest
 - cathay-rkb-chunking
@@ -44,6 +45,6 @@ Semantic search, retrieval, and comparison on regulatory and legal documents usi
 ## Graph
 
 - role: [[cathay-mle-lead|Machine Learning Engineer, team lead]]
-- claims: [[cathay-rkb-discovery]], [[cathay-rkb-decouple]], [[cathay-rkb-f1|Improved regulatory Agent F1 from 0.67 to 0.89; adopted by 2 of 5 subsidiaries.]], [[cathay-rkb-retry]], [[cathay-rkb-ingest|Designed ingestion pipelines for PDFs and structured government rules.]], [[cathay-rkb-chunking|Implemented chunking, metadata tagging, and cleanup workflows.]], [[cathay-rkb-retrieval|Improved retrieval recall and precision through iterative evaluation.]], [[cathay-rkb-integration|Integrated with internal Gen-AI platform for unified access and governance.]], [[cathay-rkb-autolabel]], [[cathay-rkb-quota]]
+- claims: [[cathay-rkb-discovery]], [[cathay-rkb-decouple]], [[cathay-rkb-f1|Improved regulatory Agent F1 from 0.67 to 0.89.]], [[cathay-rkb-adoption|Adopted by 2 of 5 subsidiaries.]], [[cathay-rkb-retry]], [[cathay-rkb-ingest|Designed ingestion pipelines for PDFs and structured government rules.]], [[cathay-rkb-chunking|Implemented chunking, metadata tagging, and cleanup workflows.]], [[cathay-rkb-retrieval|Improved retrieval recall and precision through iterative evaluation.]], [[cathay-rkb-integration|Integrated with internal Gen-AI platform for unified access and governance.]], [[cathay-rkb-autolabel]], [[cathay-rkb-quota]]
 - stack: [[rag|RAG]], [[vector-db|Vector DB]], [[databricks|Databricks]], [[data-pipeline|Data Pipeline]], [[embeddings|Embeddings]]
 <!-- graph:end -->
