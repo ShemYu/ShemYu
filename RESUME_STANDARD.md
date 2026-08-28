@@ -50,8 +50,9 @@ data layer” is the allowed wording.
 
 ## Cookpad numbers
 
-Public / outbound **recall** is **50% → 95% (53/56)** on a fixed 15-case,
-56-item eval set. Do not write 40% → 95% as the same ruler. Do not treat
+Public / outbound **recall** is **50% → 95%**. The 53/56 denominator stays in
+career/evidence, not on the one-pager or detailed resume. The underlying
+fixed 15-case, 56-item eval set is interview context. Do not write 40% → 95% as the same ruler. Do not treat
 67.6 → 83.0 as recall or as a second coverage curve.
 
 Never put on the page:
@@ -60,16 +61,12 @@ Never put on the page:
 - 15-case / 103-unit or 56-case / 9 min
 - flaky-miss RCA
 - 20 users
-- Moment team name
+- Moment team name (the product name “Moment Coach AI” may appear on the detailed resume only; never on the one-pager)
 
 ## Cathay F1 and RKB
 
 F1 0.67 → 0.89 and RKB “adopted by 2 of 5 subsidiaries” describe the **same
-system**. They may share one sentence.
-
-Do **not** invent causality between them (no “F1 led to adoption”, “resulting
-in adoption”, “because F1”, and no Japanese equivalents such as により採用 /
-につながった).
-
-Juxtaposition is allowed: “Improved regulatory Agent F1 from 0.67 to 0.89;
-adopted by 2 of 5 subsidiaries.”
+system**, not a causal pair. On the detailed resume they are separate bullets.
+A one-pager may keep them as two independent sentences. Do **not** invent
+causality (no “F1 led to adoption”, “resulting in adoption”, “because F1”,
+and no Japanese equivalents such as により採用 / につながった).

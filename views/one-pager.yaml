@@ -4,9 +4,13 @@ editorial_standard: senior-impact-v1
 person: shem
 headline: Senior AI Engineer | AI Agents, Multimodal Systems & GenAI Platforms
 summary: >-
-  Senior AI engineer with 6+ years delivering production AI systems across consumer and
-  financial products. Expertise spans multimodal agents, evaluation systems, enterprise
-  RAG, and GenAI platforms, backed by hands-on architecture, MLOps, and team leadership.
+  Senior AI engineer with 6+ years in applied AI. Production agents, RAG, MLOps,
+  and shared GenAI infrastructure — serving, APIs, deploy — concentrated in the
+  last four years, across financial services and consumer products. Hands-on on
+  architecture and production; previously led an MLE team. Usual levers:
+  evaluation, latency, cost, and delivery speed.
+summary_ja: >-
+  Applied AIに6年以上従事。本番エージェント、RAG、MLOps、共有GenAIインフラ（serving、API、デプロイ）は直近4年が中心。金融とコンシューマ製品。アーキテクチャと本番を自ら担当し、以前はMLEチームをリード。評価、レイテンシ、コスト、デリバリー速度を主なレバーとする。
 contact:
   email: true
   phone: false
@@ -24,8 +28,8 @@ roles:
         text: >-
           Built and iterated a staged video-understanding pipeline spanning observation,
           ingredient-state reasoning, and cooking-issue detection; improved dish coverage
-          on a fixed evaluation set from 50% to 95% (53/56).
-        text_ja: 観察、材料状態の推論、調理上の課題検出を段階化した動画理解パイプラインを構築・反復し、固定評価セットで料理カバレッジを50%から95%（53/56）へ向上。
+          on a fixed evaluation set from 50% to 95%.
+        text_ja: 観察、材料状態の推論、調理上の課題検出を段階化した動画理解パイプラインを構築・反復し、固定評価セットで料理カバレッジを50%から95%へ向上。
       - id: cookpad-vu-evals
         text: >-
           Established capability-based evaluations and automated scoring for observation
@@ -50,10 +54,11 @@ roles:
       - id: cathay-rkb-discovery
         supporting_claims:
           - cathay-rkb-f1
+          - cathay-rkb-adoption
         text: >-
           Mapped a regulatory-comparison workflow with legal and compliance stakeholders,
           then productionized the PoC on Databricks; improved the agent's F1 from 0.67 to
-          0.89. The system was adopted by 2 of 5 subsidiaries.
+          0.89. Adopted by 2 of 5 subsidiaries.
         text_ja: 法務・コンプライアンス関係者と規制比較ワークフローを整理し、PoCをDatabricks上で本番運用に向けてワークフロー化。エージェントのF1を0.67から0.89へ改善。5社中2社で採用。
   - id: wisers-platform-engineer
     include_summary: false

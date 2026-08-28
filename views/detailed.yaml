@@ -4,11 +4,11 @@ editorial_standard: senior-impact-v1
 person: shem
 headline: Senior AI Engineer | AI Agents, Multimodal AI, RAG & MLOps
 summary: >-
-  Senior AI engineer with 6+ years building and productionizing AI agents,
-  multimodal systems, enterprise RAG, and shared GenAI platforms across consumer
-  and financial products. Combines hands-on architecture and production
-  engineering with people leadership, evaluation discipline, and measurable
-  improvements in quality, latency, cost, and delivery speed.
+  Senior AI engineer with 6+ years in applied AI. Production agents, RAG, MLOps,
+  and shared GenAI infrastructure — serving, APIs, deploy — concentrated in the
+  last four years, across financial services and consumer products. Hands-on on
+  architecture and production; previously led an MLE team. Usual levers:
+  evaluation, latency, cost, and delivery speed.
 contact:
   email: true
   phone: false
@@ -78,7 +78,10 @@ roles:
           Mapped a regulatory-comparison workflow with legal and compliance
           stakeholders, selected it as the pilot, and productionized the PoC as a
           Databricks deployment workflow; improved the regulatory agent's F1 from 0.67
-          to 0.89. The system was adopted by 2 of 5 subsidiaries.
+          to 0.89.
+      - id: cathay-rkb-adoption
+        text: >-
+          The regulatory-comparison system is in use at 2 of 5 subsidiaries.
       - id: cathay-finops-gpu
         supporting_claims:
           - cathay-finops-cloud
@@ -231,7 +234,6 @@ skill_rows:
     skills:
       - hugging-face
       - pytorch
-      - tensorflow
       - scikit-learn
       - pandas
       - numpy

@@ -24,6 +24,7 @@ roles:
       - cathay-rkb-discovery
       - cathay-rkb-decouple
       - cathay-rkb-f1
+      - cathay-rkb-adoption
       - cathay-rkb-retry
       - cathay-gaia-deploy
     evidence:

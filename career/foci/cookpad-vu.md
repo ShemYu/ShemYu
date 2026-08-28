@@ -43,7 +43,8 @@ do_not_claim:
 - Shem owned or shipped v5 investigator
 - attributing PR #606 to Shem
 - commit count or PR count as impact
-- Moment team name, 20 users, model names, fusion methods
+- Moment team name (product name Moment Coach AI is detailed-view only, never on the one-pager)
+- 20 users, model names, fusion methods
 disclosure: public
 ---
 
