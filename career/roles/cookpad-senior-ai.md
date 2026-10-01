@@ -9,8 +9,9 @@ start: 2026-02
 end: Present
 location: Tokyo, Japan
 location_ja: 東京
-summary: Building AI that makes everyday life more joyful.
-summary_ja: 日常をより楽しくするAIを構築。
+summary: Develops a multimodal cooking coach that uses video and learner voice to identify
+  where a cook is stuck and guide the next step.
+summary_ja: 動画と学習者の声を使い、調理中にどこで詰まっているかを特定し、次の一手を案内するマルチモーダルな料理コーチを開発。
 awards: []
 disclosure: public
 ---

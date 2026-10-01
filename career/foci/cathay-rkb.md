@@ -30,7 +30,8 @@ claims:
 - cathay-rkb-quota
 do_not_claim:
 - F1 caused adoption / resulting in adoption / により採用
-- Shem built the DS PoC
+- Shem built the PoC alone
+- DS built the PoC / the data scientist's PoC / the DS-built PoC
 - Unity Catalog, Delta, or a forgotten table name
 - Spark, TB-scale, QPS
 - auto-labeling / 4-stage / retrieval miss-rate on public highlights
@@ -40,6 +41,8 @@ disclosure: public
 ---
 
 Semantic search, retrieval, and comparison on regulatory and legal documents using enterprise RAG pipelines.
+
+The PoC was built jointly by Shem and a data scientist. Public wording is “productionized the PoC”. Do not write that the data scientist built it, and do not imply Shem built it alone.
 
 <!-- graph:start -->
 ## Graph

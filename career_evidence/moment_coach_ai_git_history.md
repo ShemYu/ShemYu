@@ -75,7 +75,7 @@ These are safe technical summaries of the ledger, not ready-made impact bullets:
 
 **[User confirmed 2026-08-27]** Use the following five bullets as the final Cookpad resume version:
 
-- Built a multi-agent video-understanding system to identify cooking issues from video, improving recall from 50% to 95% through iterative grounding, retrieval, and reasoning improvements.
+- Built a multi-agent video-understanding system to identify cooking issues from video, improving dish coverage from 50% to 95% through iterative grounding, retrieval, and reasoning improvements.
 - Designed evaluation-focused video grounding around ingredients, actions, timing, and state changes, reducing video context from 40 to 7 minutes while maintaining comparable precision.
 - Built an end-to-end agent evaluation framework spanning ground-truth design, automated judging, human review, and reproducible test runs.
 - Refactored a single-agent video-understanding workflow into a multi-agent, RAG-style architecture to separate evidence retrieval from downstream reasoning and address observed failure modes.
@@ -83,7 +83,7 @@ These are safe technical summaries of the ledger, not ready-made impact bullets:
 
 Owner-grounded context that must survive future rewrites:
 
-- The 50% to 95% recall result was the final outcome of more than one month of iteration across the overall video-understanding system, not the isolated effect of one graph or refactor.
+- The 50% to 95% dish-coverage result was the final outcome of more than one month of iteration across the overall video-understanding system, not the isolated effect of one graph or refactor. Do not call it recall, and do not publish the 53/56 count.
 - The 40-to-7-minute result measures the amount of video context retained for downstream assessment. The work replaced general descriptions with cooking-evaluation evidence centered on ingredients, actions, timing, and state changes while maintaining comparable precision; it is not a latency claim.
 - The single-agent to multi-agent RAG-style refactor was driven by observed failure patterns and separated evidence retrieval from downstream reasoning.
 - The evaluation-to-production lifecycle was an architecture design covering evaluation, human review, controlled rollout, monitoring, and feedback. It was not fully implemented, so the resume must use `Designed`, not `Built` or `Implemented`.

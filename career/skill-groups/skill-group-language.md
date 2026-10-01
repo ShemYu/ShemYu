@@ -5,12 +5,12 @@ title: Language
 title_ja: 語学
 skills:
 - chinese-native
-- english-limited-working
+- english-professional-working
 disclosure: public
 ---
 
 <!-- graph:start -->
 ## Graph
 
-- skills: [[chinese-native|Chinese (Native)]], [[english-limited-working|English (Limited Working)]]
+- skills: [[chinese-native|Chinese (Native)]], [[english-professional-working|English (Professional Working)]]
 <!-- graph:end -->

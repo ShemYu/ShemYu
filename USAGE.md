@@ -18,7 +18,7 @@ templates/       print layout only
 
 Capture detail on the wiki page before compressing it into a claim `text`. Keep employment dates, focus windows, and experiment windows separate. Distinguish confirmed, derived, interview-needed, and do-not-claim statuses. Internal metrics stay `disclosure: internal` and can appear on the Bible view; they never belong on `views/one-pager.yaml`.
 
-See [`RESUME_STANDARD.md`](RESUME_STANDARD.md) and [`career/INTERVIEW.md`](career/INTERVIEW.md). Long private narrative that must not be committed goes in `career/private/` (gitignored).
+See [`skills/resume-tailoring/SKILL.md`](skills/resume-tailoring/SKILL.md), [`RESUME_STANDARD.md`](RESUME_STANDARD.md), and [`career/INTERVIEW.md`](career/INTERVIEW.md). Agents that produce a resume start at [`AGENTS.md`](AGENTS.md). Long private narrative that must not be committed goes in `career/private/` (gitignored).
 
 ## Prerequisites
 

@@ -96,8 +96,13 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertNotIn("Reduced overall cloud spend by 40%", rendered)
         self.assertIn("LangGraph", rendered)
         self.assertNotIn("R (basic)", rendered)
-        self.assertNotIn("Moment Coach AI", rendered)
+        self.assertNotIn("Moment Coach", rendered)
         self.assertNotIn("53/56", rendered)
+        self.assertEqual(
+            cookpad["summary"],
+            "Develops a multimodal cooking coach that uses video and learner voice to identify where a cook is stuck and guide the next step.",
+        )
+        self.assertIn("multimodal cooking coach", rendered)
         self.assertIn("6+ years in applied AI", profile["basics"]["summary"])
 
     def test_one_pager_cannot_select_internal_claim(self):
@@ -137,7 +142,7 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertEqual(len(all_claim_ids), len(set(all_claim_ids)))
         self.assertNotIn("cathay-dogi-finops-agent", all_claim_ids)
         self.assertNotIn("cookpad-vu-internal-coaching", all_claim_ids)
-        self.assertIn("cookpad-vu-multi-agent-recall", all_claim_ids)
+        self.assertIn("cookpad-vu-multi-agent-coverage", all_claim_ids)
         self.assertIn("cookpad-vu-evaluation-grounding", all_claim_ids)
         self.assertIn("cookpad-vu-end-to-end-evaluation", all_claim_ids)
         self.assertIn("cookpad-vu-rag-refactor", all_claim_ids)
@@ -161,7 +166,8 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertNotIn("built the poc", text.lower())
         self.assertIn("five-agent productivity suite", text)
         self.assertIn("multi-agent video-understanding system", text)
-        self.assertIn("recall from 50% to 95%", text)
+        self.assertIn("dish coverage from 50% to 95%", text)
+        self.assertNotIn("recall from 50%", text)
         self.assertNotIn("53/56", text)
         self.assertIn("video context from 40 to 7 minutes", text)
         self.assertIn("end-to-end agent evaluation framework", text)
@@ -375,7 +381,9 @@ class LiveCareerGraphTest(unittest.TestCase):
         dogi = next(item for item in profile["projects"] if "DOGI" in item["name"])
         texts = " ".join(dogi["highlights"])
         self.assertIn("Redis/Postgres", texts)
-        self.assertIn("10 contributors", texts)
+        self.assertIn("5-agent productivity suite", texts)
+        self.assertNotIn("coordinated 10", texts)
+        self.assertNotIn("10 contributors", texts)
         self.assertNotIn("30% GPU", texts)
         finops = next(item for item in profile["projects"] if item["name"] == "FinOps")
         self.assertTrue(any("30% GPU" in line for line in finops["highlights"]))
