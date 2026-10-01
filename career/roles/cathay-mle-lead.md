@@ -9,7 +9,7 @@ start: 2022-09
 end: 2026-01
 location: Taipei, Taiwan
 location_ja: 台北、台湾
-summary: Led 4 full-time reports (7 including contractors), overseeing AI project deployment
+summary: Led 4 full-time engineers (7 including contractors), overseeing AI project deployment
   and departmental internal agent development.
 summary_ja: 正社員4名（業務委託を含めると7名）をリードし、AIプロジェクトのデプロイと部門内エージェント開発を統括。
 awards:

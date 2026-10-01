@@ -23,12 +23,12 @@ roles:
       Develops Moment Coach AI, a multimodal cooking coach that uses video and learner
       voice to identify where a cook is stuck and guide the next step.
     claims:
-      - id: cookpad-vu-multi-agent-recall
+      - id: cookpad-vu-multi-agent-coverage
         supporting_claims:
           - cookpad-vu-dish-coverage
         text: >-
           Built a multi-agent video-understanding system to identify cooking issues
-          from video, improving recall from 50% to 95% through iterative grounding,
+          from video, improving dish coverage from 50% to 95% through iterative grounding,
           retrieval, and reasoning improvements.
       - id: cookpad-vu-evaluation-grounding
         text: >-
@@ -246,7 +246,7 @@ skill_rows:
   - title: Languages
     skills:
       - chinese-native
-      - english-limited-working
+      - english-professional-working
 education:
   - id: mcu-master
     include_score: true

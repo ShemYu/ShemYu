@@ -2,9 +2,10 @@
 
 Facts already in the graph were preserved. Rulings below are owner-confirmed. Remaining items are optional polish, not lost history.
 
-## Ruling: 67.6 → 83.0 is not recall
+## Ruling: 67.6 → 83.0 is not dish coverage
 
-Owner: the real recall improvement is 50% → 95% (53/56). The 15-case/103-unit
+Owner: the public result is dish coverage 50% → 95%. Do not call it recall.
+The 53/56 count is internal and stays off public pages. The 15-case/103-unit
 67.6 → 83.0 reading is retired from the story (`cookpad-vu-internal-coaching`,
 status `do-not-claim`). Not on the Bible view.
 

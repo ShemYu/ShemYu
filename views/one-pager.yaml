@@ -20,7 +20,12 @@ contact:
     - GitHub
 roles:
   - id: cookpad-senior-ai
-    include_summary: false
+    summary: >-
+      Develops a multimodal cooking coach that uses video and learner voice to
+      identify where a cook is stuck and guide the next step.
+    summary_ja: >-
+      動画と学習者の声を使い、調理中にどこで詰まっているかを特定し、次の一手を案内するマルチモーダルな料理コーチを開発。
+    include_summary: true
     claims:
       - id: cookpad-vu-pipeline
         supporting_claims:

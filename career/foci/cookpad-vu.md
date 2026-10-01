@@ -21,7 +21,7 @@ claims:
 - cookpad-vu-observation-diagnostic
 - cookpad-vu-evaluation-platform
 - cookpad-vu-reliability-engineering
-- cookpad-vu-multi-agent-recall
+- cookpad-vu-multi-agent-coverage
 - cookpad-vu-evaluation-grounding
 - cookpad-vu-end-to-end-evaluation
 - cookpad-vu-rag-refactor
@@ -52,12 +52,12 @@ Video-understanding and cooking-coaching agent. Inputs: cooking video and learne
 
 ## B. Eval
 
-Public highlight is 50% → 95% (53/56) on a fixed 15-case, 56-item set (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`.
+Public wording is dish coverage 50% → 95%. The 53/56 denominator is internal (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`. Do not call the public result recall.
 
 - 2026-07-06 30/74 = 40.5% is a **different ruler**, not an arrow into 53/56.
 - After 2026-08-11 the set is 61 dish items; 2026-08-12 onward `v3_canonical_claim`. Later 23/61 is not a product regression from 53/56.
 - Knowledge coverage remained remaining work; do not publish knowledge percentages.
-- Do not use 67.6% → 83.0% as recall; that number is retired from the story.
+- Do not use 67.6% → 83.0% as dish coverage or as recall; that number is retired from the story.
 
 ## C. Architecture
 
@@ -77,6 +77,6 @@ Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_
 ## Graph
 
 - role: [[cookpad-senior-ai|Senior AI Engineer]]
-- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-multimodal-infrastructure]], [[cookpad-vu-observation-diagnostic]], [[cookpad-vu-evaluation-platform]], [[cookpad-vu-reliability-engineering]], [[cookpad-vu-multi-agent-recall]], [[cookpad-vu-evaluation-grounding]], [[cookpad-vu-end-to-end-evaluation]], [[cookpad-vu-rag-refactor]], [[cookpad-vu-evaluation-to-production]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
+- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-multimodal-infrastructure]], [[cookpad-vu-observation-diagnostic]], [[cookpad-vu-evaluation-platform]], [[cookpad-vu-reliability-engineering]], [[cookpad-vu-multi-agent-coverage]], [[cookpad-vu-evaluation-grounding]], [[cookpad-vu-end-to-end-evaluation]], [[cookpad-vu-rag-refactor]], [[cookpad-vu-evaluation-to-production]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
 - stack: [[multimodal-agents|Multimodal AI]], [[capability-based-evals|Agent Evaluation]], [[video-understanding|video understanding]]
 <!-- graph:end -->

@@ -27,5 +27,5 @@ Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) acr
 ## Graph
 
 - focus: [[cookpad-vu|Video-understanding coaching agent]]
-- metric: [[cookpad-vu-dish-coverage-metric|50% → 95% (53/56)]]
+- metric: [[cookpad-vu-dish-coverage-metric|50% → 95%]]
 <!-- graph:end -->

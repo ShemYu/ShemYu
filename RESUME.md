@@ -15,14 +15,14 @@ Senior AI engineer with 6+ years in applied AI. Production agents, RAG, MLOps, a
 _2026-02 - Present_
 
 
-Building AI that makes everyday life more joyful.
+Develops a multimodal cooking coach that uses video and learner voice to identify where a cook is stuck and guide the next step.
 
 
 
 
 - Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.
+- Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.
 
 - Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 
@@ -33,7 +33,7 @@ Building AI that makes everyday life more joyful.
 _2022-09 - 2026-01_
 
 
-Led 4 full-time reports (7 including contractors), overseeing AI project deployment and departmental internal agent development.
+Led 4 full-time engineers (7 including contractors), overseeing AI project deployment and departmental internal agent development.
 
 
 
@@ -46,9 +46,9 @@ Led 4 full-time reports (7 including contractors), overseeing AI project deploym
 
 - Reduced overall cloud spend by 40% through FinOps practices.
 
-- With a data scientist, mapped the client's regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; DS built the PoC, and I handled production readiness as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.
+- With a data scientist, mapped the client's regulatory-comparison workflow in a workshop (legal and compliance participated) and selected it as the pilot; productionized the PoC as a Databricks deployment workflow, storing related data on the Databricks data layer per internal access rules.
 
-- Decoupled the DS-built PoC into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates' finest grain is one day.
+- Productionized the PoC by decoupling it into external-regulation processing, internal-regulation processing, and comparison, all daily-triggered because regulation updates' finest grain is one day.
 
 - Improved regulatory Agent F1 from 0.67 to 0.89.
 
@@ -56,7 +56,7 @@ Led 4 full-time reports (7 including contractors), overseeing AI project deploym
 
 - Regulatory pipeline: per-record processing status; max 3 retries with increasing wait; after 3 failures mark failed and retry the next day.
 
-- Solutions deployed using Databricks workflows and AWS infrastructure, ensuring scalable and secure operations.
+- Solutions deployed using Databricks workflows and AWS infrastructure.
 
 - CFH Cloud Creative Award 2024, 1st Place
 
@@ -165,7 +165,7 @@ _2012-06 - 2016-06_
 
 - **Generative AI & NLP**: Agent System Design, Retrieval-Augmented Generation (RAG), Large Language Models (LLM), Prompt Engineering, ASR/TTS, Embedding Databases, Search/Indexing Techniques
 
-- **Language**: Chinese (Native), English (Limited Working)
+- **Language**: Chinese (Native), English (Professional Working)
 
 - **Leadership & Communication**: Team Leadership, Project Management, Cross-Team Collaboration
 
@@ -211,7 +211,7 @@ Infer where a learner is stuck from cooking video and voice, then coach the next
 
 - Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Raised dish coverage from 50% to 95% (53/56) on a fixed 15-case, 56-item eval set; knowledge coverage remains the remaining optimization target.
+- Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.
 
 - Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 
@@ -235,7 +235,7 @@ Internal productivity tools powered by multi-agent workflows, including meeting 
 
 - Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.
 
-- Led development of a 5-agent productivity suite from 13 requirements to MVP; coordinated 10 contributors and launched to LINE users.
+- Led development of a 5-agent productivity suite from 13 requirements to MVP and launched to LINE users.
 
 - Implemented multi-agent delegation patterns for enterprise workflows.
 

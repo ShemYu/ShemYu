@@ -86,6 +86,13 @@ JA_STRINGS: dict[str, str] = {
     "Cookpad": "Cookpad（クックパッド）",
     "Building AI that makes everyday life more joyful.": "日常をより楽しくするAIを構築。",
     (
+        "Develops a multimodal cooking coach that uses video and learner voice to "
+        "identify where a cook is stuck and guide the next step."
+    ): (
+        "動画と学習者の声を使い、調理中にどこで詰まっているかを特定し、次の一手を案内する"
+        "マルチモーダルな料理コーチを開発。"
+    ),
+    (
         "Built a multimodal coaching agent that reasons over cooking video and learner "
         "voice to decide whether to reteach, narrow, or advance; raised expert-grounded "
         "coverage from 40% to 95%."
@@ -133,6 +140,13 @@ JA_STRINGS: dict[str, str] = {
     ),
     (
         "Led 4 full-time reports (7 including contractors), overseeing AI project "
+        "deployment and departmental internal agent development."
+    ): (
+        "正社員4名（業務委託を含めると7名）をリードし、AIプロジェクトのデプロイと"
+        "部門内エージェント開発を統括。"
+    ),
+    (
+        "Led 4 full-time engineers (7 including contractors), overseeing AI project "
         "deployment and departmental internal agent development."
     ): (
         "正社員4名（業務委託を含めると7名）をリードし、AIプロジェクトのデプロイと"
@@ -279,6 +293,7 @@ JA_STRINGS: dict[str, str] = {
     "Leadership & Communication": "リーダーシップ / コミュニケーション",
     "Chinese (Native)": "中国語（母語）",
     "English (Limited Working)": "英語（限定的な実務）",
+    "English (Professional Working)": "英語（十分な実務）",
     "Python (expert)": "Python（エキスパート）",
 }
 
