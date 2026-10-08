@@ -17,7 +17,7 @@ do_not_claim:
 - 20 active users on the one-pager
 ---
 
-Owner ruling 2026-08-27: not a separate FinOps product. The public result is [[cathay-finops-gpu]]. This claim only records that the agent shipped as part of [[cathay-dogi]].
+Clarified 2026-08-27: the agent shipped as part of [[cathay-dogi]] within the same FinOps workstream. Its GPU cost result is recorded in [[cathay-finops-gpu]].
 
 <!-- claim-text:start -->
 The FinOps agent in the DOGI suite is the same work as the 30% GPU cost reduction.

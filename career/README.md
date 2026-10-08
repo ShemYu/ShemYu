@@ -37,3 +37,11 @@ python scripts/sync_obsidian_links.py
 `disclosure: public` may be selected by public views. `internal` stays in the graph and can appear on the Bible view as evidence. `secret` is never selected.
 
 Private narrative that must not be committed goes in `private/` (gitignored), same schema.
+
+## Public writing style
+
+Write career notes as professional accounts of the work. Explain the problem, personal contribution, collaborators, decisions, and results directly. Preserve metric scope, attribution, and historical status.
+
+When reconstructing experience from memory, mark only the affected details with natural wording such as “approximately, from memory,” “I no longer recall the exact value,” or “my interpretation at the time.” Keep open details in a short “Details to revisit” section. Existing source-backed facts retain their stated certainty.
+
+Use neutral scope notes for distinctions between metrics, deployment states, and responsibilities. Avoid accusatory or investigative phrasing such as “do not invent,” “testimony,” or “cannot substantiate” when describing personal recollections. Clearly label later improvement ideas as future work. Technical experiment limitations and machine-readable schema keys retain their original meaning.

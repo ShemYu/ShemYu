@@ -21,7 +21,7 @@ disclosure: public
 
 GPU and cloud spend control for internal AI services.
 
-Owner ruling 2026-08-27: the FinOps agent that lived in the [[cathay-dogi]] suite **is this work**, not a second project. Public result is [[cathay-finops-gpu]] (30% GPU) and [[cathay-finops-cloud]] (40% cloud). Do not count them twice.
+Clarified 2026-08-27: the FinOps agent in the [[cathay-dogi]] suite belongs to this same workstream. Its results are recorded once in [[cathay-finops-gpu]] (30% GPU cost reduction) and [[cathay-finops-cloud]] (40% overall cloud spend reduction).
 
 <!-- graph:start -->
 ## Graph

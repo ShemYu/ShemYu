@@ -1,11 +1,10 @@
 # Interview log
 
-Facts already in the graph were preserved. Rulings below are owner-confirmed. Remaining items are optional polish, not lost history.
+These notes record my project clarifications and interview preparation. Dates identify when I added or clarified an account; missing details are listed where they would add useful context.
 
-## Ruling: 67.6 → 83.0 is not dish coverage
+## Dish-coverage metric clarification
 
-Owner: the public result is dish coverage 50% → 95%. Do not call it recall.
-The 53/56 count is internal and stays off public pages. The 15-case/103-unit
+The public result is dish coverage 50% → 95%. The 53/56 count is retained as internal context. The 15-case/103-unit
 67.6 → 83.0 reading is retired from the story (`cookpad-vu-internal-coaching`,
 status `do-not-claim`). Not on the Bible view.
 
@@ -18,12 +17,12 @@ video infra PRs, evaluation architecture, and the 33-PR ledger. PR #606 is not S
 
 ## Confirmed 2026-08-27
 
-- **FinOps is one workstream.** The DOGI-suite FinOps agent and the 30% GPU reduction are the same work. Public result stays [[cathay-finops-gpu]] / [[cathay-finops-cloud]]. [[cathay-dogi-finops-agent]] is assembly only (do not publish a second cost number).
-- **Guideline grounder v2 did not ship.** Internal only. Do not write it as production. Influence on v5 remains influence-only.
-- **Bachelor:** keep the degree node; no extra highlights. Show alongside the master.
+- **FinOps is one workstream.** The DOGI-suite FinOps agent and the 30% GPU reduction are the same work. Public result stays [[cathay-finops-gpu]] / [[cathay-finops-cloud]]. [[cathay-dogi-finops-agent]] is assembly only (the cost result belongs to the same workstream).
+- **Guideline grounder v2 did not ship.** This is historical internal design work. Its relationship to v5 is influence rather than production ownership.
+- **Bachelor:** listed alongside the master’s degree, with degree details recorded in the education note.
 - **Wisers** (`wisers-platform`) ownership is **led** (templates / UAP). TripSaaS, MCU, III stay `implemented`.
 
-## Still optional (do not invent)
+## Details to add when available
 
 - Master thesis Japanese wording (`mcu-master-h1`, `mcu-master-h2`).
 - `text.ja` for Cathay project-only claims (DOGI extras, GAIA extras, RKB ingest/chunking, etc.).

@@ -14,9 +14,11 @@ src/render/      bind a view to templates
 templates/       print layout only
 ```
 
-## Evidence-first content standard
+## Project context and source notes
 
-Capture detail on the wiki page before compressing it into a claim `text`. Keep employment dates, focus windows, and experiment windows separate. Distinguish confirmed, derived, interview-needed, and do-not-claim statuses. Internal metrics stay `disclosure: internal` and can appear on the Bible view; they never belong on `views/one-pager.yaml`.
+Capture detail on the wiki page before compressing it into a claim `text`. Keep employment dates, focus windows, and experiment windows separate. Use the existing `confirmed`, `derived`, `interview-needed`, and `do-not-claim` schema statuses to track each note's source and scope. Internal metrics stay `disclosure: internal` and can appear on the Bible view; the one-pager selects public material.
+
+Write project recollections in a natural, professional voice. State the work and contribution directly, with brief local notes for remembered estimates, historical measurements, or details still to revisit. A missing detail is a normal limitation of retrospective notes and should be described neutrally.
 
 See [`skills/resume-tailoring/SKILL.md`](skills/resume-tailoring/SKILL.md), [`RESUME_STANDARD.md`](RESUME_STANDARD.md), and [`career/INTERVIEW.md`](career/INTERVIEW.md). Agents that produce a resume start at [`AGENTS.md`](AGENTS.md). Long private narrative that must not be committed goes in `career/private/` (gitignored).
 

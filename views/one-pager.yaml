@@ -48,8 +48,9 @@ roles:
     claims:
       - id: cathay-gaia-infra
         text: >-
-          Designed and built enterprise GenAI infrastructure spanning an AI Gateway,
-          guardrails, and MLflow, reducing latency for internal AI services by 60%.
+          Led enterprise GenAI services (AI Gateway, guardrails, MLflow) from requirements
+          to deployment; redesigned guardrails with regex and parallel classifiers,
+          reducing guardrail latency by roughly 60% from memory.
       - id: cathay-dogi-agents
         text: >-
           Designed and delivered internal research automation that reduced a two-hour

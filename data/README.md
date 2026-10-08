@@ -1,8 +1,9 @@
 # Legacy YAML snapshot
 
-This tree is the previous JSON-Resume source of truth. It is **kept on purpose**
-so nothing is deleted in the wiki/graph migration.
+This tree preserves the previous JSON-Resume source as a historical snapshot
+of the wiki/graph migration. Its wording and metrics may predate later project
+recollections and scope updates.
 
 The generator now reads [`../career/`](../career/README.md) and
-[`../views/`](../views/). Prefer editing those. Do not treat this folder as
-the live SoT, but do not remove it until a later PR.
+[`../views/`](../views/). Edit those for current career content. This folder
+remains available for historical reference until a later cleanup PR.

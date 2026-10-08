@@ -67,7 +67,7 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertEqual(
             cathay["highlights"],
             [
-                "Designed and built enterprise GenAI infrastructure spanning an AI Gateway, guardrails, and MLflow, reducing latency for internal AI services by 60%.",
+                "Led enterprise GenAI services (AI Gateway, guardrails, MLflow) from requirements to deployment; redesigned guardrails with regex and parallel classifiers, reducing guardrail latency by roughly 60% from memory.",
                 "Designed and delivered internal research automation that reduced a two-hour analysis workflow to 15 minutes.",
                 "Mapped a regulatory-comparison workflow with legal and compliance stakeholders, then productionized the PoC on Databricks; improved the agent's F1 from 0.67 to 0.89. Adopted by 2 of 5 subsidiaries.",
             ],

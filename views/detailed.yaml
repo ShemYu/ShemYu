@@ -68,9 +68,10 @@ roles:
         supporting_claims:
           - cathay-gaia-infra
         text: >-
-          Designed the overall architecture and built the core infrastructure for an
-          enterprise GenAI platform, including an AI Gateway, guardrails, and MLflow;
-          reduced latency for internal AI services by 60%.
+          Led an enterprise GenAI platform from requirements through service architecture
+          and deployment, including an AI Gateway, guardrails, and MLflow; redesigned
+          guardrails with regex and parallel small-model classifiers, reducing guardrail
+          latency by about 60% based on recollection.
       - id: cathay-rkb-discovery
         supporting_claims:
           - cathay-rkb-f1
