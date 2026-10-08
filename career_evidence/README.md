@@ -8,24 +8,28 @@ lives under [`views/`](../views/).
 
 | Layer | Location | Purpose |
 |---|---|---|
-| Wiki + graph | `career/**/*.md` | Nodes, links, locked claim text, metric contracts, `do_not_claim`. |
+| Wiki + graph | `career/**/*.md` | Nodes, links, selected career statements, metric definitions, and scope notes in `do_not_claim`. |
 | Private vault | `career/private/` | Same schema; gitignored internal narrative. |
-| Interview notes | `career_evidence/private/` | Legacy long masters; gitignored. Promote into `career/` claims, do not leave facts only here. |
-| Tracked Git-history inventory | `career_evidence/moment_coach_ai_git_history.md` | Main-branch contribution ledger and resume-use boundaries derived from Moment Coach AI commits. |
+| Interview notes | `career_evidence/private/` | Legacy long masters; gitignored. Move current facts into `career/` pages for reuse. |
+| Tracked Git-history inventory | `career_evidence/moment_coach_ai_git_history.md` | Main-branch contributions, attribution, and project context derived from Moment Coach AI commits. |
 | Legacy YAML snapshot | `data/` | Previous JSON-Resume tree. Kept; generator no longer treats it as live SoT. |
 | Views | `views/*.yaml` | Which public claim ids appear on which resume, and in what order. |
-| Canonical outputs | `README.md`, `RESUME.md`, `output/resume*.html` | Generated. Never edit to introduce a career fact. |
+| Canonical outputs | `README.md`, `RESUME.md`, `output/resume*.html` | Generated from the wiki and views; update the source pages before rendering. |
 
 The current Cookpad master is `career_evidence/private/cookpad.md`. Its Obsidian copy is a research mirror; the repo-local file is the working private narrative.
 
-## Evidence states
+## Source and scope labels
 
 Use `status` on claim frontmatter:
 
-- `confirmed`: reproduced or owner-confirmed
-- `derived`: arithmetic from verified inputs
-- `interview-needed`: materially affects scope and cannot be inferred
-- `do-not-claim`: unsupported, confidential, or misleading
+- `confirmed`: reproduced or confirmed from my project experience
+- `derived`: calculated from the recorded inputs
+- `interview-needed`: a detail I still need to recall or check
+- `do-not-claim`: a statement outside the current record or intended publication scope
+
+These are existing schema labels for maintaining the notes. In reader-facing
+prose, describe the specific context directly: what I remember, where an
+estimate comes from, or which detail remains to be revisited.
 
 See [`career/INTERVIEW.md`](../career/INTERVIEW.md) for open questions.
 

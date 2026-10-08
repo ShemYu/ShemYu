@@ -103,7 +103,7 @@ class YamlDataLoaderTest(unittest.TestCase):
             cathay["highlights"][:3],
             [
                 "Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.",
-                "Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.",
+                "Led internal GenAI platform services (AI Gateway, guardrails, MLflow) from requirements to deployment; redesigned guardrails with regex PII checks and parallel small-model classifiers, reducing guardrail latency by about 60% based on recollection.",
                 "Implemented FinOps agent, achieving 30% GPU cost reduction.",
             ],
         )

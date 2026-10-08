@@ -15,7 +15,7 @@ claims: []
 disclosure: public
 ---
 
-Owner ruling 2026-08-27: no extra highlights. Show as education alongside the master; do not invent coursework, GPA, or awards.
+Updated 2026-08-27: this degree is listed alongside the master’s degree. Coursework, GPA, and awards are not included because those details are not recorded in this profile.
 
 <!-- graph:start -->
 ## Graph

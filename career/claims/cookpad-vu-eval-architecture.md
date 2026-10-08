@@ -2,7 +2,7 @@
 id: cookpad-vu-eval-architecture
 type: claim
 title: |-
-  Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.
+  Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Human-equivalence gates measure conformance with reference judgments, separately from production accuracy.
 focus: cookpad-vu
 status: confirmed
 disclosure: internal
@@ -10,7 +10,7 @@ source: repo:PRs
 metric: ''
 text:
   en: |-
-    Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.
+    Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Human-equivalence gates measure conformance with reference judgments, separately from production accuracy.
   ja: ''
 do_not_claim:
 - human-equivalence / human-standard gate as a production accuracy claim
@@ -18,7 +18,7 @@ do_not_claim:
 ---
 
 <!-- claim-text:start -->
-Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.
+Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Human-equivalence gates measure conformance with reference judgments, separately from production accuracy.
 <!-- claim-text:end -->
 
 <!-- graph:start -->

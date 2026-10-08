@@ -359,19 +359,19 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics and must not be compared with the 56-item result. Knowledge coverage remained an optimization target.</li>
+                    <li>Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics, so they are reported separately from the 56-item result. Knowledge coverage remained an optimization target.</li>
 
-                    <li>Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs but was not verified as the shipped architecture.</li>
+                    <li>Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs; the relationship between the proposal and the shipped architecture is not documented in this account.</li>
 
                     <li>Defined the upstream observation problem and designed and implemented a staged Detect → Plan → Select → Observe → Correct pipeline so downstream causal diagnosis could be evaluated independently. A legacy 14-case manual review found dish-specific signals in 13 cases but correct diagnoses in only 2, isolating unresolved primary-cause selection in Assessment. This is stage-diagnostic evidence, not visual accuracy or uplift. Sources: PR #299 and cooking_experiment_analysis/report/20250423/.</li>
 
-                    <li>Designed the v2 ObservationAgent and mentored Sonan through its implementation; the iteration was not verified as production. Source: PR #461 / 741fa4a3. Unrelated to PR #606.</li>
+                    <li>Designed the v2 ObservationAgent and mentored Sonan through its implementation; this iteration did not ship. Source: PR #461 / 741fa4a3. Unrelated to PR #606.</li>
 
-                    <li>Built Video Explorer, video embeddings, reusable similarity-search infrastructure, semantic video retrieval, and a multi-turn frame locator. Migrated Gemini Embedding 2 to 3072 dimensions with model-scoped caching. No retrieval-quality uplift is sourced. Sources: PRs #202/#213/#217/#220/#222/#239.</li>
+                    <li>Built Video Explorer, video embeddings, reusable similarity-search infrastructure, semantic video retrieval, and a multi-turn frame locator. Migrated Gemini Embedding 2 to 3072 dimensions with model-scoped caching. Retrieval-quality changes are not quantified in this note. Sources: PRs #202/#213/#217/#220/#222/#239.</li>
 
-                    <li>Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Treat human-equivalence gates as conformance evaluation, not production accuracy.</li>
+                    <li>Built versioned assessment suites, frozen-state replay, LLM judging, failure taxonomies, canonical GT contracts, review surfaces, and a video-fact audit. Human-equivalence gates measure conformance with reference judgments, separately from production accuracy.</li>
 
-                    <li>career_evidence/moment_coach_ai_git_history.md maps 33 main-branch contributions from 2026-02-27 through 2026-08-19 to resume-relevant facts and evidence boundaries. A commit proves contribution, not sole ownership, production deployment, or business impact.</li>
+                    <li>career_evidence/moment_coach_ai_git_history.md maps 33 main-branch contributions from 2026-02-27 through 2026-08-19 to project contributions and their source references. The ledger records contribution history; ownership, deployment status, and impact are described separately in the linked project notes.</li>
 
                 </ul>
 
@@ -389,7 +389,7 @@
 
                     <li>Developed Departmental Internal AI Agents with Google ADK, automating deep research tasks, reducing analysis time from 2 hours to 15 minutes.</li>
 
-                    <li>Designed and built GenAI infrastructure (AI Gateway, Guardrails, MLflow), optimizing internal AI service latency by 60%.</li>
+                    <li>Led internal GenAI platform services (AI Gateway, guardrails, MLflow) from requirements to deployment; redesigned guardrails with regex PII checks and parallel small-model classifiers, reducing guardrail latency by about 60% based on recollection.</li>
 
                     <li>Implemented FinOps agent, achieving 30% GPU cost reduction.</li>
 
@@ -419,7 +419,7 @@
 
                     <li>First release in 2025-09 connected to LINE, with 10 contributors and 20 active users at the time.</li>
 
-                    <li>Problems usually occurred in a 4-stage LLM auto-labeling step. Do not name the four auto-labeling stages. Do not put auto-labeling, 4-stage, or a miss-rate on public highlights.</li>
+                    <li>Problems usually occurred in a 4-stage LLM auto-labeling step. The stage names and any miss-rate are left unspecified in this note. This implementation detail is retained as internal project context and omitted from public highlights.</li>
 
                     <li>Many retries came from Bedrock quota. Early peak — external/Taiwan regulation updates at the end of a legislative session — high parallelism hit Bedrock quota. Observed failure rate peaked at 15%; the system digested that peak. Not a configured stop-the-batch-if-over-X% threshold, gate, or SLO.</li>
 

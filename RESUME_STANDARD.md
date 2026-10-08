@@ -30,52 +30,64 @@ The detailed resume is a separate English master artifact. It may span multiple 
 `disclosure: public` claims may be listed on `views/one-pager.yaml`,
 `views/detailed.yaml`, and `views/full.yaml`. Put internal benchmarks, case counts, pp swings, and
 similar eval notes on `disclosure: internal` claims. The Bible view may
-list them under evidence. `do_not_claim` stays on the node so humans know
-what **not** to publish.
+list them under evidence. The existing `do_not_claim` field stores scope notes
+for later edits; explain those notes in neutral, specific language.
 
-If a number or product name is missing from a public claim, leave it off
-the page. Do not guess.
+Use numbers and product names recorded on the referenced public pages.
+When a detail is no longer clear from memory, use the broader description
+that is still remembered and add a short detail-to-revisit note when useful.
 
-## Invented facts (never)
+## Project recollections and scope
 
-Do not invent Spark, TB-scale, QPS, TypeScript, LiteLLM, Unity Catalog, Delta,
-or “7 years” / “7+ years”. Total experience is “6+ years”.
+Write retrospective project notes as professional recollections. State my
+work and contributions directly. Keep estimates and open details beside
+the relevant statement, using wording such as “I remember approximately…”
+or “I no longer recall the exact…”. Preserve the distinction between my
+work, team work, implemented behavior, and design proposals. Keep uncertainty
+specific to the detail it concerns.
+
+Use the skills, scale, proficiency, and experience duration recorded on the
+source pages. Spark, TB-scale, QPS, TypeScript, LiteLLM, Unity Catalog, and
+Delta remain outside the approved public wording. Total experience is
+“6+ years”; the public wording excludes “7 years” and “7+ years”.
 
 English level is Professional Working (owner decision 2026-09-28, replacing
 Limited Working). Public wording is “English (Professional Working)”.
 
-Do not write “10 cross-functional” or “coordinated 10” for team size. Cathay’s
-team is “Led 4 full-time engineers (7 including contractors)”. DOGI’s contributor
-count is a different internal note, not the team size.
+Cathay’s team scope is “Led 4 full-time engineers (7 including contractors)”.
+DOGI’s contributor count describes a separate project team; the earlier
+“10 cross-functional” and “coordinated 10” Cathay wording is outside this
+team scope.
 
 The Cathay RKB PoC was built jointly by Shem and a data scientist. Public
-wording is “productionized the PoC”. Do not write “DS built the PoC” or “the
-data scientist's PoC”, and do not imply Shem built it alone.
-
-Forgotten Databricks layer name: do not invent Unity Catalog or Delta. “Databricks
-data layer” is the allowed wording.
+wording is “productionized the PoC”. Describe the PoC as joint work rather
+than attributing its development solely to either person. I handled Databricks
+production readiness. I no longer recall the exact data-layer product name,
+so “Databricks data layer” preserves the level of detail I remember.
 
 ## Cookpad numbers
 
-Public wording is **dish coverage 50% → 95%**. Never call that result recall.
-The 53/56 denominator stays on internal notes, not on the one-pager, the
-detailed resume, or any other public page. The underlying fixed 15-case,
-56-item eval set is interview context. Do not write 40% → 95% as the same
-ruler. Do not treat 67.6 → 83.0 as dish coverage, as recall, or as a second
-coverage curve.
+Public wording is **dish coverage 50% → 95%**; retain that metric name in
+public copy. The 53/56 denominator stays on internal notes and is excluded
+from the one-pager, detailed resume, and any other public page. The underlying
+fixed 15-case, 56-item eval set is interview context. The earlier 40% result
+used a different rubric, and 67.6 → 83.0 describes a separate evaluation
+measure; neither is part of this dish-coverage comparison. The 67.6 → 83.0
+measure is recorded separately from dish coverage and recall.
 
-Never put on the page:
+Supporting context kept outside the public resume:
 
 - internal 67.6 → 83.0 (or +15.4 pp)
 - 15-case / 103-unit or 56-case / 9 min
 - flaky-miss RCA
 - 20 users
-- Moment team name (the product name “Moment Coach AI” appears on the detailed resume only; never on the one-pager). The one-pager keeps the same Cookpad responsibility sentence without the product name; see the tailoring skill. Do not substitute the company slogan.
+- Moment team name (the product name “Moment Coach AI” appears on the detailed resume only). The Cookpad responsibility sentence stays on every resume, including one-pagers and platform-role variants. The one-pager uses the approved sentence without the product name; the detailed resume uses the approved sentence with it. Reuse these sentences from the [tailoring skill](skills/resume-tailoring/SKILL.md); the company slogan is outside the approved wording.
 
 ## Cathay F1 and RKB
 
 F1 0.67 → 0.89 and RKB “adopted by 2 of 5 subsidiaries” describe the **same
-system**, not a causal pair. On the detailed resume they are separate bullets.
-A one-pager may keep them as two independent sentences. Do **not** invent
-causality (no “F1 led to adoption”, “resulting in adoption”, “because F1”,
-and no Japanese equivalents such as により採用 / につながった).
+system**. On the detailed resume they are separate bullets. A one-pager may
+keep them as two independent sentences. The recorded facts describe both
+quality improvement and adoption; the relationship between those outcomes
+has not been established. Keep each outcome distinct in English and Japanese
+wording rather than connecting them with causal phrases.

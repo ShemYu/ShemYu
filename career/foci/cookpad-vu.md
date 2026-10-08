@@ -52,26 +52,26 @@ Video-understanding and cooking-coaching agent. Inputs: cooking video and learne
 
 ## B. Eval
 
-Public wording is dish coverage 50% → 95%. The 53/56 denominator is internal (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`. Do not call the public result recall.
+Public wording is dish coverage 50% → 95%. The 53/56 denominator is internal (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`. The reported public measurement is dish coverage.
 
 - 2026-07-06 30/74 = 40.5% is a **different ruler**, not an arrow into 53/56.
 - After 2026-08-11 the set is 61 dish items; 2026-08-12 onward `v3_canonical_claim`. Later 23/61 is not a product regression from 53/56.
-- Knowledge coverage remained remaining work; do not publish knowledge percentages.
-- Do not use 67.6% → 83.0% as dish coverage or as recall; that number is retired from the story.
+- Knowledge coverage remained an optimization target; percentage results are not included in this account.
+- The 67.6% → 83.0% interpretation was retired; the dish-coverage result uses the fixed 56-item rubric above.
 
 ## C. Architecture
 
-1. **Video Description path** — 20–50 minute videos, ~30–45 minutes processing; near-100% precision constraint. Did not succeed as production. Then proposed Recall-first Candidate Generator → Ranker → Investigator. Informed later designs; **not** verified as the shipped stack.
+1. **Video Description path** — 20–50 minute videos, ~30–45 minutes processing; near-100% precision constraint. Did not succeed as production. Then proposed Recall-first Candidate Generator → Ranker → Investigator. Informed later designs; the relationship between this proposal and the shipped stack is not documented in this account.
 2. **Guideline Grounder v1** (Shem; PR #299) — Detect → Plan → Select → Observe → Correct. Legacy 14-case review: dish-specific signals in 13, correct diagnoses in 2. Isolates Assessment causal selection; **not** 93% accuracy.
 3. **ObservationAgent v2** — Shem designed and mentored Sonan (PR #461 / `741fa4a3`). **Did not ship.** Unrelated to PR #606.
-4. **Video infrastructure** — Video Explorer, embeddings, similarity search, semantic retrieval, Visual Explorer (internal). Gemini Embedding 2 → 3072-d with model-scoped cache. No retrieval-accuracy lift. PRs #202/#213/#217/#220/#222/#239.
+4. **Video infrastructure** — Video Explorer, embeddings, similarity search, semantic retrieval, Visual Explorer (internal). Gemini Embedding 2 → 3072-d with model-scoped cache. Retrieval-quality changes are not quantified here. PRs #202/#213/#217/#220/#222/#239.
 5. **Evaluation architecture** — frozen-state suites, LLM-as-judge, failure taxonomy, canonical GT, review UI, observed-cooking audit (#666; contract incomplete). Human-equivalence is conformance, not production accuracy.
 
-Company iterations often replaced architectures; do not claim every merged component remained online.
+Company iterations often replaced architectures. The history below covers designs and contributions across those iterations; deployment status is recorded separately where known.
 
 ## D. Git history
 
-Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_evidence/moment_coach_ai_git_history.md) — 33 main-branch PRs, 2026-02-27 through 2026-08-19. A commit is contribution, not ownership, deployment, or impact.
+Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_evidence/moment_coach_ai_git_history.md) — 33 main-branch PRs, 2026-02-27 through 2026-08-19. The ledger records contribution history; ownership, deployment status, and impact are described separately in the project notes.
 
 <!-- graph:start -->
 ## Graph
