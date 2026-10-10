@@ -349,7 +349,7 @@
 
                     <li>Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
 
-                    <li>Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.</li>
+                    <li>Raised issue recall from 50% to 95% on a fixed evaluation set, measured against all domain-expert-annotated issues per video; knowledge coverage remains the remaining optimization target.</li>
 
                     <li>Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.</li>
 
@@ -359,7 +359,7 @@
                 <p style="margin-top:1mm;font-size:8pt;color:#666;font-weight:700;">Evidence (not public)</p>
                 <ul>
 
-                    <li>Dish coverage improved from 28/56 to 53/56 (50% → 94.6%, published as 95%) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics, so they are reported separately from the 56-item result. Knowledge coverage remained an optimization target.</li>
+                    <li>Issue recall improved from 28/56 to 53/56 (50% → 94.6%, published as 95%; `dish_covered`/`dish_total` in `daily/history.json`) across the same 15 cases between 2026-07-08 and 2026-07-27. Source: daily/history.json. The earlier 30/74 (40.5%) reading and the later 61-item v3_canonical_claim use different rubrics, so they are reported separately from the 56-item result. Knowledge coverage remained an optimization target.</li>
 
                     <li>Built a detailed video-description and verification pipeline for 20–50 minute videos, then proposed separating broad candidate recall from precision-focused investigation through Candidate Generator → Ranker → Investigator. This work informed later designs; the relationship between the proposal and the shipped architecture is not documented in this account.</li>
 
@@ -526,7 +526,7 @@
 
                     <li>Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.</li>
 
-                    <li>Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.</li>
+                    <li>Raised issue recall from 50% to 95% on a fixed evaluation set, measured against all domain-expert-annotated issues per video; knowledge coverage remains the remaining optimization target.</li>
 
                     <li>Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.</li>
 

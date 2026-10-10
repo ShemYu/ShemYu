@@ -49,11 +49,11 @@ Role-summary wording is reused verbatim from the approved resumes (`views/one-pa
 
 Good — problem, method, result, and the number is on the claim:
 
-> Built a multi-agent video-understanding system to identify cooking issues from video, improving dish coverage from 50% to 95% through iterative grounding, retrieval, and reasoning improvements.
+> Built a multi-agent video-understanding system to identify cooking issues from video, improving issue recall from 50% to 95% against expert-annotated ground truth through iterative grounding, retrieval, and reasoning improvements.
 
 Bad — the same result renamed, which this repo does not allow:
 
-> Built a multi-agent video-understanding system to identify cooking issues from video, improving recall from 50% to 95%.
+> Built a multi-agent video-understanding system to identify cooking issues from video, improving dish coverage from 50% to 95%.
 
 Good — adoption and the metric stay independent (Cathay RKB):
 
@@ -89,7 +89,7 @@ Length: one page for quick-fit roles; at most two pages for Staff or senior-owne
 
 If a claim does not support a JD item, leave it off. Do not upgrade a claim to match the posting.
 
-- **Cookpad result.** Public wording is `dish coverage 50%→95%`. Never call that result recall. Never publish `40%→95%`, `67.6%→83.0%`, or `53/56`. The fraction and the 15-case, 56-item ruler stay on internal notes (`cookpad-vu-ruler-note`).
+- **Cookpad result.** Public wording is `issue recall 50%→95%` (domain experts annotated the issues in each video; the metric is the share of all annotated issues recalled — owner clarification 2026-10-10). Never call that result dish coverage, and never invent an eval-set size. Never publish `40%→95%`, `67.6%→83.0%`, or `53/56`. The fraction and the 15-case, 56-item ruler stay on internal notes (`cookpad-vu-ruler-note`).
 - **Cathay dates and team.** Cathay ended 2026-01. Team size is `Led 4 full-time engineers (7 including contractors)`. Never write `coordinated 10` or a cross-functional 10. DOGI's contributor count is a different internal note, not the team size.
 - **Cathay RKB PoC.** The PoC was built jointly by the owner and a data scientist. Public wording is `productionized the PoC`. Never `the data scientist's PoC` or `DS built the PoC`, and never imply the owner built it alone.
 - **English.** `Professional Working` (owner decision 2026-09-28). Public skill title is `English (Professional Working)`. Do not write `Limited Working`.
@@ -109,4 +109,4 @@ A one-page resume produced outside this method (not stored in the repo) shows th
 - Cathay said `DS built the PoC`.
 - A Cathay bullet ended in `ensuring scalable and secure operations`.
 - Another bullet listed video-infrastructure components with no problem and no result.
-- Dish coverage `50%→95%` was missing, so the page spent its Cookpad space on an inventory.
+- Issue recall `50%→95%` was missing, so the page spent its Cookpad space on an inventory.

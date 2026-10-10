@@ -28,8 +28,8 @@ roles:
           - cookpad-vu-dish-coverage
         text: >-
           Built a multi-agent video-understanding system to identify cooking issues
-          from video, improving dish coverage from 50% to 95% through iterative grounding,
-          retrieval, and reasoning improvements.
+          from video, improving issue recall from 50% to 95% against expert-annotated ground truth
+          through iterative grounding, retrieval, and reasoning improvements.
       - id: cookpad-vu-evaluation-grounding
         text: >-
           Designed evaluation-focused video grounding around ingredients, actions,

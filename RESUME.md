@@ -22,7 +22,7 @@ Develops a multimodal cooking coach that uses video and learner voice to identif
 
 - Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.
+- Raised issue recall from 50% to 95% on a fixed evaluation set, measured against all domain-expert-annotated issues per video; knowledge coverage remains the remaining optimization target.
 
 - Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 
@@ -211,7 +211,7 @@ Infer where a learner is stuck from cooking video and voice, then coach the next
 
 - Built and iterated the video-understanding system as a staged pipeline: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
 
-- Raised dish coverage from 50% to 95% on a fixed evaluation set; knowledge coverage remains the remaining optimization target.
+- Raised issue recall from 50% to 95% on a fixed evaluation set, measured against all domain-expert-annotated issues per video; knowledge coverage remains the remaining optimization target.
 
 - Capability-based evals and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.
 

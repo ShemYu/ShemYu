@@ -36,9 +36,9 @@ claims:
 - cookpad-vu-git-history
 do_not_claim:
 - 40% → 95% as the same ruler
-- combining 56-item dish metric with later 61-item or 109-contract rubrics
+- combining 56-item issue-recall metric with later 61-item or 109-contract rubrics
 - 93% grounding accuracy / 93% coverage
-- 67.6 → 83.0 / +15.4 pp as recall or a second coverage arrow
+- 67.6 → 83.0 / +15.4 pp as issue recall or a second recall arrow
 - Guideline grounder v2 or ObservationAgent as production
 - Shem owned or shipped v5 investigator
 - attributing PR #606 to Shem
@@ -52,12 +52,12 @@ Video-understanding and cooking-coaching agent. Inputs: cooking video and learne
 
 ## B. Eval
 
-Public wording is dish coverage 50% → 95%. The 53/56 denominator is internal (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`. The reported public measurement is dish coverage.
+Public wording is issue recall 50% → 95%, measured against domain-expert-annotated ground truth (all annotated issues per video; owner clarification 2026-10-10). The 53/56 denominator is internal (same-rubric window 2026-07-08 → 2026-07-27; 28/56 → 53/56 = 94.6%, published as 95%). Source: `daily/history.json`. The reported public measurement is issue-level recall.
 
 - 2026-07-06 30/74 = 40.5% is a **different ruler**, not an arrow into 53/56.
 - After 2026-08-11 the set is 61 dish items; 2026-08-12 onward `v3_canonical_claim`. Later 23/61 is not a product regression from 53/56.
 - Knowledge coverage remained an optimization target; percentage results are not included in this account.
-- The 67.6% → 83.0% interpretation was retired; the dish-coverage result uses the fixed 56-item rubric above.
+- The 67.6% → 83.0% interpretation was retired; the issue-recall result uses the fixed 56-item rubric above.
 
 ## C. Architecture
 

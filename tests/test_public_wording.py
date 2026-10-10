@@ -21,8 +21,7 @@ BANNED_PUBLIC_PHRASES = (
     "distributed AI Gateway",
     "7+ years",
     "Limited Working",
-    "improving recall",
-    "recall from 50%",
+    "dish coverage",
     "40% → 95%",
     "40% to 95%",
     "ensuring scalable and secure operations",
@@ -65,7 +64,7 @@ class PublicWordingTest(unittest.TestCase):
             self.assertNotIn(phrase, surface, phrase)
 
         self.assertIn("English (Professional Working)", surface)
-        self.assertIn("dish coverage from 50% to 95%", surface)
+        self.assertIn("issue recall from 50% to 95%", surface)
         self.assertNotIn("Moment Coach", _public_surface(bind_view(graph, load_view("views/one-pager.yaml"))))
 
 

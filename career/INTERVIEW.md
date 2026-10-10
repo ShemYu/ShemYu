@@ -2,9 +2,9 @@
 
 These notes record my project clarifications and interview preparation. Dates identify when I added or clarified an account; missing details are listed where they would add useful context.
 
-## Dish-coverage metric clarification
+## Issue-recall metric clarification
 
-The public result is dish coverage 50% → 95%. The 53/56 count is retained as internal context. The 15-case/103-unit
+The public result is issue recall 50% → 95%: domain experts annotated the issues in each video, and the metric is the share of all annotated issues the system recalls. The name "dish coverage" (taken from the `dish_covered` eval field and made the mandatory public name, with "never call it recall", in PR #29 on 2026-10-01) was a wording error; the owner clarified the definition on 2026-10-10. The 53/56 count is retained as internal context. The 15-case/103-unit
 67.6 → 83.0 reading is retired from the story (`cookpad-vu-internal-coaching`,
 status `do-not-claim`). Not on the Bible view.
 

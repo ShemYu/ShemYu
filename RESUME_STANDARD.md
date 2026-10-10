@@ -67,13 +67,16 @@ so “Databricks data layer” preserves the level of detail I remember.
 
 ## Cookpad numbers
 
-Public wording is **dish coverage 50% → 95%**; retain that metric name in
-public copy. The 53/56 denominator stays on internal notes and is excluded
-from the one-pager, detailed resume, and any other public page. The underlying
-fixed 15-case, 56-item eval set is interview context. The earlier 40% result
-used a different rubric, and 67.6 → 83.0 describes a separate evaluation
-measure; neither is part of this dish-coverage comparison. The 67.6 → 83.0
-measure is recorded separately from dish coverage and recall.
+Public wording is **issue recall 50% → 95%**. Definition (owner clarification
+2026-10-10): domain experts annotated the issues present in each video as
+ground truth, and the metric is the share of all annotated issues the system
+recalls. Do not describe it as dish coverage. The 53/56 denominator stays on
+internal notes and is excluded from the one-pager, detailed resume, and any
+other public page. Do not state an evaluation-set size that is not recorded in
+this repo. The underlying fixed 15-case, 56-item eval set is interview context.
+The earlier 40% result used a different rubric, and 67.6 → 83.0 describes a
+separate evaluation measure; neither is part of this issue-recall comparison.
+The 67.6 → 83.0 measure is recorded separately from issue recall.
 
 Supporting context kept outside the public resume:
 
