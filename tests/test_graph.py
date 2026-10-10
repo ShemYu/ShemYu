@@ -53,7 +53,7 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertEqual(
             cookpad["highlights"],
             [
-                "Built and iterated a staged video-understanding pipeline spanning observation, ingredient-state reasoning, and cooking-issue detection; improved dish coverage on a fixed evaluation set from 50% to 95%.",
+                "Built and iterated a staged video-understanding pipeline spanning observation, ingredient-state reasoning, and cooking-issue detection; improved issue recall against expert-annotated ground truth from 50% to 95%.",
                 "Established capability-based evaluations and automated scoring for observation accuracy, issue coverage, factuality, coherence, and turn-level coaching quality.",
             ],
         )
@@ -166,8 +166,8 @@ class LiveCareerGraphTest(unittest.TestCase):
         self.assertNotIn("built the poc", text.lower())
         self.assertIn("five-agent productivity suite", text)
         self.assertIn("multi-agent video-understanding system", text)
-        self.assertIn("dish coverage from 50% to 95%", text)
-        self.assertNotIn("recall from 50%", text)
+        self.assertIn("issue recall from 50% to 95%", text)
+        self.assertNotIn("dish coverage", text)
         self.assertNotIn("53/56", text)
         self.assertIn("video context from 40 to 7 minutes", text)
         self.assertIn("end-to-end agent evaluation framework", text)
@@ -253,7 +253,7 @@ class LiveCareerGraphTest(unittest.TestCase):
         metric_bullet = metric_view.roles[0].claims[0]
         assert isinstance(metric_bullet, ClaimView)
         metric_bullet.text = (
-            "Raised dish coverage from 50% to 95% on a fixed evaluation set."
+            "Raised issue recall from 50% to 95% on a fixed evaluation set."
         )
         with self.assertRaisesRegex(ValueError, "metric-first"):
             bind_view(graph, metric_view)

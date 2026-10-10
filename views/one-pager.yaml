@@ -32,9 +32,9 @@ roles:
           - cookpad-vu-dish-coverage
         text: >-
           Built and iterated a staged video-understanding pipeline spanning observation,
-          ingredient-state reasoning, and cooking-issue detection; improved dish coverage
-          on a fixed evaluation set from 50% to 95%.
-        text_ja: 観察、材料状態の推論、調理上の課題検出を段階化した動画理解パイプラインを構築・反復し、固定評価セットで料理カバレッジを50%から95%へ向上。
+          ingredient-state reasoning, and cooking-issue detection; improved issue recall
+          against expert-annotated ground truth from 50% to 95%.
+        text_ja: 観察、材料状態の推論、調理上の課題検出を段階化した動画理解パイプラインを構築・反復し、専門家が注釈した課題に対する課題リコールを50%から95%へ向上。
       - id: cookpad-vu-evals
         text: >-
           Established capability-based evaluations and automated scoring for observation
