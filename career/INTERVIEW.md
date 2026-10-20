@@ -15,6 +15,11 @@ Public one-pager bullets unchanged. Internal Cookpad claims now match
 Guideline Grounder 13/14 vs 2/14, ObservationAgent design/mentorship (PR #461),
 video infra PRs, evaluation architecture, and the 33-PR ledger. PR #606 is not Shem.
 
+## Confirmed 2026-10-20
+
+- **Cookpad consumer beta.** The multimodal cooking coach is consumer-facing and has launched to a limited beta of end users. Locked wording is [[cookpad-vu-limited-beta]]. User counts, GA status, and launch plans stay off that wording. The internal “20 users” note is unchanged.
+- **AI-assisted development.** Daily tool usage. Public skill title is “AI-assisted development (Claude Code, Cursor, Orca)” on [[ai-assisted-development]]. This records tools used while developing. It is not a product, and it is not a claim of building a product or a skill with Claude or Codex.
+
 ## Confirmed 2026-08-27
 
 - **FinOps is one workstream.** The DOGI-suite FinOps agent and the 30% GPU reduction are the same work. Public result stays [[cathay-finops-gpu]] / [[cathay-finops-cloud]]. [[cathay-dogi-finops-agent]] is assembly only (the cost result belongs to the same workstream).

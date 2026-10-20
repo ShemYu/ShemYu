@@ -19,11 +19,12 @@ skills:
 - numpy
 - scipy
 - matplotlib
+- ai-assisted-development
 disclosure: public
 ---
 
 <!-- graph:start -->
 ## Graph
 
-- skills: [[python-expert|Python]], [[r-basic|R (basic)]], [[c-c-plus-plus-familiar|C/C++ (familiar)]], [[hugging-face|Hugging Face]], [[fastapi|FastAPI]], [[googleadk|Google ADK]], [[langchain|LangChain]], [[langgraph|LangGraph]], [[pytorch|PyTorch]], [[tensorflow|TensorFlow]], [[scikit-learn]], [[pandas]], [[numpy|NumPy]], [[scipy|SciPy]], [[matplotlib|Matplotlib]]
+- skills: [[python-expert|Python]], [[r-basic|R (basic)]], [[c-c-plus-plus-familiar|C/C++ (familiar)]], [[hugging-face|Hugging Face]], [[fastapi|FastAPI]], [[googleadk|Google ADK]], [[langchain|LangChain]], [[langgraph|LangGraph]], [[pytorch|PyTorch]], [[tensorflow|TensorFlow]], [[scikit-learn]], [[pandas]], [[numpy|NumPy]], [[scipy|SciPy]], [[matplotlib|Matplotlib]], [[ai-assisted-development|AI-assisted development (Claude Code, Cursor, Orca)]]
 <!-- graph:end -->

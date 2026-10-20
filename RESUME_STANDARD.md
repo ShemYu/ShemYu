@@ -86,6 +86,10 @@ Supporting context kept outside the public resume:
 - 20 users
 - Moment team name (the product name “Moment Coach AI” appears on the detailed resume only). The Cookpad responsibility sentence stays on every resume, including one-pagers and platform-role variants. The one-pager uses the approved sentence without the product name; the detailed resume uses the approved sentence with it. Reuse these sentences from the [tailoring skill](skills/resume-tailoring/SKILL.md); the company slogan is outside the approved wording.
 
+Public launch scope (owner confirmation 2026-10-20, `cookpad-vu-limited-beta`): consumer-facing, launched to a limited beta of end users. Locked wording: “Building a consumer-facing multimodal cooking coach, launched to a limited beta of end users, that uses video and learner voice to identify where a cook is stuck and guide the next step.” User counts, GA status, and launch plans stay off that wording. The “20 users” note remains internal context.
+
+AI-assisted development is daily tool usage (owner confirmation 2026-10-20), not a product or project claim. Public skill title: “AI-assisted development (Claude Code, Cursor, Orca)”. `Claude Code` may appear as a listed tool. Do not claim a product or a skill built with Claude or Codex.
+
 ## Cathay F1 and RKB
 
 F1 0.67 → 0.89 and RKB “adopted by 2 of 5 subsidiaries” describe the **same
