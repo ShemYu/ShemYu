@@ -34,6 +34,7 @@ claims:
 - cookpad-vu-video-infra
 - cookpad-vu-eval-architecture
 - cookpad-vu-git-history
+- cookpad-vu-limited-beta
 do_not_claim:
 - 40% → 95% as the same ruler
 - combining 56-item issue-recall metric with later 61-item or 109-contract rubrics
@@ -45,10 +46,13 @@ do_not_claim:
 - commit count or PR count as impact
 - Moment team name (product name Moment Coach AI is detailed-view only, never on the one-pager)
 - 20 users, model names, fusion methods
+- user counts, GA status, or launch plans (public launch scope is a limited beta of end users)
 disclosure: public
 ---
 
 Video-understanding and cooking-coaching agent. Inputs: cooking video and learner voice. Infer where the learner is stuck. Public architecture: observable facts → recipe-specific ingredient definitions → ingredient state → cooking issues.
+
+Public launch scope (owner confirmation 2026-10-20): consumer-facing, launched to a limited beta of end users. User counts, GA status, and launch plans stay off that wording.
 
 ## B. Eval
 
@@ -77,6 +81,6 @@ Tracked ledger: [`career_evidence/moment_coach_ai_git_history.md`](../../career_
 ## Graph
 
 - role: [[cookpad-senior-ai|Senior AI Engineer]]
-- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-multimodal-infrastructure]], [[cookpad-vu-observation-diagnostic]], [[cookpad-vu-evaluation-platform]], [[cookpad-vu-reliability-engineering]], [[cookpad-vu-multi-agent-coverage]], [[cookpad-vu-evaluation-grounding]], [[cookpad-vu-end-to-end-evaluation]], [[cookpad-vu-rag-refactor]], [[cookpad-vu-evaluation-to-production]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]]
+- claims: [[cookpad-vu-pipeline]], [[cookpad-vu-dish-coverage]], [[cookpad-vu-evals]], [[cookpad-vu-multimodal-infrastructure]], [[cookpad-vu-observation-diagnostic]], [[cookpad-vu-evaluation-platform]], [[cookpad-vu-reliability-engineering]], [[cookpad-vu-multi-agent-coverage]], [[cookpad-vu-evaluation-grounding]], [[cookpad-vu-end-to-end-evaluation]], [[cookpad-vu-rag-refactor]], [[cookpad-vu-evaluation-to-production]], [[cookpad-vu-ruler-note]], [[cookpad-vu-internal-coaching]], [[cookpad-vu-architecture-bound]], [[cookpad-vu-grounder-v1]], [[cookpad-vu-observation-agent]], [[cookpad-vu-video-infra]], [[cookpad-vu-eval-architecture]], [[cookpad-vu-git-history]], [[cookpad-vu-limited-beta]]
 - stack: [[multimodal-agents|Multimodal AI]], [[capability-based-evals|Agent Evaluation]], [[video-understanding|video understanding]]
 <!-- graph:end -->

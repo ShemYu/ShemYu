@@ -67,6 +67,50 @@ class PublicWordingTest(unittest.TestCase):
         self.assertIn("issue recall from 50% to 95%", surface)
         self.assertNotIn("Moment Coach", _public_surface(bind_view(graph, load_view("views/one-pager.yaml"))))
 
+    def test_owner_confirmed_2026_10_20_facts_stay_in_scope(self):
+        graph = load_graph("career")
+        claim = graph.get("cookpad-vu-limited-beta")
+        self.assertIsInstance(claim, Claim)
+        self.assertEqual(claim.status, "confirmed")
+        self.assertEqual(claim.disclosure, "public")
+        self.assertEqual(claim.focus, "cookpad-vu")
+        self.assertEqual(claim.source, "user-confirmed:2026-10-20")
+        self.assertEqual(
+            claim.text.en,
+            "Building a consumer-facing multimodal cooking coach, launched to a limited beta of end users, that uses video and learner voice to identify where a cook is stuck and guide the next step.",
+        )
+        self.assertEqual(claim.text.ja, "")
+        self.assertIn("cookpad-vu-limited-beta", graph.get("cookpad-vu").claims)
+        self.assertEqual(
+            claim.do_not_claim,
+            ["user counts", "GA status", "launch plans"],
+        )
+        self.assertNotIn("20", claim.text.en)
+        self.assertNotRegex(claim.text.en, r"\bGA\b|general availability|launch plan")
+
+        skill = graph.get("ai-assisted-development")
+        self.assertIsInstance(skill, Skill)
+        self.assertEqual(skill.disclosure, "public")
+        self.assertEqual(
+            skill.title,
+            "AI-assisted development (Claude Code, Codex, Grok Build, Gemini CLI, Orca, Cursor)",
+        )
+        self.assertNotIsInstance(skill, Claim)
+        for focus in graph.of_type("focus"):
+            self.assertNotIn("ai-assisted-development", focus.stack)
+            self.assertNotIn("ai-assisted-development", focus.claims)
+        self.assertIn(
+            "ai-assisted-development",
+            graph.get("skill-group-programming").skills,
+        )
+        readme = bind_view(graph, load_view("views/github-readme.yaml"))
+        keywords = [
+            keyword
+            for row in readme["skills"]
+            for keyword in row["keywords"]
+        ]
+        self.assertIn(skill.title, keywords)
+
 
 if __name__ == "__main__":
     unittest.main()
