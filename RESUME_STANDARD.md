@@ -88,7 +88,7 @@ Supporting context kept outside the public resume:
 
 Public launch scope (owner confirmation 2026-10-20, `cookpad-vu-limited-beta`): consumer-facing, launched to a limited beta of end users. Locked wording: “Building a consumer-facing multimodal cooking coach, launched to a limited beta of end users, that uses video and learner voice to identify where a cook is stuck and guide the next step.” User counts, GA status, and launch plans stay off that wording. The “20 users” note remains internal context.
 
-AI-assisted development is daily tool usage (owner confirmation 2026-10-20), not a product or project claim. Public skill title: “AI-assisted development (Claude Code, Cursor, Orca)”. `Claude Code` may appear as a listed tool. Do not claim a product or a skill built with Claude or Codex.
+AI-assisted development is regular hands-on tool usage (owner confirmation 2026-10-21), not a product or project claim. Public skill title: “AI-assisted development (Claude Code, Codex, Grok Build, Gemini CLI, Orca, Cursor)”. Claude Code, Codex, Grok Build, Gemini CLI, Orca, and Cursor may appear as listed tools. Do not claim depth beyond regular hands-on use, and do not claim a product built with these tools.
 
 ## Cathay F1 and RKB
 

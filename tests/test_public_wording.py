@@ -93,7 +93,7 @@ class PublicWordingTest(unittest.TestCase):
         self.assertEqual(skill.disclosure, "public")
         self.assertEqual(
             skill.title,
-            "AI-assisted development (Claude Code, Cursor, Orca)",
+            "AI-assisted development (Claude Code, Codex, Grok Build, Gemini CLI, Orca, Cursor)",
         )
         self.assertNotIsInstance(skill, Claim)
         for focus in graph.of_type("focus"):
@@ -103,6 +103,13 @@ class PublicWordingTest(unittest.TestCase):
             "ai-assisted-development",
             graph.get("skill-group-programming").skills,
         )
+        readme = bind_view(graph, load_view("views/github-readme.yaml"))
+        keywords = [
+            keyword
+            for row in readme["skills"]
+            for keyword in row["keywords"]
+        ]
+        self.assertIn(skill.title, keywords)
 
 
 if __name__ == "__main__":

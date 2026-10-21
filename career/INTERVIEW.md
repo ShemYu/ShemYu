@@ -15,10 +15,14 @@ Public one-pager bullets unchanged. Internal Cookpad claims now match
 Guideline Grounder 13/14 vs 2/14, ObservationAgent design/mentorship (PR #461),
 video infra PRs, evaluation architecture, and the 33-PR ledger. PR #606 is not Shem.
 
+## Confirmed 2026-10-21
+
+- **AI-assisted development.** Regular hands-on use of Claude Code, Codex, Grok Build, Gemini CLI, Orca, and Cursor. Public skill title is “AI-assisted development (Claude Code, Codex, Grok Build, Gemini CLI, Orca, Cursor)” on [[ai-assisted-development]]. This records tools used while developing. It does not record depth beyond regular hands-on use, and it does not record a product built with these tools. This list replaces the 2026-10-20 title.
+
 ## Confirmed 2026-10-20
 
 - **Cookpad consumer beta.** The multimodal cooking coach is consumer-facing and has launched to a limited beta of end users. Locked wording is [[cookpad-vu-limited-beta]]. User counts, GA status, and launch plans stay off that wording. The internal “20 users” note is unchanged.
-- **AI-assisted development.** Daily tool usage. Public skill title is “AI-assisted development (Claude Code, Cursor, Orca)” on [[ai-assisted-development]]. This records tools used while developing. It is not a product, and it is not a claim of building a product or a skill with Claude or Codex.
+- **AI-assisted development.** An earlier title listed Claude Code, Cursor, and Orca. The current list is the 2026-10-21 confirmation.
 
 ## Confirmed 2026-08-27
 
