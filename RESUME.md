@@ -171,7 +171,7 @@ _2012-06 - 2016-06_
 
 - **MLOps & Deployment**: Databricks, MLflow, Docker, CI/CD (Azure DevOps), Kubernetes, AWS SageMaker, AWS Lambda
 
-- **Programming & ML Frameworks**: Python, R (basic), C/C++ (familiar), Hugging Face, FastAPI, Google ADK, LangChain, LangGraph, PyTorch, TensorFlow, scikit-learn, pandas, NumPy, SciPy, Matplotlib
+- **Programming & ML Frameworks**: Python, R (basic), C/C++ (familiar), Hugging Face, FastAPI, Google ADK, LangChain, LangGraph, PyTorch, TensorFlow, scikit-learn, pandas, NumPy, SciPy, Matplotlib, AI-assisted development (Claude Code, Codex, Grok Build, Gemini CLI, Orca, Cursor)
 
 
 

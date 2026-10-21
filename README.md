@@ -48,7 +48,7 @@ Uptime: 6 roles of experience
 
 <img src="https://img.shields.io/badge/MLOps%20&%20Deployment-7-2ea44f?style=for-the-badge&logo=appveyor" alt="MLOps & Deployment" />
 
-<img src="https://img.shields.io/badge/Programming%20&%20ML%20Frameworks-15-2ea44f?style=for-the-badge&logo=appveyor" alt="Programming & ML Frameworks" />
+<img src="https://img.shields.io/badge/Programming%20&%20ML%20Frameworks-16-2ea44f?style=for-the-badge&logo=appveyor" alt="Programming & ML Frameworks" />
 
 </p>
 
